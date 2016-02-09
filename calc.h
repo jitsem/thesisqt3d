@@ -14,7 +14,7 @@ public:
     std::vector<float> solveLevel(QFile *file);
 
 private:
-    std::vector<float> computeNetwork(std::vector<std::shared_ptr<Component> > s, std::vector<std::shared_ptr<Component> > r, int nrOfNodes);
+    std::vector<float> computeNetwork(std::vector<std::shared_ptr<Component> > &s, std::vector<std::shared_ptr<Component> > &r, int nrOfNodes);
     std::vector<std::shared_ptr<Component> > readFile(QFile *file);
 };
 

@@ -81,7 +81,7 @@ std::vector<std::shared_ptr<Component>> Calc::readFile(QFile *file)
 }
 
 
-std::vector<float> Calc::computeNetwork(std::vector<std::shared_ptr<Component> > s, std::vector<std::shared_ptr<Component> > r, int nrOfNodes)
+std::vector<float> Calc::computeNetwork(std::vector<std::shared_ptr<Component> > & s, std::vector<std::shared_ptr<Component> > &r, int  nrOfNodes)
 {
     //m is nrOfSources
     const int m =s.size();
