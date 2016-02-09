@@ -7,7 +7,7 @@ SOURCES += main.cpp \
     resistor.cpp \
     source.cpp \
     calc.cpp \
-    component.cpp
+    component.cpp \
 
 HEADERS += \
     calc.h \

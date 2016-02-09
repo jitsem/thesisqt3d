@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     QQuickView view;
-    view.setSource(QUrl(QStringLiteral("qrc:/AppView.qml")));
+    view.setSource(QUrl(QStringLiteral("qrc:/Qml/AppView.qml")));
 
 
     QObject *text = view.rootObject();
