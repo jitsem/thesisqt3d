@@ -5,6 +5,12 @@
 #include <QQuickItem>
 #include <QVariant>
 
+#include <QQmlContext>
+#include <QQmlEngine>
+#include <QOpenGLContext>
+#include <QSurfaceFormat>
+
+
 #include <iostream>
 #include <vector>
 #include <list>
@@ -19,6 +25,8 @@ using namespace std;
 int main(int argc, char *argv[])
 {
 
+
+    //Dingen voor netwerkcalculation
 
 
     Calc* c=new Calc();
@@ -40,10 +48,27 @@ int main(int argc, char *argv[])
    std::string toPrint = ss.str();
    QString str = QString::fromUtf8(toPrint.c_str());
 
-    QApplication app(argc, argv);
 
-    QQuickView view;
-    view.setSource(QUrl(QStringLiteral("qrc:/Qml/AppView.qml")));
+   //Dingen voor 3D
+   QApplication app(argc, argv);
+
+   //default surface format -- moet altijd??
+   QSurfaceFormat format;
+   if(QOpenGLContext::openGLModuleType() == QOpenGLContext::LibGL){
+       format.setVersion(4,1);
+       format.setProfile((QSurfaceFormat::CoreProfile));
+   }
+   format.setDepthBufferSize(24);
+   format.setSamples(4);
+   format.setStencilBufferSize(8);
+   QSurfaceFormat::setDefaultFormat(format);
+
+
+   //load view
+   QQuickView view;
+   view.engine()->rootContext()->setContextProperty(QStringLiteral("_window"), &view);
+   view.setResizeMode(QQuickView::SizeRootObjectToView);
+   view.setSource(QUrl("qrc:/Qml/AppView.qml"));
 
 
     QObject *text = view.rootObject();

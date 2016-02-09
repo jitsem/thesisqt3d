@@ -1,5 +1,10 @@
 <RCC>
     <qresource prefix="/">
         <file>Qml/AppView.qml</file>
+        <file>Qml/GameController.qml</file>
+        <file>Qml/InputController.qml</file>
+        <file>Qml/World3D.qml</file>
+        <file>Qml/Comp.qml</file>
+
      </qresource>
 </RCC>
