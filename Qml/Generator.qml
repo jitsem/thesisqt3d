@@ -24,13 +24,27 @@ Entity{
         o.resistorFactory=Qt.createComponent("qrc:/Qml/Resistor.qml")
 
         for(var i=0;i<calculator.getNumberOfSources();i++){
-            var source = o.sourceFactory.createObject(null,{"s":0.1*calculator.voltageAtSource(i),"x":3*calculator.nodePAtSource(i)});
+
+            var negNode = calculator.nodeMAtSource(i); //TODO wegdoen, is maar tijdelijk
+
+            if(negNode === 0){
+                negNode = calculator.numberOfNodes();
+            }
+
+            var source = o.sourceFactory.createObject(null,{"s":calculator.voltageAtSource(i),"x":calculator.nodePAtSource(i)*2, "y":calculator.voltageAtNode(negNode-1)});
+
             source.parent=root.parent;
 
         }
 
         for(var i=0;i<calculator.getNumberOfResistors();i++){
-            var resistor = o.resistorFactory.createObject(null,{"s":0.01*calculator.resistanceAtResistor(i),"x":3*calculator.node1AtResistor(i), "z":3});
+
+            var firstNode = calculator.node2AtResistor(i); //TODO wegdoen, is maar tijdelijk
+
+            if(firstNode === 0){
+                firstNode = calculator.numberOfNodes();
+            }
+            var resistor = o.resistorFactory.createObject(null,{"s":0.01*calculator.resistanceAtResistor(i),"x":calculator.node1AtResistor(i)*2, "y":calculator.voltageAtNode(firstNode-1)});
             resistor.parent=root.parent;
 
         }
