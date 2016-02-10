@@ -11,10 +11,19 @@ Entity {
     property real cameraAngle2: 1
     property real nrOfFramesPassed: 0
 
+
+
+
+    //TODO controlleren werkt nog niet
+    Configuration  {
+        controlledCamera: mainCamera
+    }
+
+
     Camera {
-        id: camera
+        id: mainCamera
         projectionType: CameraLens.PerspectiveProjection
-        fieldOfView: 45
+        fieldOfView: 60
         aspectRatio: 16/9
         nearPlane : 0.1
         farPlane : 1000.0
@@ -25,10 +34,11 @@ Entity {
 
 
 
+
     FrameGraph {
         id : forward_renderer
         activeFrameGraph : ForwardRenderer {
-            camera: camera
+            camera: mainCamera
             clearColor: "black"
         }
     }
@@ -36,8 +46,8 @@ Entity {
     components: [forward_renderer]
 
 
-    GameController{
-        id:controller
+    Generator{
+        id:generator
     }
 
 

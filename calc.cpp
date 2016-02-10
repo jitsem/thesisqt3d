@@ -13,13 +13,14 @@ Calc::Calc()
 
 }
 
-std::vector<float> Calc::solveLevel(QFile *file)
+void Calc::solveLevel(QString path)
 {
-    std::vector<std::shared_ptr<Component>> sources;
-    std::vector<std::shared_ptr<Component>> resistors;
+    QFile file(path);
+
+
     std::list<int> nodes;
 
-    std::vector<std::shared_ptr<Component>> com = readFile(file);
+    std::vector<std::shared_ptr<Component>> com = readFile(&file);
 
     for(std::shared_ptr<Component> c:com){
         std::string s=typeid(*c).name();
@@ -39,8 +40,8 @@ std::vector<float> Calc::solveLevel(QFile *file)
     nodes.unique();
 
 
-    std::vector<float> sol=computeNetwork(sources,resistors,nodes.size());
-    return sol;
+    sol=computeNetwork(sources,resistors,nodes.size());
+
 }
 
 
@@ -81,6 +82,7 @@ std::vector<std::shared_ptr<Component>> Calc::readFile(QFile *file)
 }
 
 
+//TODO sources/resistors direct aanspreken
 std::vector<float> Calc::computeNetwork(std::vector<std::shared_ptr<Component> > & s, std::vector<std::shared_ptr<Component> > &r, int  nrOfNodes)
 {
     //m is nrOfSources
@@ -171,12 +173,12 @@ std::vector<float> Calc::computeNetwork(std::vector<std::shared_ptr<Component> >
 
     VectorXf x = a.colPivHouseholderQr().solve(z);
 
-    std::vector<float> sol;
+    std::vector<float> solu;
     for (int i=0;i<nrOfNodes;i++){
-        sol.push_back(x(i));
+        solu.push_back(x(i));
     }
 
-    return sol;
+    return solu;
 
 
 }

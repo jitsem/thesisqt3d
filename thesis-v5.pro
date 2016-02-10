@@ -18,12 +18,13 @@ HEADERS += \
 
 
 DISTFILES += \
-    drawing \
+    solution.png \
     Qml/AppView.qml \
-    Qml/GameController.qml \
     Qml/InputController.qml \
     Qml/World3D.qml \
-    Qml/Comp.qml
+    Qml/Source.qml \
+    Qml/Generator.qml \
+    Qml/Resistor.qml
 
 RESOURCES += \
     qml.qrc \

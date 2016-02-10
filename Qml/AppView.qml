@@ -4,7 +4,7 @@ import QtQuick.Controls 1.4
 
 
 Item {
-    id:root
+    id:appView
 
     Scene3D{
         id:scene3D
@@ -31,6 +31,27 @@ Item {
         style: Text.Raised
         styleColor: "white"
     }
+
+    Text{
+        id:solText
+        text: "The circuit has following solution: "
+        font.pointSize: 10
+        color: "white"
+        anchors.verticalCenter: parent.verticalCenter
+
+        style: Text.Raised
+        styleColor: "white"
+    }
+
+
+    function setSol(){
+        solText.text+= calculator.numberOfNodes();
+        solText.text+= " nodes: \n";
+         for (var i=0;i<(calculator.numberOfNodes());i++){
+           solText.text += "voltage at node nr " +i +" " +(calculator.voltageAtNode(i)) +" volt.\n";
+         }
+
+}
 
 
 
