@@ -1,7 +1,7 @@
 TEMPLATE = app
 CONFIG += console c++11
 
-QT+=qml quick widgets
+QT+=qml quick widgets 3dcore 3dinput 3drender 3dquick
 
 SOURCES += main.cpp \
     resistor.cpp \
@@ -18,8 +18,13 @@ HEADERS += \
 
 
 DISTFILES += \
-    drawing \
-    AppView.qml
+    solution.png \
+    Qml/AppView.qml \
+    Qml/InputController.qml \
+    Qml/World3D.qml \
+    Qml/Source.qml \
+    Qml/Generator.qml \
+    Qml/Resistor.qml
 
 RESOURCES += \
     qml.qrc \
