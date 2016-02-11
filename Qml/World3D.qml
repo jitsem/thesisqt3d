@@ -27,9 +27,9 @@ Entity {
         aspectRatio: 16/9
         nearPlane : 0.1
         farPlane : 1000.0
-        position: Qt.vector3d( 20.0*cameraAngle2, 30.0, 20.0*cameraAngle1 )
+        position: Qt.vector3d( 0*cameraAngle2, 10.0, 50.0*cameraAngle1 )
         upVector: Qt.vector3d( 0.0, 1.0, 0.0 )
-        viewCenter: Qt.vector3d( 0.0, 0, 0.0 )
+        viewCenter: Qt.vector3d( 0.0, 0.0, 0.0 )
     }
 
 

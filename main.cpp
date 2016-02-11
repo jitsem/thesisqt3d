@@ -43,8 +43,6 @@ int main(int argc, char *argv[])
 
    //Dingen voor 3D
    QApplication app(argc, argv);
-
-   //default surface format -- moet altijd??
    QSurfaceFormat format;
    if(QOpenGLContext::openGLModuleType() == QOpenGLContext::LibGL){
        format.setVersion(4,1);

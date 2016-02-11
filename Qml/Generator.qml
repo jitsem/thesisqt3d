@@ -3,8 +3,10 @@ import Qt3D.Logic 2.0
 import QtQuick 2.3 as QQ2
 
 
+//Object dat verantwoordelijk is voor bouwen van circuit
 Entity{
     id:root
+
 
     QQ2.QtObject{
 
@@ -26,7 +28,6 @@ Entity{
         for(var i=0;i<calculator.getNumberOfSources();i++){
 
             var negNode = calculator.nodeMAtSource(i); //TODO wegdoen, is maar tijdelijk
-
             if(negNode === 0){
                 negNode = calculator.numberOfNodes();
             }

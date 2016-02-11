@@ -10,6 +10,7 @@ Item {
         id:scene3D
         anchors.fill: parent
         focus:true
+        aspects: "input"
 
 
         World3D{
