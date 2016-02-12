@@ -24,7 +24,8 @@ DISTFILES += \
     Qml/World3D.qml \
     Qml/Source.qml \
     Qml/Generator.qml \
-    Qml/Resistor.qml
+    Qml/Resistor.qml \
+    Qml/GroundPlane.qml
 
 RESOURCES += \
     qml.qrc \
