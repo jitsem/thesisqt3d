@@ -174,9 +174,11 @@ std::vector<float> Calc::computeNetwork(std::vector<std::shared_ptr<Component> >
     VectorXf x = a.colPivHouseholderQr().solve(z);
 
     std::vector<float> solu;
-    for (int i=0;i<nrOfNodes;i++){
+    solu.push_back(0);   //Add value of ground node, always 0
+    for (int i=0;i<nrOfNodes-1;i++){
         solu.push_back(x(i));
     }
+
 
     return solu;
 

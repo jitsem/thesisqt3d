@@ -9,12 +9,11 @@ Entity {
     id: world3D
     property real cameraAngle1: 1
     property real cameraAngle2: 1
-    property real nrOfFramesPassed: 0
 
 
 
 
-    //TODO controlleren werkt nog niet
+
     Configuration  {
         controlledCamera: mainCamera
     }

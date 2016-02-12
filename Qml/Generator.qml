@@ -27,12 +27,10 @@ Entity{
 
         for(var i=0;i<calculator.getNumberOfSources();i++){
 
-            var negNode = calculator.nodeMAtSource(i); //TODO wegdoen, is maar tijdelijk
-            if(negNode === 0){
-                negNode = calculator.numberOfNodes();
-            }
+            var negNode = calculator.nodeMAtSource(i);
+            var posNode= calculator.nodePAtSource(i);
 
-            var source = o.sourceFactory.createObject(null,{"s":calculator.voltageAtSource(i),"x":i*3, "y":calculator.voltageAtNode(negNode-1)});
+            var source = o.sourceFactory.createObject(null,{"s":calculator.voltageAtSource(i),"x":i*3, "y":calculator.voltageAtNode(negNode)});
 
             source.parent=root.parent;
 
@@ -40,16 +38,11 @@ Entity{
 
         for(var i=0;i<calculator.getNumberOfResistors();i++){
 
-            var firstNode = calculator.node2AtResistor(i); //TODO wegdoen, is maar tijdelijk
-            var lastNode = calculator.node1AtResistor(i);
-            if(firstNode === 0){
-                firstNode = calculator.numberOfNodes();
-            }
-            else if(lastNode === 0){
-                lastNode = calculator.numberOfNodes();
-            }
+            var firstNode = calculator.node1AtResistor(i);
+            var lastNode = calculator.node2AtResistor(i);
 
-            var resistor = o.resistorFactory.createObject(null,{"a":Math.atan2(3,(calculator.voltageAtNode(firstNode-1)-calculator.voltageAtNode(lastNode-1)))*180/Math.PI  ,"s":0.01*calculator.resistanceAtResistor(i),"x":(i+calculator.getNumberOfSources())*3, "y":calculator.voltageAtNode(firstNode-1)});
+
+            var resistor = o.resistorFactory.createObject(null,{"a":Math.atan2(3,(calculator.voltageAtNode(lastNode)-calculator.voltageAtNode(firstNode)))*180/Math.PI  ,"s":0.01*calculator.resistanceAtResistor(i),"x":(i+calculator.getNumberOfSources())*3, "y":calculator.voltageAtNode(lastNode)});
             resistor.parent=root.parent;
 
         }
