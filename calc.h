@@ -28,6 +28,23 @@ public:
     Q_INVOKABLE int numberOfNodes(){return sol.size();}
     Q_INVOKABLE float voltageAtNode(int nodeNr){return sol.at(nodeNr);}
 
+
+    //Methodes voor tekenen van circuit, setters zijn tijdelijk. TODO verbeteren, teveel functies voor hetzelfde
+    Q_INVOKABLE int getAngleOfResistor(int resNr){return resistors.at(resNr)->getAngle();}
+    Q_INVOKABLE void setAngleOfResistor(int resNr, int angle){resistors.at(resNr)->setAngle(angle);}
+    Q_INVOKABLE int getXCoordOfResistor(int resNr){return resistors.at(resNr)->getXCoord();}
+    Q_INVOKABLE void setXCoordOfResistor(int resNr, int xCoord){resistors.at(resNr)->setXCoord(xCoord);}
+    Q_INVOKABLE int getYCoordOfResistor(int resNr){return resistors.at(resNr)->getYCoord();}
+    Q_INVOKABLE void setYCoordOfResistor(int resNr, int yCoord){resistors.at(resNr)->setYCoord(yCoord);}
+
+    Q_INVOKABLE int getAngleOfSource(int soNr){return sources.at(soNr)->getAngle();}
+    Q_INVOKABLE void setAngleOfSource(int soNr, int angle){ sources.at(soNr)->setAngle(angle);}
+    Q_INVOKABLE int getXCoordOfSource(int soNr){return sources.at(soNr)->getXCoord();}
+    Q_INVOKABLE void setXCoordOfSource(int soNr, int xCoord){sources.at(soNr)->setXCoord(xCoord);}
+    Q_INVOKABLE int getYCoordOfSource(int soNr){return sources.at(soNr)->getYCoord();}
+    Q_INVOKABLE void setYCoordOfSource(int soNr, int yCoord){ sources.at(soNr)->setYCoord(yCoord);}
+
+
 private:
     std::vector<float> computeNetwork(std::vector<std::shared_ptr<Component> > &s, std::vector<std::shared_ptr<Component> > &r, int nrOfNodes);
     std::vector<std::shared_ptr<Component> > readFile(QFile *file);

@@ -11,7 +11,7 @@ Entity{
     property real y: 0
     property real z: 0
     property real a: 90
-
+    property real orientationAngle: 0
     components: [resmesh,retrans]
 
     Entity{
@@ -53,8 +53,15 @@ Entity{
 
     Transform{
         id:retrans
-        translation: Qt.vector3d(x, y+0.5, z)
-        rotation: fromAxisAndAngle(Qt.vector3d(0, 0, 1), a)
+        matrix: {
+                        var m = Qt.matrix4x4()
+                        m.translate(Qt.vector3d(x, y, z))
+                        m.rotate(a,(Qt.vector3d(0, 0, 1)))
+                        m.rotate(orientationAngle,Qt.vector3d(0, 1, 0))
+                        m.scale(1)
+                        return m
+                    }
+
         scale3D : Qt.vector3d(0.5, 1*s, 0.5)
 
 

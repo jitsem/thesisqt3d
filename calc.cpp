@@ -183,6 +183,8 @@ std::vector<float> Calc::computeNetwork(std::vector<std::shared_ptr<Component> >
     return solu;
 
 
+
+
 }
 
 

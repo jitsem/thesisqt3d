@@ -6,6 +6,8 @@
         <file>Qml/World3D.qml</file>
         <file>Qml/Source.qml</file>
         <file>Qml/Resistor.qml</file>
+        <file>Qml/GroundPlane.qml</file>
+
 
      </qresource>
 </RCC>
