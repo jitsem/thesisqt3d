@@ -10,33 +10,62 @@ Entity{
     property real x: 0
     property real y: 0
     property real z: 0
+    property real a: 90
 
-    components: [mesh,trans,mat]
+    components: [resmesh,retrans]
 
-    CylinderMesh {
-        id:mesh
-        radius: 0.5
-        length: 1
+    Entity{
+        id:resmesh
 
+        components: [mesh, trans,mat]
+
+
+
+        CylinderMesh {
+            id:mesh
+            radius: 0.5
+            length: 1
+
+
+
+        }
+
+        Transform{
+
+            id:trans
+            translation: Qt.vector3d(0, -0.5, 0)
+
+
+
+        }
+
+        PhongMaterial {
+            id:mat
+            diffuse: "green"
+            ambient: "green"
+            specular: "blue"
+            shininess: 0.2
+        }
 
     }
+
+
 
     Transform{
-        id:trans
-
+        id:retrans
+        translation: Qt.vector3d(x, y+0.5, z)
+        rotation: fromAxisAndAngle(Qt.vector3d(0, 0, 1), a)
         scale3D : Qt.vector3d(0.5, 1*s, 0.5)
-        translation: Qt.vector3d(x, y, z)
-        rotation: fromAxisAndAngle(Qt.vector3d(0, 0, 1), 90)
+
+
+
 
     }
 
-    PhongMaterial {
-        id:mat
-        diffuse: "green"
-        ambient: "green"
-        specular: "blue"
-        shininess: 0.2
-    }
+
 
 
 }
+
+
+

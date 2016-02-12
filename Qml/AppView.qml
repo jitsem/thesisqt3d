@@ -48,7 +48,7 @@ Item {
     function setSol(){
         solText.text+= calculator.numberOfNodes();
         solText.text+= " nodes: \n";
-         for (var i=0;i<(calculator.numberOfNodes());i++){
+         for (var i=0;i<calculator.numberOfNodes();i++){
            solText.text += "voltage at node nr " +i +" " +(calculator.voltageAtNode(i)) +" volt.\n";
          }
 
