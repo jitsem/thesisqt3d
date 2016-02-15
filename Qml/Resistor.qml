@@ -6,72 +6,69 @@ import QtQuick 2.2 as QQ2
 
 Entity{
     id:node
-    property real s: 1
+    property real s: 1 //bepaald dikte vd weerstand, afhankelijk van weestandswaarde
+    property real l: 1 //bepaald lengte vd weerstand, afhankelijk van spanning over weerstand
+
+    //Variablen voor posistie
     property real x: 0
     property real y: 0
     property real z: 0
-    property real a: 90
-    property real orientationAngle: 0
-    components: [resmesh,retrans]
+
+    //Variable voor hoek.
+    property real a: 90 //Hoek volgens z as,bepaald door spanning over weerstand
+    property real orientationAngle: 0 //Hoek volgens y as, bepaald door plaatsing weerstand
+
+    components: [finmesh,fintrans]
 
     Entity{
-        id:resmesh
+        //Weerstand met juiste waardes, zonder plaatsing
+        id:finmesh
+        components: [resmesh,retrans]
 
-        components: [mesh, trans,mat]
+        Entity{
+            //Basismodel weestand
+            id:resmesh
+            components: [mesh, trans,mat]
 
+            CylinderMesh {
+                id:mesh
+                radius: 1
+                length: 1
+            }
 
+            Transform{
 
-        CylinderMesh {
-            id:mesh
-            radius: 0.5
-            length: 1
+                id:trans
+                translation: Qt.vector3d(0, -0.5, 0)
 
+            }
 
+            PhongMaterial {
+                id:mat
+                diffuse: "green"
+                ambient: "green"
+                specular: "blue"
+                shininess: 0.2
+            }
 
         }
 
         Transform{
-
-            id:trans
-            translation: Qt.vector3d(0, -0.5, 0)
-
-
-
+            id:retrans
+            matrix: {
+                var m = Qt.matrix4x4()
+                m.rotate(a,(Qt.vector3d(0, 0, 1)));
+                m.scale(1);
+                return m
+            }
+            scale3D: Qt.vector3d(0.005*s,l,0.005*s)
         }
-
-        PhongMaterial {
-            id:mat
-            diffuse: "green"
-            ambient: "green"
-            specular: "blue"
-            shininess: 0.2
-        }
-
     }
-
-
-
     Transform{
-        id:retrans
-        matrix: {
-                        var m = Qt.matrix4x4()
-                        m.translate(Qt.vector3d(x, y, z))
-                        m.rotate(a,(Qt.vector3d(0, 0, 1)))
-                        m.rotate(orientationAngle,Qt.vector3d(0, 1, 0))
-                        m.scale(1)
-                        return m
-                    }
-
-        scale3D : Qt.vector3d(0.5, 1*s, 0.5)
-
-
-
-
+        id:fintrans
+        rotation: fromAxisAndAngle(Qt.vector3d(0,1,0),orientationAngle)
+        translation: (Qt.vector3d(x, y, z))
     }
-
-
-
-
 }
 
 

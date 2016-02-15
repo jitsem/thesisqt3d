@@ -10,14 +10,10 @@ Entity {
     property real cameraAngle1: 1
     property real cameraAngle2: 1
 
-
-
-
-
+    //Camera settings
     Configuration  {
         controlledCamera: mainCamera
     }
-
 
     Camera {
         id: mainCamera
@@ -33,7 +29,7 @@ Entity {
 
 
 
-
+    //Render settings
     FrameGraph {
         id : forward_renderer
         activeFrameGraph : ForwardRenderer {
@@ -44,7 +40,7 @@ Entity {
 
     components: [forward_renderer]
 
-
+    //World generation
     Generator{
         id:generator
     }
