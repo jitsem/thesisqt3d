@@ -27,18 +27,7 @@ int main(int argc, char *argv[])
 
 
     //Dingen voor netwerkcalculation
-
-
     Calc* c=new Calc();
-
-//    QFile f(":/assets/inputfile.txt");
-//    std::vector<float> sol=c->solveLevel(&f);
-//    std::stringstream ss;
-//    for (int i=0;i<4;i++){
-//    ss<<"voltage at node nr "<<i+1<<" "<<(sol.at(i))<<" volt"<<'\n';
-//    }
-//   std::string toPrint = ss.str();
-//   QString str = QString::fromUtf8(toPrint.c_str());
 
 
    //Dingen voor 3D
@@ -62,9 +51,6 @@ int main(int argc, char *argv[])
    view.setSource(QUrl("qrc:/Qml/AppView.qml"));
 
 
-    QObject *text = view.rootObject();
-
-   // text->setProperty("text",str);
 
     view.show();
 
