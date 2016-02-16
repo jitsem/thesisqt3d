@@ -28,7 +28,8 @@ DISTFILES += \
     Qml/Generator.qml \
     Qml/Resistor.qml \
     Qml/GroundPlane.qml \
-    assets/inputfile_new.sj
+    Qml/Wire.qml \
+    Qml/Electron.qml \
 
 RESOURCES += \
     qml.qrc \

@@ -2,7 +2,7 @@ import QtQuick 2.5
 import QtQuick.Scene3D 2.0
 import QtQuick.Controls 1.4
 
-
+//Overlay met Qtquick elementen
 Item {
     id:appView
 
@@ -10,7 +10,7 @@ Item {
         id:scene3D
         anchors.fill: parent
         focus:true
-        aspects: "input"
+        aspects: ["logic", "input"]
 
 
         World3D{
@@ -28,7 +28,6 @@ Item {
         font.pointSize: 24
         color: "red"
         anchors.horizontalCenter: parent.horizontalCenter
-
         style: Text.Raised
         styleColor: "white"
     }
@@ -39,7 +38,6 @@ Item {
         font.pointSize: 10
         color: "white"
         anchors.verticalCenter: parent.verticalCenter
-
         style: Text.Raised
         styleColor: "white"
     }
