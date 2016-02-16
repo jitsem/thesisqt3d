@@ -1,10 +1,13 @@
 #include "resistor.h"
 #include "component.h"
-Resistor::Resistor(float v, int n1, int n2)
+Resistor::Resistor(float v, int n1, int n2, int x, int y, int angle)
  : node1(n1),node2(n2)
 {
 
-    Component::setValue(v);
+    this->setValue(v);
+    this->setXCoord(x);
+    this->setYCoord(y);
+    this->setAngle(angle);
 }
 
 int Resistor::getNode1() const

@@ -1,11 +1,16 @@
 #include "source.h"
 #include "component.h"
-Source::Source(float v, int np, int nm)
+Source::Source(float v, int np, int nm, int x, int y, int angle)
     : nodep(np), nodem(nm)
 
 {
-        Component::setValue(v);
+        this->setValue(v);
+    this->setXCoord(x);
+    this->setYCoord(y);
+    this->setAngle(angle);
 }
+
+
 
 int Source::getNodep() const
 {

@@ -4,6 +4,7 @@
 #include <QQuickView>
 #include <QQuickItem>
 #include <QVariant>
+#include <QDebug>
 
 #include <QQmlContext>
 #include <QQmlEngine>
@@ -20,6 +21,7 @@
 #include "source.h"
 #include "resistor.h"
 #include "calc.h"
+#include "component.h"
 using namespace std;
 
 int main(int argc, char *argv[])
@@ -28,6 +30,18 @@ int main(int argc, char *argv[])
 
     //Dingen voor netwerkcalculation
     Calc* c=new Calc();
+
+
+
+    QFile f(":/assets/inputfile_new.sj");
+
+    std::vector<std::shared_ptr<Component>> pipi = c->readFile(&f);
+    int i=0;
+    for (auto &comp : pipi){
+        i++;
+        qDebug() <<"component nr"<<i<<comp->getXCoord();
+    }
+
 
 
    //Dingen voor 3D

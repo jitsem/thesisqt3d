@@ -1,5 +1,7 @@
 #include "component.h"
 
+//TODO override << operator so that component can be printed
+
 Component::Component()
 {
 

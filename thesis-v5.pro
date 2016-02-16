@@ -8,12 +8,14 @@ SOURCES += main.cpp \
     source.cpp \
     calc.cpp \
     component.cpp \
+    wire.cpp
 
 HEADERS += \
     calc.h \
     resistor.h \
     source.h \
     component.h\
+    wire.h
 
 
 

@@ -6,6 +6,9 @@
 #include "resistor.h"
 #include "source.h"
 #include "component.h"
+#include <QDebug>
+#include <QString>
+#include "wire.h"
 
 class Calc: public QObject
 {
@@ -45,9 +48,14 @@ public:
     Q_INVOKABLE void setYCoordOfSource(int soNr, int yCoord){ sources.at(soNr)->setYCoord(yCoord);}
 
 
+    Q_INVOKABLE std::vector<std::shared_ptr<Component> > readFile(QFile *file);
+
+    std::vector<std::shared_ptr<Component>> process_wire_line(QString& lijn);//TODO remove return type and push_back wires in global wires var
+    void process_resistor_line(QString &lijn);
+    void process_source_line(QString &lijn);
 private:
     std::vector<float> computeNetwork(std::vector<std::shared_ptr<Component> > &s, std::vector<std::shared_ptr<Component> > &r, int nrOfNodes);
-    std::vector<std::shared_ptr<Component> > readFile(QFile *file);
+    //std::vector<std::shared_ptr<Component> > readFile(QFile *file);
 
 
     //variables for circuit
@@ -55,6 +63,7 @@ private:
     std::vector<float> sol;
     std::vector<std::shared_ptr<Component>> sources;
     std::vector<std::shared_ptr<Component>> resistors;
+    std::vector<std::shared_ptr<Component>> wires;
 };
 
 #endif // CALC_H
