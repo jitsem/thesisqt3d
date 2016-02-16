@@ -1,10 +1,12 @@
 import Qt3D.Core 2.0
 import Qt3D.Render 2.0
+import Qt3D.Logic 2.0
 import QtQuick 2.2 as QQ2
 
 
 
 Entity{
+    id:root
     //Positie variablen
     property real x: 0
     property real y: 0
@@ -13,7 +15,11 @@ Entity{
     property real l: 1 //Lengte van draad
     property real orientationAngle: 90 //Hoek van draad
 
-    components: [finmesh,fintrans]
+    //Variables for spawning electrons
+    property bool done: false
+    property real framecount
+
+    components: [finmesh,fintrans,electronSpawner]
 
     Entity{
         id:finmesh
@@ -53,6 +59,7 @@ Entity{
                 m.scale(1);
                 return m;
             }
+
         }
 
     }
@@ -63,6 +70,45 @@ Entity{
         translation: (Qt.vector3d(x, y, z))
 
     }
+
+
+
+    //Stuff for spawning electrons
+    QQ2.QtObject{
+        id:o
+        property var electronFactory
+
+    }
+    QQ2.Component.onCompleted: {
+        o.electronFactory=Qt.createComponent("qrc:/Qml/Electron.qml");
+        root.done = true;
+    }
+
+    LogicComponent{
+        id: electronSpawner
+
+        onFrameUpdate:
+        {
+            spawnElectron();
+
+        }
+    }
+
+    function spawnElectron(){
+        root.framecount++;
+        if(!root.done)
+            return;
+
+        if(root.framecount >= 60){
+            var electron = o.electronFactory.createObject(null,{"xend":root.l, "dur":1000*root.l});
+            electron.parent=root;
+            root.framecount=0;
+        }
+    }
+
+
+
+
 
 
 
