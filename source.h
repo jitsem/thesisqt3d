@@ -6,7 +6,7 @@
 class Source : public Component
 {
 public:
-    Source(float v, int np, int nm);
+    Source(float v, int np, int nm,int x,int y,int angle);
     int getNodep() const;
     void setNodep(int value);
 

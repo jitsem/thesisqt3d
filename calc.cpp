@@ -5,7 +5,6 @@
 #include "Eigen/Dense"
 
 
-//comment iets
 
 using namespace Eigen;
 Calc::Calc()
@@ -24,16 +23,17 @@ void Calc::solveLevel(QString path)
 
     for(std::shared_ptr<Component> c:com){
         std::string s=typeid(*c).name();
-       if(s.substr(1,s.size()-1) =="Source"){
-           sources.push_back(c);
-           nodes.push_back(c->getNodem());
-           nodes.push_back(c->getNodep());
-       }
-       if(s.substr(1,s.size()-1)=="Resistor"){
-           resistors.push_back(c);
-           nodes.push_back(c->getNode1());
-           nodes.push_back(c->getNode2());
-       }
+        if(s.substr(1,s.size()-1) =="Source"){
+            sources.push_back(c);
+            nodes.push_back(c->getNodem());
+            nodes.push_back(c->getNodep());
+        }
+        if(s.substr(1,s.size()-1)=="Resistor"){
+            resistors.push_back(c);
+            nodes.push_back(c->getNode1());
+            nodes.push_back(c->getNode2());
+        }
+
 
     }
     nodes.sort();
@@ -54,32 +54,149 @@ std::vector<std::shared_ptr<Component>> Calc::readFile(QFile *file)
         while (!in.atEnd())
         {
             QString line = in.readLine();
-            QStringList lineList = line.split(" ");
+            if (!line.isEmpty()&&!line.isNull()){
 
-            switch ( lineList.at(0).toLower().at(0).toLatin1() )
-            {
-            case 'v':
-            {
-                auto v = std::make_shared<Source>(lineList.at(1).toFloat(),lineList.at(2).toInt(), lineList.at(3).toInt());
-                components.push_back(v);
-                break;
-            }
-            case 'r':
-            {
 
-                auto r = std::make_shared<Resistor>(lineList.at(1).toFloat(),lineList.at(2).toInt(), lineList.at(3).toInt());
-                components.push_back(r);
-                break;
+                QChar first =line.at(0).toLower();
+                switch (first.toLatin1()) //to check first character
+                {
+                case '*':{
+                    if(line.length()>=2 ){
+
+                        QChar second =line.at(1).toLower().toLatin1();
+
+                        if(second=='s'){
+                            for (int i=2;i<line.length();i++){
+                                if(line.at(i).toLower().toLatin1()=='j'){ //TODO check if index is too big necessary?
+                                    qDebug()<<"start of file, found correct sj start";
+                                }
+                            }
+                            break;//break from * case
+                        }
+                        else if(second=='g'){
+                            //qDebug()<<"found ground, ignored location at the moment";
+                            break;
+                        }
+
+                        else if(second=='w'){
+                            if(line.length()>2){
+
+                                auto wir=process_wire_line(line);
+                                wires.insert(std::end(wires), std::begin(wir), std::end(wir));
+                            }
+                            else{
+                                break;
+                            }
+
+                        }
+                        else if (second=='/'){
+                            if(line.length()>2){
+                                //qDebug()<<line;
+                                //#ingnore
+                            }
+                        }
+                        break;
+                    }
+                }
+
+                case '\n':{
+                    //just continue
+                    //qDebug()<<"read a newline char"<<"\n ";
+                    break;
+                }
+                case ' ':{
+                    //just continue
+                    // qDebug()<<"read a space"<<"\n ";
+                    break;
+                }
+                case 'r':{
+                    //do for resistor
+                    process_resistor_line(line);
+                    break;
+                }
+                case 'v':{
+                    //do for source
+                    process_source_line(line);
+                    break;
+                }
+                case '.':{
+                    // do for end
+                    break;
+                }
+                default :
+                    qDebug()<<"something went wrong" <<"\n";
+                }
             }
-            default:
-                std::cout<<"Fault in Reading File"<<std::endl;
-            }
+
 
         }
         file->close();
     }
     return components;
 }
+
+std::vector<std::shared_ptr<Component> > Calc::process_wire_line(QString &lijn)
+{
+    std::vector<std::shared_ptr<Component>> wires;
+    lijn.replace("*","",Qt::CaseSensitivity::CaseInsensitive); //remove *
+    lijn.replace("w","",Qt::CaseSensitivity::CaseInsensitive); //remove w
+    QStringList list=lijn.split(",");
+    for (QStringList::iterator it = list.begin(); it != list.end(); ++it) {
+        QString current = *it;
+        QStringList list2=current.split(" ",QString::SkipEmptyParts);//TODO better name
+        //qDebug()<<list2.at(2);
+        int x=list2.at(1).toInt();
+        int y=list2.at(2).toInt();
+        int angle=list2.at(0).toInt();
+        int length=list2.at(4).toInt();
+        int node=list2.at(3).toInt();
+        auto w =std::make_shared<Wire>(x,y,angle,length,node);
+        wires.push_back(w); //TODO check if input is correct!!
+
+
+    }
+
+    return wires;
+}
+
+void Calc::process_resistor_line(QString &lijn)
+{
+
+    lijn.replace("r","",Qt::CaseSensitivity::CaseInsensitive); //remove r
+    QStringList list=lijn.split(" ",QString::SkipEmptyParts);
+    //for (QStringList::iterator it = list.begin(); it != list.end(); ++it) {
+    //QString current = *it;
+    int x=list.at(5).toInt();
+    int y=list.at(6).toInt();
+    int angle=list.at(7).toInt();
+    int node1=list.at(1).toInt();
+    int node2=list.at(2).toInt();
+    float v=list.at(3).toFloat();
+    auto r =std::make_shared<Resistor>(v,node1,node2,x,y,angle);
+    resistors.push_back(r); //TODO check if input is correct!!
+
+    //}
+    int i=0;
+
+}
+
+void Calc::process_source_line(QString &lijn)
+{
+
+    lijn.replace("v","",Qt::CaseSensitivity::CaseInsensitive); //remove v
+    QStringList list=lijn.split(" ",QString::SkipEmptyParts);
+    int x=list.at(5).toInt();
+    int y=list.at(6).toInt();
+    int angle=list.at(7).toInt();
+    int nodep=list.at(1).toInt();
+    int nodem=list.at(2).toInt();
+    float v=list.at(3).toFloat();
+    auto s =std::make_shared<Source>(v,nodep,nodem,x,y,angle);
+    sources.push_back(s); //TODO check if input is correct!!
+
+
+}
+
 
 
 //TODO sources/resistors direct aanspreken

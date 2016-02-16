@@ -20,66 +20,66 @@ Entity{
 
     QQ2.Component.onCompleted: {
 
-        calculator.solveLevel(":/assets/inputfile.txt");
+        //calculator.solveLevel(":/assets/inputfile.txt");
 
-        o.sourceFactory=Qt.createComponent("qrc:/Qml/Source.qml");
-        o.resistorFactory=Qt.createComponent("qrc:/Qml/Resistor.qml")
+//        o.sourceFactory=Qt.createComponent("qrc:/Qml/Source.qml");
+//        o.resistorFactory=Qt.createComponent("qrc:/Qml/Resistor.qml")
 
 
         //tijdelijk TODO delete
 
-        calculator.setAngleOfResistor(0,90);
-        calculator.setAngleOfResistor(1,0);
-        calculator.setAngleOfResistor(2,90);
-        calculator.setAngleOfResistor(3,90);
-        calculator.setAngleOfResistor(4, 90);
+//        calculator.setAngleOfResistor(0,90);
+//        calculator.setAngleOfResistor(1,0);
+//        calculator.setAngleOfResistor(2,90);
+//        calculator.setAngleOfResistor(3,90);
+//        calculator.setAngleOfResistor(4, 90);
 
-        calculator.setXCoordOfResistor(0, 1);
-        calculator.setXCoordOfResistor(1, 0);
-        calculator.setXCoordOfResistor(2, 1);
-        calculator.setXCoordOfResistor(3, 6);
-        calculator.setXCoordOfResistor(4, 4);
+//        calculator.setXCoordOfResistor(0, 1);
+//        calculator.setXCoordOfResistor(1, 0);
+//        calculator.setXCoordOfResistor(2, 1);
+//        calculator.setXCoordOfResistor(3, 6);
+//        calculator.setXCoordOfResistor(4, 4);
 
-        calculator.setYCoordOfResistor(0, 5);
-        calculator.setYCoordOfResistor(1, 1);
-        calculator.setYCoordOfResistor(2, 3);
-        calculator.setYCoordOfResistor(3, 3);
-        calculator.setYCoordOfResistor(4, 4);
+//        calculator.setYCoordOfResistor(0, 5);
+//        calculator.setYCoordOfResistor(1, 1);
+//        calculator.setYCoordOfResistor(2, 3);
+//        calculator.setYCoordOfResistor(3, 3);
+//        calculator.setYCoordOfResistor(4, 4);
 
-        calculator.setAngleOfSource(0, 90);
-        calculator.setXCoordOfSource(0, 9);
-        calculator.setYCoordOfSource(0, 3);
+//        calculator.setAngleOfSource(0, 90);
+//        calculator.setXCoordOfSource(0, 9);
+//        calculator.setYCoordOfSource(0, 3);
 
-         calculator.setAngleOfSource(1, 90);
-         calculator.setXCoordOfSource(1, 4);
-         calculator.setYCoordOfSource(1, 3);
-
-
+//         calculator.setAngleOfSource(1, 90);
+//         calculator.setXCoordOfSource(1, 4);
+//         calculator.setYCoordOfSource(1, 3);
 
 
 
-        for(var i=0;i<calculator.getNumberOfSources();i++){
-
-            var negNode = calculator.nodeMAtSource(i);
-            var posNode= calculator.nodePAtSource(i);
-            var source = o.sourceFactory.createObject(null,{"s":calculator.voltageAtSource(i),"x":calculator.getXCoordOfSource(i)*3,
-                                                          "z":-calculator.getYCoordOfSource(i)*3, "y":calculator.voltageAtNode(negNode)});
-            source.parent=root.parent;
 
 
-        }
+//        for(var i=0;i<calculator.getNumberOfSources();i++){
 
-        for(i=0;i<calculator.getNumberOfResistors();i++){
+//            var negNode = calculator.nodeMAtSource(i);
+//            var posNode= calculator.nodePAtSource(i);
+//            var source = o.sourceFactory.createObject(null,{"s":calculator.voltageAtSource(i),"x":calculator.getXCoordOfSource(i)*3,
+//                                                          "z":-calculator.getYCoordOfSource(i)*3, "y":calculator.voltageAtNode(negNode)});
+//            source.parent=root.parent;
 
-            var firstNode = calculator.node1AtResistor(i);
-            var lastNode = calculator.node2AtResistor(i);
-            var resistor = o.resistorFactory.createObject(null,{"a":Math.atan2(3,(calculator.voltageAtNode(lastNode)-calculator.voltageAtNode(firstNode)))*180/Math.PI
-                                                              ,"s":0.01*calculator.resistanceAtResistor(i),"x":calculator.getXCoordOfResistor(i)*3,
-                                                              "z":-calculator.getYCoordOfResistor(i)*3,
-                                                              "y":calculator.voltageAtNode(lastNode), "orientationAngle":calculator.getAngleOfResistor(i)});
-            resistor.parent=root.parent;
 
-        }
+//        }
+
+//        for(i=0;i<calculator.getNumberOfResistors();i++){
+
+//            var firstNode = calculator.node1AtResistor(i);
+//            var lastNode = calculator.node2AtResistor(i);
+//            var resistor = o.resistorFactory.createObject(null,{"a":Math.atan2(3,(calculator.voltageAtNode(lastNode)-calculator.voltageAtNode(firstNode)))*180/Math.PI
+//                                                              ,"s":0.01*calculator.resistanceAtResistor(i),"x":calculator.getXCoordOfResistor(i)*3,
+//                                                              "z":-calculator.getYCoordOfResistor(i)*3,
+//                                                              "y":calculator.voltageAtNode(lastNode), "orientationAngle":calculator.getAngleOfResistor(i)});
+//            resistor.parent=root.parent;
+
+//        }
 
 
 
@@ -90,10 +90,10 @@ Entity{
 //        line.parent = root.parent;
 
 
-        setSol();
+//        setSol();
 
 
-    }
+//    }
 
 }
 
@@ -172,3 +172,4 @@ Entity{
 
 //}
 
+}

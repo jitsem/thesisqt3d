@@ -8,12 +8,14 @@ SOURCES += main.cpp \
     source.cpp \
     calc.cpp \
     component.cpp \
+    wire.cpp
 
 HEADERS += \
     calc.h \
     resistor.h \
     source.h \
     component.h\
+    wire.h
 
 
 
@@ -25,7 +27,8 @@ DISTFILES += \
     Qml/Source.qml \
     Qml/Generator.qml \
     Qml/Resistor.qml \
-    Qml/GroundPlane.qml
+    Qml/GroundPlane.qml \
+    assets/inputfile_new.sj
 
 RESOURCES += \
     qml.qrc \
