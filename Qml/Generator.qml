@@ -3,7 +3,7 @@ import Qt3D.Logic 2.0
 import QtQuick 2.3 as QQ2
 
 
-//Object dat verantwoordelijk is voor bouwen van circuit
+//Object dat verantwoordelijk is voor bouwen van circuitsc
 Entity{
     id:root
 
@@ -22,8 +22,8 @@ Entity{
 
         //arrays for components
         property var sources:[]
-        property var resistors :[];
-        property var wires: [];
+        property var resistors :[]
+        property var wires: []
 
 
 
@@ -129,29 +129,19 @@ Entity{
         var wire2 = o.wireFactory.createObject(null,{"x":0*o.sf,"z":-3*o.sf, "y":12.6, "orientationAngle":0, "l":o.sf});
         wire2.parent=root.parent;
 
-        var wire3 = o.wireFactory.createObject(null,{"x":2*o.sf,"z":-3*o.sf,"y":23,"orientationAngle":0, "l":o.sf});
+        var wire3 = o.wireFactory.createObject(null,{"x":2*o.sf,"z":-3*o.sf,"y":23,"orientationAngle":0, "l":o.sf*2});
 
         wire3.parent=root.parent;
 
-        var wire4 = o.wireFactory.createObject(null,{"x":3*o.sf,"z":-3*o.sf,"y":23,"orientationAngle":0, "l":o.sf});
 
-        wire4.parent=root.parent;
 
         var wire5 = o.wireFactory.createObject(null,{"x":4*o.sf,"z":-3*o.sf,"y":8.04,"orientationAngle":0, "l":o.sf});
 
         wire5.parent=root.parent;
 
-        var wire5 = o.wireFactory.createObject(null,{"x":6*o.sf,"z":-3*o.sf,"y":20,"orientationAngle":0, "l":o.sf});
+        var wire5 = o.wireFactory.createObject(null,{"x":6*o.sf,"z":-3*o.sf,"y":20,"orientationAngle":0, "l":o.sf*3});
 
         wire5.parent=root.parent;
-
-        var wire6 = o.wireFactory.createObject(null,{"x":7*o.sf,"z":-3*o.sf,"y":20,"orientationAngle":0, "l":o.sf});
-
-        wire6.parent=root.parent;
-
-        var wire7 = o.wireFactory.createObject(null,{"x":8*o.sf,"z":-3*o.sf,"y":20,"orientationAngle":0, "l":o.sf});
-
-        wire7.parent=root.parent;
 
 
         console.log("number of sources, resistors", o.sources.length, o.resistors.length);

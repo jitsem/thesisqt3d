@@ -27,6 +27,7 @@ DISTFILES += \
     Qml/Resistor.qml \
     Qml/GroundPlane.qml \
     Qml/Wire.qml \
+    Qml/Electron.qml \
 
 RESOURCES += \
     qml.qrc \

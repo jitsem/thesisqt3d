@@ -8,6 +8,7 @@
         <file>Qml/Resistor.qml</file>
         <file>Qml/GroundPlane.qml</file>
 	<file>Qml/Wire.qml</file>
+	<file>Qml/Electron.qml</file>
 
 
      </qresource>
