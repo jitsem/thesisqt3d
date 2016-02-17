@@ -32,39 +32,20 @@ Entity{
 
 
     QQ2.Component.onCompleted: {
-       buildLevel(); //Bouw Ciruict
-       setSol();    //show nodal solution on screen, for debugging
+        buildLevel(); //Bouw Ciruict
+        setSol();    //show nodal solution on screen, for debugging
 
 
     }
 
     function buildLevel(){
 
-        calculator.solveLevel(":/assets/inputfile.txt");
-
+        calculator.readFile(":/assets/inputfile_1.sj");
+        calculator.solveLevel();
 
         o.sourceFactory=Qt.createComponent("qrc:/Qml/Source.qml");
         o.resistorFactory=Qt.createComponent("qrc:/Qml/Resistor.qml");
         o.wireFactory=Qt.createComponent("qrc:/Qml/Wire.qml");
-
-
-
-        //tijdelijk TODO delete
-
-        calculator.setAngleOfResistor(0,0);
-        calculator.setAngleOfResistor(1,90);
-        calculator.setAngleOfResistor(2,0);
-        calculator.setAngleOfResistor(3,180);
-        calculator.setAngleOfResistor(4, 0);
-
-        calculator.setAngleOfSource(1, 90);
-        calculator.setXCoordOfSource(1, 4);
-        calculator.setYCoordOfSource(1, 3);
-
-
-
-
-
 
         for(var i=0;i<calculator.getNumberOfSources();i++){
 
@@ -72,46 +53,47 @@ Entity{
             var negNode = calculator.nodeMAtSource(i);
             var posNode= calculator.nodePAtSource(i);
             var source = o.sourceFactory.createObject(null,{"s":calculator.voltageAtSource(i),
-                                                            "x":calculator.getXCoordOfSource(i)*o.sf,
-                                                            "z":-calculator.getYCoordOfSource(i)*o.sf,
-                                                            "y":calculator.voltageAtNode(negNode)});
+                                                          "x":calculator.getXCoordOfSource(i)*o.sf,
+                                                          "z":-calculator.getYCoordOfSource(i)*o.sf,
+                                                          "y":calculator.voltageAtNode(negNode)});
             source.parent=root.parent;
             o.sources[o.sources.length]=source;
 
 
 
-       }
+        }
+
+        //TODO Probleem met angle oplossen
 
         for(i=0;i<calculator.getNumberOfResistors();i++){
 
 
-       var firstNode = calculator.node1AtResistor(i);
-          var lastNode = calculator.node2AtResistor(i);
-         var resistor = o.resistorFactory.createObject(null,{"a":Math.atan2(3,(calculator.voltageAtNode(lastNode)-calculator.voltageAtNode(firstNode)))*180/Math.PI
-                                                           ,"s":0.01*calculator.resistanceAtResistor(i),"x":calculator.getXCoordOfResistor(i)*3,
-                                                           "z":-calculator.getYCoordOfResistor(i)*3,
-                                                            "y":calculator.voltageAtNode(lastNode), "orientationAngle":calculator.getAngleOfResistor(i)});
-          resistor.parent=root.parent;
-        }
-
-
-
+            var minVolt = Math.min(calculator.voltageAtNode(calculator.node1AtResistor(i)),calculator.voltageAtNode(calculator.node2AtResistor(i)));
+            var maxVolt = Math.max(calculator.voltageAtNode(calculator.node1AtResistor(i)),calculator.voltageAtNode(calculator.node2AtResistor(i)));
 
 
             //Hoek van de weerstand
-            var angle = Math.atan2(o.sf,(calculator.voltageAtNode(lastNode)-calculator.voltageAtNode(firstNode)));
+            var angle = Math.atan2(o.sf,(minVolt-maxVolt));
+
 
             //Lengte van de weerstand
-            var length = Math.abs(((calculator.voltageAtNode(lastNode)-calculator.voltageAtNode(firstNode)))/Math.cos(angle));
+            var length = Math.abs(((maxVolt-minVolt))/Math.cos(angle));
 
 
-            var resistor = o.resistorFactory.createObject(null,{"a":angle*180/Math.PI,
-                                                                "l":length,
-                                                                "s":calculator.resistanceAtResistor(i),
-                                                                "x":calculator.getXCoordOfResistor(i)*o.sf,
-                                                                "z":-calculator.getYCoordOfResistor(i)*o.sf,
-                                                                "y":calculator.voltageAtNode(lastNode),
-                                                                "orientationAngle":calculator.getAngleOfResistor(i)});
+
+
+
+            //Loopke voor hoek
+
+
+
+            var resistor = o.resistorFactory.createObject(null,{"a":(angle*180/Math.PI),
+                                                              "l":length,
+                                                              "s":calculator.resistanceAtResistor(i),
+                                                              "x":calculator.getXCoordOfResistor(i)*o.sf,
+                                                              "z":-calculator.getYCoordOfResistor(i)*o.sf,
+                                                              "y":minVolt,
+                                                              "orientationAngle":90*(calculator.getAngleOfResistor(i)-1)});
 
             resistor.parent=root.parent;
             o.resistors[o.resistors.length]=resistor;
@@ -120,28 +102,21 @@ Entity{
 
 
 
-
         //add wires TODO make automatisch
-        var wire1 = o.wireFactory.createObject(null,{"x":0*o.sf,"z":-2*o.sf, "y":12.6, "l":o.sf});
-        wire1.parent=root.parent;
 
-        var wire2 = o.wireFactory.createObject(null,{"x":0*o.sf,"z":-3*o.sf, "y":12.6, "orientationAngle":0, "l":o.sf});
-        wire2.parent=root.parent;
-
-        var wire3 = o.wireFactory.createObject(null,{"x":2*o.sf,"z":-3*o.sf,"y":23,"orientationAngle":0, "l":o.sf*2});
-
-        wire3.parent=root.parent;
+        for(i=0;i<calculator.getNumberOfWires();i++){
 
 
 
-        var wire5 = o.wireFactory.createObject(null,{"x":4*o.sf,"z":-3*o.sf,"y":8.04,"orientationAngle":0, "l":o.sf});
+            var wire = o.wireFactory.createObject(null,{"x":calculator.getXCoordOfWire(i)*o.sf,
+                                                         "z":-calculator.getYCoordOfWire(i)*o.sf,
+                                                         "y":calculator.voltageAtNode(calculator.getNodeOfWire(i)),
+                                                         "l":calculator.getLengthOfWire(i)*o.sf,
+                                                         "orientationAngle":90*(calculator.getAngleOfWire(i)-1)});
+            wire.parent=root.parent;
+            o.wires[o.wires.length]=wire;
 
-        wire5.parent=root.parent;
-
-        var wire5 = o.wireFactory.createObject(null,{"x":6*o.sf,"z":-3*o.sf,"y":20,"orientationAngle":0, "l":o.sf*3});
-
-        wire5.parent=root.parent;
-
+        }
 
         console.log("number of sources, resistors", o.sources.length, o.resistors.length);
 
@@ -152,4 +127,3 @@ Entity{
 
 
 
-}

@@ -12,42 +12,33 @@ Calc::Calc()
 
 }
 
-void Calc::solveLevel(QString path)
+void Calc::solveLevel()
 {
-    QFile file(path);
-
-
     std::list<int> nodes;
 
-    std::vector<std::shared_ptr<Component>> com = readFile(&file);
-
-    for(std::shared_ptr<Component> c:com){
-        std::string s=typeid(*c).name();
-        if(s.substr(1,s.size()-1) =="Source"){
-            sources.push_back(c);
-            nodes.push_back(c->getNodem());
-            nodes.push_back(c->getNodep());
-        }
-        if(s.substr(1,s.size()-1)=="Resistor"){
-            resistors.push_back(c);
-            nodes.push_back(c->getNode1());
-            nodes.push_back(c->getNode2());
-        }
-
-
+    for(auto v:sources){
+        nodes.push_back(v->getNodem());
+        nodes.push_back(v->getNodep());
     }
+    for(auto r:resistors){
+
+        nodes.push_back(r->getNode1());
+        nodes.push_back(r->getNode2());
+    }
+
+
     nodes.sort();
     nodes.unique();
-
 
     sol=computeNetwork(sources,resistors,nodes.size());
 
 }
 
 
-std::vector<std::shared_ptr<Component>> Calc::readFile(QFile *file)
+void Calc::readFile(QString s)
 {
-    std::vector<std::shared_ptr<Component>> components;
+    QFile * file = new QFile(s);
+
     if (file->open(QIODevice::ReadOnly| QIODevice::Text))
     {
         QTextStream in(file);
@@ -132,12 +123,11 @@ std::vector<std::shared_ptr<Component>> Calc::readFile(QFile *file)
         }
         file->close();
     }
-    return components;
 }
 
-std::vector<std::shared_ptr<Component> > Calc::process_wire_line(QString &lijn)
+std::vector<std::shared_ptr<Wire> > Calc::process_wire_line(QString &lijn)
 {
-    std::vector<std::shared_ptr<Component>> wires;
+    std::vector<std::shared_ptr<Wire>> wir;
     lijn.replace("*","",Qt::CaseSensitivity::CaseInsensitive); //remove *
     lijn.replace("w","",Qt::CaseSensitivity::CaseInsensitive); //remove w
     QStringList list=lijn.split(",");
@@ -151,12 +141,12 @@ std::vector<std::shared_ptr<Component> > Calc::process_wire_line(QString &lijn)
         int length=list2.at(4).toInt();
         int node=list2.at(3).toInt();
         auto w =std::make_shared<Wire>(x,y,angle,length,node);
-        wires.push_back(w); //TODO check if input is correct!!
+        wir.push_back(w); //TODO check if input is correct!!
 
 
     }
 
-    return wires;
+    return wir;
 }
 
 void Calc::process_resistor_line(QString &lijn)

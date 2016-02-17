@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>assets/inputfile.txt</file>
-        <file>assets/inputfile_new.sj</file>
+        <file>assets/inputfile_1.sj</file>
+        <file>assets/inputfile_2.sj</file>
     </qresource>
 </RCC>
