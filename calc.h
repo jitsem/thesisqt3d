@@ -53,6 +53,9 @@ public:
 
     Q_INVOKABLE void readFile(QString s);
 
+    //Methode voor juiste richtingen
+    Q_INVOKABLE void correctAngles();
+
     std::vector<std::shared_ptr<Wire> > process_wire_line(QString& lijn);//TODO remove return type and push_back wires in global wires var
     void process_resistor_line(QString &lijn);
     void process_source_line(QString &lijn);

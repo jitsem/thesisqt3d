@@ -40,8 +40,9 @@ Entity{
 
     function buildLevel(){
 
-        calculator.readFile(":/assets/inputfile_1.sj");
+        calculator.readFile(":/assets/inputfile_3.sj");
         calculator.solveLevel();
+        calculator.correctAngles();
 
         o.sourceFactory=Qt.createComponent("qrc:/Qml/Source.qml");
         o.resistorFactory=Qt.createComponent("qrc:/Qml/Resistor.qml");

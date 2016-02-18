@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <QTextStream>
+#include <QPoint>
 #include "Eigen/Dense"
 
 
@@ -122,6 +123,222 @@ void Calc::readFile(QString s)
 
         }
         file->close();
+    }
+}
+
+//Functie om hoek te corriger TODO proberen verkleinen
+void Calc::correctAngles()
+{
+    for(auto r:resistors){
+        QPoint p(r->getXCoord(),r->getYCoord());
+        int angle(r->getAngle());
+        int node = -1;
+
+        switch (angle) {
+
+        case 1:
+
+            for(auto w:wires){
+                int xp = w->getXCoord();
+                int yp = w->getYCoord();
+                int l = w->getLength();
+                switch (w->getAngle()) {
+                case 1:
+                    if(p == QPoint(xp+l,yp)){
+                        node = w->getNode();
+                        goto Correct1;
+                    }
+
+                    break;
+                case 2:
+                    if(p==QPoint(xp,yp) || p == QPoint(xp,yp+l)){
+                        node = w->getNode();
+                        goto Correct1;
+                    }
+
+                    break;
+                case 3:
+                    if(p == QPoint(xp,yp)){
+                        node = w->getNode();
+                        goto Correct1;
+                    }
+
+                    break;
+                case 4:
+                    if(p==QPoint(xp,yp) || p == QPoint(xp,yp-l)){
+                        node = w->getNode();
+                        goto Correct1;
+                    }
+
+                    break;
+                default:
+                    break;
+                }
+            }
+        Correct1:
+            if(node != -1)
+            {
+                if(voltageAtNode(node) == std::max(voltageAtNode(r->getNode1()), voltageAtNode(r->getNode2()))){
+                    r->setAngle(3);
+                    r->setXCoord(r->getXCoord() + 1);
+
+                }
+
+            }
+            break;
+
+
+        case 2:
+
+            for(auto w:wires){
+                int xp = w->getXCoord();
+                int yp = w->getYCoord();
+                int l = w->getLength();
+                switch (w->getAngle()) {
+                case 1:
+                    if(p==QPoint(xp,yp) || p == QPoint(xp+l,yp)){
+                        node = w->getNode();
+                        goto Correct2;
+                    }
+
+                    break;
+                case 2:
+                    if(p == QPoint(xp,yp+l)){
+                        node = w->getNode();
+                        goto Correct2;
+                    }
+
+                    break;
+                case 3:
+                    if(p==QPoint(xp,yp) || p == QPoint(xp-l,yp)){
+                        node = w->getNode();
+                        goto Correct2;
+                    }
+
+                    break;
+                case 4:
+                    if(p == QPoint(xp,yp)){
+                        node = w->getNode();
+                        goto Correct2;
+                    }
+
+                    break;
+                default:
+                    break;
+                }
+            }
+        Correct2:
+            if(node != -1)
+            {
+                if(voltageAtNode(node) == std::max(voltageAtNode(r->getNode1()), voltageAtNode(r->getNode2()))){
+                    r->setAngle(4);
+                    r->setYCoord(r->getYCoord() + 1);
+
+                }
+
+            }
+            break;
+        case 3:
+            for(auto w:wires){
+                int xp = w->getXCoord();
+                int yp = w->getYCoord();
+                int l = w->getLength();
+                switch (w->getAngle()) {
+                case 1:
+                    if(p == QPoint(xp,yp)){
+                        node = w->getNode();
+                        goto Correct3;
+                    }
+
+                    break;
+                case 2:
+                    if(p==QPoint(xp,yp) || p == QPoint(xp,yp+l)){
+                        node = w->getNode();
+                        goto Correct3;
+                    }
+
+                    break;
+                case 3:
+                    if(p == QPoint(xp-l,yp)){
+                        node = w->getNode();
+                        goto Correct3;
+                    }
+
+                    break;
+                case 4:
+                    if(p==QPoint(xp,yp) || p == QPoint(xp,yp-l)){
+                        node = w->getNode();
+                        goto Correct3;
+                    }
+
+                    break;
+                default:
+                    break;
+                }
+            }
+        Correct3:
+            if(node != -1)
+            {
+                if(voltageAtNode(node) == std::max(voltageAtNode(r->getNode1()), voltageAtNode(r->getNode2()))){
+                    r->setAngle(1);
+                    r->setXCoord(r->getXCoord() - 1);
+
+                }
+
+            }
+            break;
+        case 4:
+            for(auto w:wires){
+                int xp = w->getXCoord();
+                int yp = w->getYCoord();
+                int l = w->getLength();
+                switch (w->getAngle()) {
+                case 1:
+                    if(p==QPoint(xp,yp) || p == QPoint(xp+l,yp)){
+                        node = w->getNode();
+                        goto Correct4;
+                    }
+
+                    break;
+                case 2:
+                    if(p == QPoint(xp,yp)){
+                        node = w->getNode();
+                        goto Correct4;
+                    }
+
+                    break;
+                case 3:
+                    if(p==QPoint(xp,yp) || p == QPoint(xp-l,yp)){
+                        node = w->getNode();
+                        goto Correct4;
+                    }
+
+                    break;
+                case 4:
+                    if(p == QPoint(xp,yp-l)){
+                        node = w->getNode();
+                        goto Correct4;
+                    }
+
+                    break;
+                default:
+                    break;
+                }
+            }
+        Correct4:
+            if(node != -1)
+            {
+                if(voltageAtNode(node) == std::max(voltageAtNode(r->getNode1()), voltageAtNode(r->getNode2()))){
+                    r->setAngle(2);
+                    r->setYCoord(r->getYCoord() - 1);
+
+                }
+
+            }
+            break;
+        default:
+            break;
+        }
     }
 }
 
