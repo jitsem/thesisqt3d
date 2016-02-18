@@ -40,9 +40,9 @@ Entity{
 
     function buildLevel(){
 
-        calculator.readFile(":/assets/inputfile_3.sj");
+        calculator.readFile(":/assets/inputfile_1.sj");
         calculator.solveLevel();
-        calculator.correctAngles();
+
 
         o.sourceFactory=Qt.createComponent("qrc:/Qml/Source.qml");
         o.resistorFactory=Qt.createComponent("qrc:/Qml/Resistor.qml");
@@ -60,6 +60,7 @@ Entity{
             source.parent=root.parent;
             o.sources[o.sources.length]=source;
 
+            console.log("Current trough source: ", i , calculator.getCurrentofSource(i));
 
 
         }
@@ -98,6 +99,7 @@ Entity{
 
             resistor.parent=root.parent;
             o.resistors[o.resistors.length]=resistor;
+            console.log("Current trough resistor: ", i ,calculator.getCurrentofResistor(i));
 
         }
 
@@ -113,9 +115,11 @@ Entity{
                                                          "z":-calculator.getYCoordOfWire(i)*o.sf,
                                                          "y":calculator.voltageAtNode(calculator.getNodeOfWire(i)),
                                                          "l":calculator.getLengthOfWire(i)*o.sf,
-                                                         "orientationAngle":90*(calculator.getAngleOfWire(i)-1)});
+                                                         "orientationAngle":90*(calculator.getAngleOfWire(i)-1),
+                                                         "eSize": calculator.getCurrentofWire(i)});
             wire.parent=root.parent;
             o.wires[o.wires.length]=wire;
+            console.log("Current trough Wire: ", i,calculator.getCurrentofWire(i));
 
         }
 

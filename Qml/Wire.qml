@@ -18,6 +18,7 @@ Entity{
     //Variables for spawning electrons
     property bool done: false
     property real framecount
+    property real eSize
 
     components: [finmesh,fintrans,electronSpawner]
 
@@ -100,7 +101,7 @@ Entity{
             return;
 
         if(root.framecount >= 60){
-            var electron = o.electronFactory.createObject(null,{"xend":root.l, "dur":1000*root.l});
+            var electron = o.electronFactory.createObject(null,{"xend":root.l, "dur":1000*root.l, "s": root.eSize});
             electron.parent=root;
             root.framecount=0;
         }

@@ -57,6 +57,16 @@ void Component::setYCoord(int value)
     yCoord = value;
 }
 
+float Component::getCurrent() const
+{
+    return current;
+}
+
+void Component::setCurrent(float value)
+{
+    current = value;
+}
+
 
 Component::Component(float v)
 {

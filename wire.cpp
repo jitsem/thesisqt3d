@@ -21,11 +21,6 @@ void Wire::setLength(int value)
     length = value;
 }
 
-float Wire::getCurrent() const
-{
-    return current;
-}
-
 int Wire::getNode() const
 {
     return node;

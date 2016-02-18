@@ -31,7 +31,16 @@ void Calc::solveLevel()
     nodes.sort();
     nodes.unique();
 
-    sol=computeNetwork(sources,resistors,nodes.size());
+    sol=computeNetwork(nodes.size());
+    correctAngles();
+    setCurrentsOfResistors();
+
+    //TODO TEMP
+    for(auto w:wires){
+        w->setCurrent(0.0);
+    }
+
+    setCurrentsOfWires();
 
 }
 
@@ -126,12 +135,12 @@ void Calc::readFile(QString s)
     }
 }
 
-//Functie om hoek te corriger TODO proberen verkleinen
+//Functie om hoek te corrigeren TODO proberen verkleinen
 void Calc::correctAngles()
 {
     for(auto r:resistors){
         QPoint p(r->getXCoord(),r->getYCoord());
-        int angle(r->getAngle());
+        int angle = r->getAngle();
         int node = -1;
 
         switch (angle) {
@@ -175,7 +184,7 @@ void Calc::correctAngles()
                     break;
                 }
             }
-        Correct1:
+Correct1:
             if(node != -1)
             {
                 if(voltageAtNode(node) == std::max(voltageAtNode(r->getNode1()), voltageAtNode(r->getNode2()))){
@@ -227,7 +236,7 @@ void Calc::correctAngles()
                     break;
                 }
             }
-        Correct2:
+Correct2:
             if(node != -1)
             {
                 if(voltageAtNode(node) == std::max(voltageAtNode(r->getNode1()), voltageAtNode(r->getNode2()))){
@@ -276,7 +285,7 @@ void Calc::correctAngles()
                     break;
                 }
             }
-        Correct3:
+Correct3:
             if(node != -1)
             {
                 if(voltageAtNode(node) == std::max(voltageAtNode(r->getNode1()), voltageAtNode(r->getNode2()))){
@@ -325,7 +334,7 @@ void Calc::correctAngles()
                     break;
                 }
             }
-        Correct4:
+Correct4:
             if(node != -1)
             {
                 if(voltageAtNode(node) == std::max(voltageAtNode(r->getNode1()), voltageAtNode(r->getNode2()))){
@@ -340,6 +349,231 @@ void Calc::correctAngles()
             break;
         }
     }
+}
+
+void Calc::setCurrentsOfResistors()
+{
+    for(auto r : resistors){
+        r->setCurrent(std::abs(voltageAtNode(r->getNode1())-voltageAtNode(r->getNode2()))/r->getValue());
+    }
+
+}
+
+void Calc::setCurrentsOfWires()
+{
+    int nodemin,nodemax;
+    for(auto r : resistors){
+        int angle= r->getAngle();
+        if( std::max(voltageAtNode(r->getNode1()), voltageAtNode(r->getNode2())) == voltageAtNode(r->getNode1())){
+            nodemax = r->getNode1();
+            nodemin = r->getNode2();
+        }
+        else{
+            nodemax = r->getNode2();
+            nodemin = r->getNode1();
+        }
+
+        QPoint pos(r->getXCoord(),r->getYCoord());
+        std::shared_ptr<Wire> wTemp;
+        std::shared_ptr<Wire> lastWire;
+        int connectedWires = 0;
+        bool cross = false;
+
+        switch (angle) {
+        case 1:
+
+            while(!cross){
+                for(auto w : wires){
+                    if(w->getNode() == nodemin){
+                        if(w!=lastWire){
+
+                            int xp = w->getXCoord();
+                            int yp = w->getYCoord();
+                            int l = w->getLength();
+                            switch (w->getAngle()) {
+
+                            case 1:
+                                if(pos==QPoint(xp,yp) || pos == QPoint(xp+l,yp)){
+                                    connectedWires++;
+                                    wTemp = w;
+                                }
+
+                                break;
+                            case 2:
+                                if(pos==QPoint(xp,yp) || pos== QPoint(xp,yp+l)){
+                                    connectedWires++;
+                                    wTemp = w;
+                                }
+
+
+                                break;
+                            case 3:
+                                if(pos == QPoint(xp,yp ||pos == QPoint(xp-l,yp))){
+                                    connectedWires++;
+                                    wTemp = w;
+                                }
+
+
+                                break;
+                            case 4:
+                                if(pos==QPoint(xp,yp) || pos == QPoint(xp,yp-l)){
+                                    connectedWires++;
+                                    wTemp = w;
+                                }
+
+                                break;
+                            default:
+                                break;
+                            }
+                        }
+                    }
+                }
+                for(auto s:sources){
+                    if(pos == QPoint(s->getXCoord(),s->getYCoord()))
+                        connectedWires++;
+                }
+                if(connectedWires ==1){
+                    wTemp->setCurrent(r->getCurrent());
+                    switch(wTemp->getAngle()){
+                    case 1:
+                        if(wTemp->getXCoord()==pos.x())
+                            pos.setX(pos.x()+wTemp->getLength());
+                        else
+                            pos.setX(pos.x()-wTemp->getLength());
+                        break;
+                    case 2:
+                        if(wTemp->getYCoord()==pos.y())
+                            pos.setY(pos.y()+wTemp->getLength());
+                        else
+                            pos.setY(pos.y()-wTemp->getLength());
+                        break;
+                    case 3:
+                        if(wTemp->getXCoord()==pos.x())
+                            pos.setX(pos.x()-wTemp->getLength());
+                        else
+                            pos.setX(pos.x()+wTemp->getLength());
+                        break;
+                    case 4:
+                        if(wTemp->getYCoord()==pos.y())
+                            pos.setY(pos.y()-wTemp->getLength());
+                        else
+                            pos.setY(pos.y()+wTemp->getLength());
+                        break;
+                    }
+                    lastWire = wTemp;
+                    connectedWires = 0;
+                }
+                else{
+                    cross = true;
+                }
+            }
+            cross = false;
+            connectedWires = 0;
+            pos.setX(r->getXCoord()+1);
+            pos.setY(r->getYCoord());
+            while(!cross){
+                for(auto w : wires){
+                    if(w->getNode() == nodemax){
+                        if(w!=lastWire){
+
+                            int xp = w->getXCoord();
+                            int yp = w->getYCoord();
+                            int l = w->getLength();
+                            switch (w->getAngle()) {
+
+                            case 1:
+                                if(pos==QPoint(xp,yp) || pos == QPoint(xp+l,yp)){
+                                    connectedWires++;
+                                    wTemp = w;
+                                }
+
+                                break;
+                            case 2:
+                                if(pos==QPoint(xp,yp) || pos== QPoint(xp,yp+l)){
+                                    connectedWires++;
+                                    wTemp = w;
+                                }
+
+
+                                break;
+                            case 3:
+                                if(pos == QPoint(xp,yp ||pos == QPoint(xp-l,yp))){
+                                    connectedWires++;
+                                    wTemp = w;
+                                }
+
+
+                                break;
+                            case 4:
+                                if(pos==QPoint(xp,yp) || pos == QPoint(xp,yp-l)){
+                                    connectedWires++;
+                                    wTemp = w;
+                                }
+
+                                break;
+                            default:
+                                break;
+                            }
+                        }
+                    }
+                }
+                for(auto s:sources){
+                    if(pos == QPoint(s->getXCoord(),s->getYCoord()))
+                        connectedWires++;
+                }
+                if(connectedWires ==1){
+                    wTemp->setCurrent(r->getCurrent());
+                    switch(wTemp->getAngle()){
+                    case 1:
+                        if(wTemp->getXCoord()==pos.x())
+                            pos.setX(pos.x()+wTemp->getLength());
+                        else
+                            pos.setX(pos.x()-wTemp->getLength());
+                        break;
+                    case 2:
+                        if(wTemp->getYCoord()==pos.y())
+                            pos.setY(pos.y()+wTemp->getLength());
+                        else
+                            pos.setY(pos.y()-wTemp->getLength());
+                        break;
+                    case 3:
+                        if(wTemp->getXCoord()==pos.x())
+                            pos.setX(pos.x()-wTemp->getLength());
+                        else
+                            pos.setX(pos.x()+wTemp->getLength());
+                        break;
+                    case 4:
+                        if(wTemp->getYCoord()==pos.y())
+                            pos.setY(pos.y()-wTemp->getLength());
+                        else
+                            pos.setY(pos.y()+wTemp->getLength());
+                        break;
+                    }
+                    lastWire = wTemp;
+                    connectedWires = 0;
+                }
+                else{
+                    cross = true;
+                }
+            }
+            cross = false;
+
+
+            break;
+        case 2:
+
+            break;
+        case 3:
+
+            break;
+        case 4:
+
+            break;
+        default:
+            break;
+        }
+    }
+
 }
 
 std::vector<std::shared_ptr<Wire> > Calc::process_wire_line(QString &lijn)
@@ -407,10 +641,10 @@ void Calc::process_source_line(QString &lijn)
 
 
 //TODO sources/resistors direct aanspreken
-std::vector<float> Calc::computeNetwork(std::vector<std::shared_ptr<Component> > & s, std::vector<std::shared_ptr<Component> > &r, int  nrOfNodes)
+std::vector<float> Calc::computeNetwork(int  nrOfNodes)
 {
     //m is nrOfSources
-    const int m =s.size();
+    const int m =sources.size();
     MatrixXf g(nrOfNodes,nrOfNodes);
     MatrixXf b(nrOfNodes,m);
     MatrixXf c(m,nrOfNodes);
@@ -431,12 +665,12 @@ std::vector<float> Calc::computeNetwork(std::vector<std::shared_ptr<Component> >
     i<<MatrixXf::Zero(nrOfNodes,1);
     e<<MatrixXf::Zero(m,1);
     //Fill matrix for G
+
     // TODO make list of nodes and loop trough
-    for(std::shared_ptr<Component> res:r){
+    for(auto res:resistors){
 
         for (int i=1;i<=nrOfNodes;i++){
             if(res->getNode1()==i||res->getNode2()==i){
-                //std::cout<<(1/(res->getValue()))<<std::endl;
                 g(i-1,i-1)+=(1/(res->getValue()));
             }
         }
@@ -446,49 +680,43 @@ std::vector<float> Calc::computeNetwork(std::vector<std::shared_ptr<Component> >
         }
 
     }
-    //    std::cout<<"matrix g"<<std::endl;
-    //    std::cout<<g<<std::endl;
+
 
     //Fill matrix b
-    for(int i=0;i<s.size();i++){
+    for(int i=0;i<sources.size();i++){
         for (int j=1;j<=nrOfNodes;j++){
-            if(s.at(i)->getNodep()==j){
+            if(sources.at(i)->getNodep()==j){
                 b(j-1,i)=1;
             }
-            if(s.at(i)->getNodem()==j){
+            if(sources.at(i)->getNodem()==j){
                 b(j-1,i)=-1;
             }
 
         }
     }
-    //    std::cout<<"matrix b"<<std::endl;
-    //    std::cout<<b<<std::endl;
+
     //Fill matrix c
-    for(int i=0;i<s.size();i++){
+    for(int i=0;i<sources.size();i++){
         for (int j=1;j<=nrOfNodes;j++){
-            if(s.at(i)->getNodep()==j){
+            if(sources.at(i)->getNodep()==j){
                 c(i,j-1)=1;
             }
-            if(s.at(i)->getNodem()==j){
+            if(sources.at(i)->getNodem()==j){
                 c(i,j-1)=-1;
             }
         }
     }
-    //    std::cout<<"matrix c"<<std::endl;
-    //    std::cout<<c<<std::endl;
-    //    std::cout<<"matrix d"<<std::endl;
-    //    std::cout<<d<<std::endl;
+
     a.resize(g.rows()+c.rows(),b.cols()+g.cols());
     a<<g,b,
             c,d       ;
 
-    //    std::cout<<"matrix a"<<std::endl;
-    // std::cout<<a<<std::endl;
+
 
 
     //fill e matrix
-    for(int i=0;i<s.size();i++){
-        e(i,0)=s.at(i)->getValue();
+    for(int i=0;i<sources.size();i++){
+        e(i,0)=sources.at(i)->getValue();
     }
 
 
@@ -501,6 +729,10 @@ std::vector<float> Calc::computeNetwork(std::vector<std::shared_ptr<Component> >
     solu.push_back(0);   //Add value of ground node, always 0
     for (int i=0;i<nrOfNodes-1;i++){
         solu.push_back(x(i));
+    }
+
+    for (int i = 0; i< sources.size();i++){
+        sources.at(i)->setCurrent(x(i+nrOfNodes));
     }
 
 

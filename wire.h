@@ -10,7 +10,6 @@ public:
     int getLength() const;
     void setLength(int value);
 
-    float getCurrent() const;
 
     int getNode() const;
     void setNode(int value);

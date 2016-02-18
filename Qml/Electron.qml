@@ -32,7 +32,7 @@ Entity{
 
     SphereMesh{
         id:mesh
-        radius:s*0.5
+        radius:s*3
     }
 
     Transform
