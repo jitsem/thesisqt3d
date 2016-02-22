@@ -32,7 +32,7 @@ Entity{
 
     SphereMesh{
         id:mesh
-        radius:s*3
+        radius:s*4
     }
 
     Transform
@@ -48,7 +48,7 @@ Entity{
 
             property: "x"
             duration: electron.dur
-            from: 0
+            from: electron.xbegin
             to: electron.xend
         }
     LogicComponent{

@@ -119,7 +119,7 @@ Entity{
                                                          "eSize": calculator.getCurrentofWire(i)});
             wire.parent=root.parent;
             o.wires[o.wires.length]=wire;
-            console.log("Current trough Wire: ", i,calculator.getCurrentofWire(i));
+            console.log("Current trough Wire at pos : ", calculator.getXCoordOfWire(i),calculator.getYCoordOfWire(i),calculator.getCurrentofWire(i));
 
         }
 

@@ -34,7 +34,7 @@ Entity{
 
             CylinderMesh {
                 id:mesh
-                radius: 0.1
+                radius: 0.02
                 length: 1*l
             }
             Transform{
@@ -74,6 +74,7 @@ Entity{
 
 
 
+
     //Stuff for spawning electrons
     QQ2.QtObject{
         id:o
@@ -101,7 +102,10 @@ Entity{
             return;
 
         if(root.framecount >= 60){
-            var electron = o.electronFactory.createObject(null,{"xend":root.l, "dur":1000*root.l, "s": root.eSize});
+            if(root.eSize>0)
+                var electron = o.electronFactory.createObject(null,{"xend":root.l, "dur":750*root.l, "s": Math.abs(root.eSize)});
+            else
+                var electron = o.electronFactory.createObject(null,{"xend":0, "xbegin": root.l, "dur":750*root.l, "s": Math.abs(root.eSize)});
             electron.parent=root;
             root.framecount=0;
         }
