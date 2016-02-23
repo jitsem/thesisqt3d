@@ -32,11 +32,22 @@ Entity {
     //Render settings
     FrameGraph {
         id : forward_renderer
-        activeFrameGraph : ForwardRenderer {
-            camera: mainCamera
+        Viewport {
+            rect: Qt.rect(0.0, 0.0, 1.0, 1.0)
             clearColor: "black"
+
+            ClearBuffer {
+                buffers : ClearBuffer.ColorDepthBuffer
+
+            }
+
+            CameraSelector {
+                camera: mainCamera
+
+            }
         }
     }
+
 
     components: [forward_renderer]
 

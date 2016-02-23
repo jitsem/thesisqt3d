@@ -7,6 +7,7 @@ import QtQuick 2.2 as QQ2
 
 Entity{
     id:source
+
     property real s: 1 //Grote van bron, bepaald door spanning
 
     //Positie variablen
@@ -48,5 +49,7 @@ Entity{
         scale3D : Qt.vector3d(2, 1*s, 2)
 
     }
+
+
 
 }

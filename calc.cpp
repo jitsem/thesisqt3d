@@ -27,17 +27,15 @@ void Calc::solveLevel()
         nodes.push_back(r->getNode2());
     }
 
-
     nodes.sort();
     nodes.unique();
-
     sol=computeNetwork(nodes.size());
     correctAngles();
     setCurrentsOfResistors();
 
     //TODO TEMP
     for(auto w:wires){
-        w->setCurrent(0.0);
+        w->setCurrent(std::numeric_limits<float>::infinity());
     }
 
     setCurrentsOfWires();
@@ -361,9 +359,10 @@ void Calc::setCurrentsOfResistors()
 
 void Calc::setCurrentsOfWires()
 {
-    int nodemin,nodemax;
+
     for(auto r : resistors){
 
+        int nodemin,nodemax;
         if( std::max(voltageAtNode(r->getNode1()), voltageAtNode(r->getNode2())) == voltageAtNode(r->getNode1())){
             nodemax = r->getNode1();
             nodemin = r->getNode2();
@@ -378,273 +377,249 @@ void Calc::setCurrentsOfWires()
         std::shared_ptr<Wire> lastWire;
         int connectedWires = 0;
         bool cross = false;
+        int node;
+        int corFactor = 1;
+
+        //Ga tweemaal door loop, een keer voor maxNode eenmaal voor minNode.
+        for(int i = 0; i<2;i++){
+            switch(i){
+            case 0:
+                node = nodemin;
+                break;
+
+            case 1:
+                node = nodemax;
+                corFactor = -1;
+                break;
+
+            }
+
+            //Check connected elements, if only one connected: assign same current to wire)
+            while(!cross){
+                for(auto w : wires){
+                    if(w->getNode() == node){
+                        if(w!=lastWire){
+
+                            int xp = w->getXCoord();
+                            int yp = w->getYCoord();
+                            int l = w->getLength();
+                            switch (w->getAngle()) {
+
+                            case 1:
+                                if(pos==QPoint(xp,yp) || pos == QPoint(xp+l,yp)){
+                                    connectedWires++;
+                                    wTemp = w;
+                                }
+
+                                break;
+                            case 2:
+                                if(pos==QPoint(xp,yp) || pos== QPoint(xp,yp+l)){
+                                    connectedWires++;
+                                    wTemp = w;
+                                }
 
 
-        //Alle draden geconnecteerd aan minNode
-        while(!cross){
-            for(auto w : wires){
-                if(w->getNode() == nodemin){
-                    if(w!=lastWire){
+                                break;
+                            case 3:
+                                if(pos == QPoint(xp,yp) ||pos == QPoint(xp-l,yp)){
+                                    connectedWires++;
+                                    wTemp = w;
+                                }
 
-                        int xp = w->getXCoord();
-                        int yp = w->getYCoord();
-                        int l = w->getLength();
-                        switch (w->getAngle()) {
+
+                                break;
+                            case 4:
+                                if(pos==QPoint(xp,yp) || pos == QPoint(xp,yp-l)){
+                                    connectedWires++;
+                                    wTemp = w;
+                                }
+
+                                break;
+                            default:
+                                break;
+                            }
+                        }
+                    }
+                }
+                for(auto s:sources){
+                    if(pos == QPoint(s->getXCoord(),s->getYCoord()))
+                        connectedWires+=2;
+                }
+                for(auto res:resistors){
+
+                    if(res!=r){
+                        if(res->getNode1()==node || res->getNode2()==node){
+                            int xp = res->getXCoord();
+                            int yp = res->getYCoord();
+                            switch(res->getAngle()){
+
+                            case 1:
+                                if(pos==QPoint(xp,yp) || pos == QPoint(xp+1,yp)){
+                                    connectedWires+=2;
+                                }
+
+                                break;
+                            case 2:
+                                if(pos==QPoint(xp,yp) || pos== QPoint(xp,yp+1)){
+                                    connectedWires+=2;
+                                }
+
+
+                                break;
+                            case 3:
+                                if(pos == QPoint(xp,yp) ||pos == QPoint(xp-1,yp)){
+                                    connectedWires+=2;
+                                }
+
+
+                                break;
+                            case 4:
+                                if(pos==QPoint(xp,yp) || pos == QPoint(xp,yp-1)){
+                                    connectedWires+=2;
+                                }
+
+                                break;
+                            default:
+                                break;
+
+                            }
+                        }
+                    }
+                }
+                if(connectedWires ==1){
+                    wTemp->setCurrent(r->getCurrent()*corFactor);
+                    switch(wTemp->getAngle()){
+                    case 1:
+                        if(wTemp->getXCoord()==pos.x())
+                            pos.setX(pos.x()+wTemp->getLength());
+                        else{
+                            pos.setX(pos.x()-wTemp->getLength());
+                            wTemp->setCurrent(wTemp->getCurrent()*-1);
+                        }
+                        break;
+                    case 2:
+                        if(wTemp->getYCoord()==pos.y())
+                            pos.setY(pos.y()+wTemp->getLength());
+                        else{
+                            pos.setY(+pos.y()-wTemp->getLength());
+                            wTemp->setCurrent(wTemp->getCurrent()*-1);
+                        }
+                        break;
+                    case 3:
+                        if(wTemp->getXCoord()==pos.x())
+                            pos.setX(pos.x()-wTemp->getLength());
+                        else{
+                            pos.setX(pos.x()+wTemp->getLength());
+                            wTemp->setCurrent(wTemp->getCurrent()*-1);
+                        }
+                        break;
+                    case 4:
+                        if(wTemp->getYCoord()==pos.y())
+                            pos.setY(pos.y()-wTemp->getLength());
+                        else{
+                            pos.setY(pos.y()+wTemp->getLength());
+                            wTemp->setCurrent(wTemp->getCurrent()*-1);
+                        }
+                        break;
+                    }
+                    lastWire = wTemp;
+                    connectedWires = 0;
+                }
+                else{
+                    cross = true;
+                }
+            }
+            cross = false;
+            connectedWires = 0;
+            lastWire = nullptr;
+            int angle= r->getAngle();
+            switch(angle){
+            case 1:
+                pos.setX(r->getXCoord()+1);
+                pos.setY(r->getYCoord());
+                break;
+            case 2:
+                pos.setX(r->getXCoord());
+                pos.setY(r->getYCoord()+1);
+                break;
+            case 3:
+                pos.setX(r->getXCoord()-1);
+                pos.setY(r->getYCoord());
+                break;
+            case 4:
+                pos.setX(r->getXCoord());
+                pos.setY(r->getYCoord()-1);
+                break;
+
+            }
+        }
+    }
+
+
+    //Draden die niet aan weerstand liggen
+
+    //Zolang er er nog een weerstand met oneindigestromen is, in while blijven
+    bool inf = true;
+    while(inf){
+
+        inf = false;
+
+        //Check alle draden waar nog geen stroom aan toegekend is
+        for(auto w:wires){
+            if(isinf(w->getCurrent())){
+                QPoint pos(w->getXCoord(),w->getYCoord());
+                float curr = 0;
+
+                //Tel de stromen op van alle andere verbonde draden
+                for (auto wire:wires){
+                    if(wire!=w){
+                        int xp = wire->getXCoord();
+                        int yp = wire->getYCoord();
+                        int l = wire->getLength();
+                        switch (wire->getAngle()) {
 
                         case 1:
                             if(pos==QPoint(xp,yp) || pos == QPoint(xp+l,yp)){
-                                connectedWires++;
-                                wTemp = w;
+                                curr += wire->getCurrent();
                             }
 
                             break;
                         case 2:
                             if(pos==QPoint(xp,yp) || pos== QPoint(xp,yp+l)){
-                                connectedWires++;
-                                wTemp = w;
+                                curr += wire->getCurrent();
                             }
-
 
                             break;
                         case 3:
                             if(pos == QPoint(xp,yp) ||pos == QPoint(xp-l,yp)){
-                                connectedWires++;
-                                wTemp = w;
+                                curr += wire->getCurrent();
                             }
 
 
                             break;
                         case 4:
                             if(pos==QPoint(xp,yp) || pos == QPoint(xp,yp-l)){
-                                connectedWires++;
-                                wTemp = w;
+                                curr += wire->getCurrent();
                             }
 
                             break;
                         default:
                             break;
                         }
+
+
                     }
                 }
+                w->setCurrent(curr);
+                if(isinf(w->getCurrent()))
+                    inf=true; //Blijf in lus
+
             }
-            for(auto s:sources){
-                if(pos == QPoint(s->getXCoord(),s->getYCoord()))
-                    connectedWires+=2;
-            }
-            if(connectedWires ==1){
-                wTemp->setCurrent(r->getCurrent());
-                switch(wTemp->getAngle()){
-                case 1:
-                    if(wTemp->getXCoord()==pos.x())
-                        pos.setX(pos.x()+wTemp->getLength());
-                    else{
-                        pos.setX(pos.x()-wTemp->getLength());
-                        wTemp->setCurrent(wTemp->getCurrent()*-1);
-                    }
-                    break;
-                case 2:
-                    if(wTemp->getYCoord()==pos.y())
-                        pos.setY(pos.y()+wTemp->getLength());
-                    else{
-                        pos.setY(+pos.y()-wTemp->getLength());
-                        wTemp->setCurrent(wTemp->getCurrent()*-1);
-                    }
-                    break;
-                case 3:
-                    if(wTemp->getXCoord()==pos.x())
-                        pos.setX(pos.x()-wTemp->getLength());
-                    else{
-                        pos.setX(pos.x()+wTemp->getLength());
-                        wTemp->setCurrent(wTemp->getCurrent()*-1);
-                    }
-                    break;
-                case 4:
-                    if(wTemp->getYCoord()==pos.y())
-                        pos.setY(pos.y()-wTemp->getLength());
-                    else{
-                        pos.setY(pos.y()+wTemp->getLength());
-                        wTemp->setCurrent(wTemp->getCurrent()*-1);
-                    }
-                    break;
-                }
-                lastWire = wTemp;
-                connectedWires = 0;
-            }
-            else{
-                cross = true;
-            }
-        }
-        cross = false;
-        connectedWires = 0;
-        int angle= r->getAngle();
-        switch(angle){
-        case 1:
-            pos.setX(r->getXCoord()+1);
-            pos.setY(r->getYCoord());
-            break;
-        case 2:
-            pos.setX(r->getXCoord());
-            pos.setY(r->getYCoord()+1);
-            break;
-        case 3:
-            pos.setX(r->getXCoord()-1);
-            pos.setY(r->getYCoord());
-            break;
-        case 4:
-            pos.setX(r->getXCoord());
-            pos.setY(r->getYCoord()-1);
-            break;
-
-        }
-
-        //Alledraden aan maxNode
-        while(!cross){
-            for(auto w : wires){
-                if(w->getNode() == nodemax){
-                    if(w!=lastWire){
-
-                        int xp = w->getXCoord();
-                        int yp = w->getYCoord();
-                        int l = w->getLength();
-                        switch (w->getAngle()) {
-
-                        case 1:
-                            if(pos==QPoint(xp,yp) || pos == QPoint(xp+l,yp)){
-                                connectedWires++;
-                                wTemp = w;
-                            }
-
-                            break;
-                        case 2:
-                            if(pos==QPoint(xp,yp) || pos== QPoint(xp,yp+l)){
-                                connectedWires++;
-                                wTemp = w;
-                            }
-
-
-                            break;
-                        case 3:
-                            if(pos == QPoint(xp,yp ||pos == QPoint(xp-l,yp))){
-                                connectedWires++;
-                                wTemp = w;
-                            }
-
-
-                            break;
-                        case 4:
-                            if(pos==QPoint(xp,yp) || pos == QPoint(xp,yp-l)){
-                                connectedWires++;
-                                wTemp = w;
-                            }
-
-                            break;
-                        default:
-                            break;
-                        }
-                    }
-                }
-            }
-            for(auto s:sources){
-                if(pos == QPoint(s->getXCoord(),s->getYCoord()))
-                    connectedWires+=2;
-            }
-            if(connectedWires ==1){
-                wTemp->setCurrent(-1*r->getCurrent());
-                switch(wTemp->getAngle()){
-                case 1:
-                    if(wTemp->getXCoord()==pos.x())
-                        pos.setX(pos.x()+wTemp->getLength());
-                    else{
-                        pos.setX(pos.x()-wTemp->getLength());
-                        wTemp->setCurrent(wTemp->getCurrent()*-1);
-                    }
-                    break;
-                case 2:
-                    if(wTemp->getYCoord()==pos.y())
-                        pos.setY(pos.y()+wTemp->getLength());
-                    else{
-                        pos.setY(pos.y()-wTemp->getLength());
-                        wTemp->setCurrent(wTemp->getCurrent()*-1);
-                    }
-                    break;
-                case 3:
-                    if(wTemp->getXCoord()==pos.x())
-                        pos.setX(pos.x()-wTemp->getLength());
-                    else{
-                        pos.setX(pos.x()+wTemp->getLength());
-                        wTemp->setCurrent(wTemp->getCurrent()*-1);
-                    }
-                    break;
-                case 4:
-                    if(wTemp->getYCoord()==pos.y())
-                        pos.setY(pos.y()-wTemp->getLength());
-                    else{
-                        pos.setY(pos.y()+wTemp->getLength());
-                        wTemp->setCurrent(wTemp->getCurrent()*-1);
-                    }
-                    break;
-                }
-                lastWire = wTemp;
-                connectedWires = 0;
-            }
-            else{
-                cross = true;
-            }
-        }
-
-
-    }
-
-    //Draden die niet aan weerstand liggen
-    for(auto w:wires){
-        if(w->getCurrent() == 0){
-            QPoint pos(w->getXCoord(),w->getYCoord());
-            float curr = 0;
-            for (auto wire:wires){
-                if(wire!=w){
-                    int xp = wire->getXCoord();
-                    int yp = wire->getYCoord();
-                    int l = wire->getLength();
-                    switch (wire->getAngle()) {
-
-                    case 1:
-                        if(pos==QPoint(xp,yp) || pos == QPoint(xp+l,yp)){
-                            curr += wire->getCurrent();
-                        }
-
-                        break;
-                    case 2:
-                        if(pos==QPoint(xp,yp) || pos== QPoint(xp,yp+l)){
-                            curr += wire->getCurrent();
-                        }
-
-                        break;
-                    case 3:
-                        if(pos == QPoint(xp,yp) ||pos == QPoint(xp-l,yp)){
-                            curr += wire->getCurrent();
-                        }
-
-
-                        break;
-                    case 4:
-                        if(pos==QPoint(xp,yp) || pos == QPoint(xp,yp-l)){
-                            curr += wire->getCurrent();
-                        }
-
-                        break;
-                    default:
-                        break;
-                    }
-
-
-                }
-            }
-            w->setCurrent(curr);
         }
     }
-
 
 }
+
 
 std::vector<std::shared_ptr<Wire> > Calc::process_wire_line(QString &lijn)
 {

@@ -85,7 +85,7 @@ Entity{
 
 
 
-            //Loopke voor hoek
+            //Loop voor hoek
 
 
 
