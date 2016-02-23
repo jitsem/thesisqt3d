@@ -3,7 +3,7 @@ import Qt3D.Logic 2.0
 import QtQuick 2.3 as QQ2
 
 
-//Object dat verantwoordelijk is voor bouwen van circuitsc
+//Object dat verantwoordelijk is voor bouwen van circuits
 Entity{
     id:root
 
@@ -40,7 +40,7 @@ Entity{
 
     function buildLevel(){
 
-        calculator.readFile(":/assets/inputfile_1.sj");
+        calculator.readFile(":/assets/Levels/inputfile_1.sj");
         calculator.solveLevel();
 
 
