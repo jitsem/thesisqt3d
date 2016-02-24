@@ -38,7 +38,9 @@ public:
 
     //Sources
     Q_INVOKABLE int getNumberOfSources(){return sources.size();}
-    Q_INVOKABLE float voltageAtSource(int sourceNr){return sources.at(sourceNr)->getValue();}
+    Q_INVOKABLE float getVoltageAtSource(int sourceNr){return sources.at(sourceNr)->getValue();}
+    Q_INVOKABLE void increaseVoltageAtSource(int sourceNr){sources.at(sourceNr)->setValue(sources.at(sourceNr)->getValue()+1);}
+    Q_INVOKABLE void decreaseVoltageAtSource(int sourceNr){if(sources.at(sourceNr)->getValue()>0){sources.at(sourceNr)->setValue(sources.at(sourceNr)->getValue()-1);}}
     Q_INVOKABLE float getCurrentofSource(int sourceNr){return sources.at(sourceNr)->getCurrent();}
     Q_INVOKABLE int getAngleOfSource(int soNr){return sources.at(soNr)->getAngle();}
     Q_INVOKABLE int getXCoordOfSource(int soNr){return sources.at(soNr)->getXCoord();}

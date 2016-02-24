@@ -7,24 +7,25 @@ import Qt3D.Logic 2.0
 
 Entity {
     id: world3D
-    property real cameraAngle1: 1
-    property real cameraAngle2: 1
+    property real cameraAngle
 
-    //Camera settings
-    Configuration  {
-        controlledCamera: mainCamera
-    }
+    //CiruitMiddle
+    property real x: 4.5
+    property real y: 0
+    property real z: -4.5
 
+    //Zoomlevel
+    property real zoomlevel: 40
+
+
+    //Camera
     Camera {
         id: mainCamera
         projectionType: CameraLens.PerspectiveProjection
         fieldOfView: 60
         aspectRatio: 16/9
-        nearPlane : 0.1
-        farPlane : 1000.0
-        position: Qt.vector3d( 0*cameraAngle2, 10.0, 50.0*cameraAngle1 )
-        upVector: Qt.vector3d( 0.0, 1.0, 0.0 )
-        viewCenter: Qt.vector3d( 0.0, 0.0, 0.0 )
+        position: Qt.vector3d(zoomlevel*Math.sin(cameraAngle*180/Math.PI)+x*generator.sf, zoomlevel, -zoomlevel*Math.cos(cameraAngle*180/Math.PI)+z*generator.sf )
+        viewCenter: Qt.vector3d(x*generator.sf, 0.0, z*generator.sf)
     }
 
 
@@ -52,7 +53,7 @@ Entity {
     components: [forward_renderer]
 
     //World generation
-    Generator{
+    property Entity generator: Generator{
         id:generator
     }
 

@@ -7,6 +7,8 @@
 
 
 
+
+
 using namespace Eigen;
 Calc::Calc()
 {
@@ -566,7 +568,7 @@ void Calc::setCurrentsOfWires()
 
         //Check alle draden waar nog geen stroom aan toegekend is
         for(auto w:wires){
-            if(isinf(w->getCurrent())){
+            if(std::isinf(w->getCurrent())){
                 QPoint pos(w->getXCoord(),w->getYCoord());
                 float curr = 0;
 
@@ -611,7 +613,7 @@ void Calc::setCurrentsOfWires()
                     }
                 }
                 w->setCurrent(curr);
-                if(isinf(w->getCurrent()))
+                if(std::isinf(w->getCurrent()))
                     inf=true; //Blijf in lus
 
             }

@@ -6,24 +6,25 @@ import QtQuick 2.3 as QQ2
 //Object dat verantwoordelijk is voor bouwen van circuits
 Entity{
     id:root
-
+    property real sf:5
+    //arrays for components
+    property var sources:[]
+    property var resistors :[]
+    property var wires: []
 
     QQ2.QtObject{
 
         id:o
 
         //global vars
-        property var sf:5 //size of each coordinate step: scaleFactor
+        //size of each coordinate step: scaleFactor
 
         //Variables for spawning objects
         property var sourceFactory
         property var resistorFactory
         property var wireFactory
 
-        //arrays for components
-        property var sources:[]
-        property var resistors :[]
-        property var wires: []
+
 
 
 
@@ -32,15 +33,16 @@ Entity{
 
 
     QQ2.Component.onCompleted: {
-        buildLevel(); //Bouw Ciruict
-        setSol();    //show nodal solution on screen, for debugging
 
+        calculator.readFile(":/assets/Levels/inputfile_1.sj");
+        buildLevel(); //Bouw Ciruict
+        makeEditMenu();
 
     }
 
     function buildLevel(){
 
-        calculator.readFile(":/assets/Levels/inputfile_1.sj");
+
         calculator.solveLevel();
 
 
@@ -53,12 +55,12 @@ Entity{
 
             var negNode = calculator.nodeMAtSource(i);
             var posNode= calculator.nodePAtSource(i);
-            var source = o.sourceFactory.createObject(null,{"s":calculator.voltageAtSource(i),
-                                                          "x":calculator.getXCoordOfSource(i)*o.sf,
-                                                          "z":-calculator.getYCoordOfSource(i)*o.sf,
+            var source = o.sourceFactory.createObject(null,{"s":calculator.getVoltageAtSource(i),
+                                                          "x":calculator.getXCoordOfSource(i)*root.sf,
+                                                          "z":-calculator.getYCoordOfSource(i)*root.sf,
                                                           "y":calculator.voltageAtNode(negNode)});
             source.parent=root.parent;
-            o.sources[o.sources.length]=source;
+            root.sources[i]=source;
 
             console.log("Current trough source: ", i , calculator.getCurrentofSource(i));
 
@@ -75,7 +77,7 @@ Entity{
 
 
             //Hoek van de weerstand
-            var angle = Math.atan2(o.sf,(minVolt-maxVolt));
+            var angle = Math.atan2(root.sf,(minVolt-maxVolt));
 
 
             //Lengte van de weerstand
@@ -92,13 +94,13 @@ Entity{
             var resistor = o.resistorFactory.createObject(null,{"a":(angle*180/Math.PI),
                                                               "l":length,
                                                               "s":calculator.resistanceAtResistor(i),
-                                                              "x":calculator.getXCoordOfResistor(i)*o.sf,
-                                                              "z":-calculator.getYCoordOfResistor(i)*o.sf,
+                                                              "x":calculator.getXCoordOfResistor(i)*root.sf,
+                                                              "z":-calculator.getYCoordOfResistor(i)*root.sf,
                                                               "y":minVolt,
                                                               "orientationAngle":90*(calculator.getAngleOfResistor(i)-1)});
 
             resistor.parent=root.parent;
-            o.resistors[o.resistors.length]=resistor;
+            root.resistors[i]=resistor;
             console.log("Current trough resistor: ", i ,calculator.getCurrentofResistor(i));
 
         }
@@ -111,20 +113,41 @@ Entity{
 
 
 
-            var wire = o.wireFactory.createObject(null,{"x":calculator.getXCoordOfWire(i)*o.sf,
-                                                         "z":-calculator.getYCoordOfWire(i)*o.sf,
+            var wire = o.wireFactory.createObject(null,{"x":calculator.getXCoordOfWire(i)*root.sf,
+                                                         "z":-calculator.getYCoordOfWire(i)*root.sf,
                                                          "y":calculator.voltageAtNode(calculator.getNodeOfWire(i)),
-                                                         "l":calculator.getLengthOfWire(i)*o.sf,
+                                                         "l":calculator.getLengthOfWire(i)*root.sf,
                                                          "orientationAngle":90*(calculator.getAngleOfWire(i)-1),
                                                          "eSize": calculator.getCurrentofWire(i)});
             wire.parent=root.parent;
-            o.wires[o.wires.length]=wire;
+            root.wires[i]=wire;
             console.log("Current trough Wire at pos : ", calculator.getXCoordOfWire(i),calculator.getYCoordOfWire(i),calculator.getCurrentofWire(i));
 
         }
 
-        console.log("number of sources, resistors", o.sources.length, o.resistors.length);
+        console.log("number of sources, resistors", root.sources.length, root.resistors.length);
 
+        setSol();    //show nodal solution on screen, for debugging
+
+    }
+
+    function destroyLevel(){
+        //destroy all objects
+        for (var i = 0; i < root.wires.length; i++) {
+            wires[i].destroy();
+
+        }
+
+        for (var i = 0; i < root.sources.length; i++) {
+            sources[i].destroy();
+
+
+        }
+        for (var i = 0; i < root.resistors.length; i++) {
+            resistors[i].destroy();
+
+
+        }
     }
 
 }
