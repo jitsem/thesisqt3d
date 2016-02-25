@@ -5,26 +5,58 @@ import QtQuick.Controls 1.4
 
 Menu{
     id:root
-    property real sourceNr
-    title:"source " + sourceNr
+    property real nr
+    property string target: ""
+    title: target + nr
     MenuItem {
-        text: "Increase Voltage"
+        text: "Increase"
         onTriggered: {
 
-            calculator.increaseVoltageAtSource(sourceNr);
+            increase();
             world3D.generator.destroyLevel();
             world3D.generator.buildLevel();
         }
     }
 
     MenuItem {
-        text: "Decrease Voltage"
+        text: "Decrease"
         onTriggered: {
 
-            calculator.decreaseVoltageAtSource(sourceNr);
+            decrease();
             world3D.generator.destroyLevel();
             world3D.generator.buildLevel();
         }
+    }
+
+    function increase(){
+        if(target === "resistor")
+        {
+
+            calculator.increaseResistanceAtResistor(nr);
+
+        }
+        else if(target === "source"){
+
+            calculator.increaseVoltageAtSource(nr);
+
+        }
+
+    }
+
+    function decrease(){
+        if(target === "resistor")
+        {
+                calculator.decreaseResistanceAtResistor(nr)
+
+
+        }
+        else if(target === "source"){
+
+            calculator.decreaseVoltageAtSource(nr);
+
+        }
+
+
     }
 
 }

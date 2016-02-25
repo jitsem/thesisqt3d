@@ -439,6 +439,7 @@ void Calc::setCurrentsOfWires()
                                 break;
                             default:
                                 break;
+                                //TODO catch default
                             }
                         }
                     }
@@ -626,7 +627,21 @@ void Calc::setCurrentsOfWires()
 std::vector<std::shared_ptr<Wire> > Calc::process_wire_line(QString &lijn)
 {
     std::vector<std::shared_ptr<Wire>> wir;
-    lijn.replace("*","",Qt::CaseSensitivity::CaseInsensitive); //remove *
+    lijn.replace("*","",Qt
+
+
+
+
+
+
+
+
+
+
+
+
+
+                 ::CaseSensitivity::CaseInsensitive); //remove *
     lijn.replace("w","",Qt::CaseSensitivity::CaseInsensitive); //remove w
     QStringList list=lijn.split(",");
     for (QStringList::iterator it = list.begin(); it != list.end(); ++it) {
@@ -639,7 +654,8 @@ std::vector<std::shared_ptr<Wire> > Calc::process_wire_line(QString &lijn)
         int length=list2.at(4).toInt();
         int node=list2.at(3).toInt();
         auto w =std::make_shared<Wire>(x,y,angle,length,node);
-        wir.push_back(w); //TODO check if input is correct!!
+        wir.push_back(w);
+        //TODO check if input is correct!!
 
 
     }
@@ -652,8 +668,7 @@ void Calc::process_resistor_line(QString &lijn)
 
     lijn.replace("r","",Qt::CaseSensitivity::CaseInsensitive); //remove r
     QStringList list=lijn.split(" ",QString::SkipEmptyParts);
-    //for (QStringList::iterator it = list.begin(); it != list.end(); ++it) {
-    //QString current = *it;
+
     int x=list.at(5).toInt();
     int y=list.at(6).toInt();
     int angle=list.at(7).toInt();
@@ -661,9 +676,10 @@ void Calc::process_resistor_line(QString &lijn)
     int node2=list.at(2).toInt();
     float v=list.at(3).toFloat();
     auto r =std::make_shared<Resistor>(v,node1,node2,x,y,angle);
-    resistors.push_back(r); //TODO check if input is correct!!
+    resistors.push_back(r);
+    //TODO check if input is correct!!
 
-    //}
+
     int i=0;
 
 }
@@ -680,14 +696,14 @@ void Calc::process_source_line(QString &lijn)
     int nodem=list.at(2).toInt();
     float v=list.at(3).toFloat();
     auto s =std::make_shared<Source>(v,nodep,nodem,x,y,angle);
-    sources.push_back(s); //TODO check if input is correct!!
+    sources.push_back(s);
+    //TODO check if input is correct!!
 
 
 }
 
 
 
-//TODO sources/resistors direct aanspreken
 std::vector<float> Calc::computeNetwork(int  nrOfNodes)
 {
     //m is nrOfSources

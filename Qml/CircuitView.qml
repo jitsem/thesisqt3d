@@ -119,7 +119,7 @@ Item {
         interval: 40;
         running: rotateCameraLeft.pressed;
         repeat: true
-        onTriggered:  cameraRotation(1)
+        onTriggered:  world3D.inputController.cameraRotation(1)
 
     }
 
@@ -128,7 +128,7 @@ Item {
         interval: 40;
         running: rotateCameraRight.pressed;
         repeat: true
-        onTriggered:  cameraRotation(-1)
+        onTriggered:  world3D.inputController.cameraRotation(-1)
 
     }
 
@@ -137,7 +137,7 @@ Item {
         interval: 40;
         running: zoomIn.pressed;
         repeat: true
-        onTriggered:  zoom(-1)
+        onTriggered:  world3D.inputController.zoom(-1)
 
     }
 
@@ -146,25 +146,11 @@ Item {
         interval: 40;
         running: zoomOut.pressed;
         repeat: true
-        onTriggered:  zoom(1)
+        onTriggered:  world3D.inputController.zoom(1)
 
     }
 
-    function cameraRotation(direction) {
 
-
-        world3D.cameraAngle += direction/360;
-
-
-    }
-
-    function zoom(direction) {
-
-
-        world3D.zoomlevel += direction;
-
-
-    }
 
     //Menu for changing sources sizes, created after building level for firts time
     Button{
@@ -181,15 +167,38 @@ Item {
         id:sourceMenu
     }
 
+
+    Button{
+        id:resistorEdit
+        width: 50; height: 50
+        anchors.top: sourceEdit.bottom
+        anchors.topMargin: 10
+        anchors.left:parent.left
+        iconSource: "qrc:/assets/icons/svg/battery-power.svg"
+        menu:resistorMenu
+
+    }
+
+    Menu{
+        id:resistorMenu
+    }
+
+
     function makeEditMenu() {
 
         var menuFactory = Qt.createComponent("qrc:/Qml/EditMenu.qml");
         for (var i = 0; i < world3D.generator.sources.length; i++) {
-            var menu = menuFactory.createObject(appView,{"sourceNr":i});
+            var menu = menuFactory.createObject(appView,{"target":"source", "nr":i});
             sourceMenu.insertItem(i+1,menu);
+
+        }
+        for (var i = 0; i < world3D.generator.resistors.length; i++) {
+            var menu = menuFactory.createObject(appView,{"target":"resistor", "nr":i});
+            resistorMenu.insertItem(i+1,menu);
 
         }
 
     }
+
 }
 

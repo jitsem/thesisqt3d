@@ -50,7 +50,7 @@ Entity {
     }
 
 
-    components: [forward_renderer]
+    components: [forward_renderer,inputController]
 
     //World generation
     property Entity generator: Generator{
@@ -59,6 +59,9 @@ Entity {
 
     GroundPlane{
 
+    }
+    property Entity inputController: InputController{
+        id:inputController
     }
 
 
