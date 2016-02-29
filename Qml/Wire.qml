@@ -16,11 +16,15 @@ Entity{
     property real orientationAngle: 90 //Hoek van draad
 
     //Variables for spawning electrons
-    property bool done: false
-    property real framecount
     property real eSize
 
-    components: [finmesh,fintrans,electronSpawner]
+    //global scale factor
+    property real sf:1
+
+
+    //list of electrons
+    property var electrons: []
+    components: [finmesh,fintrans]
 
     Entity{
         id:finmesh
@@ -83,33 +87,46 @@ Entity{
     }
     QQ2.Component.onCompleted: {
         o.electronFactory=Qt.createComponent("qrc:/Qml/Electron.qml");
-        root.done = true;
+        spawnElectrons();
     }
 
-    LogicComponent{
-        id: electronSpawner
 
-        onFrameUpdate:
-        {
-            spawnElectron();
+    function spawnElectrons(){
 
-        }
-    }
+        for(var i=0;i<2*root.l/root.sf;i++){
 
-    function spawnElectron(){
-        root.framecount++;
-        if(!root.done)
-            return;
-
-        if(root.framecount >= 60){
             if(root.eSize>0)
-                var electron = o.electronFactory.createObject(null,{"xend":root.l, "dur":750*root.l, "s": Math.abs(root.eSize)});
-            else
-                var electron = o.electronFactory.createObject(null,{"xend":0, "xbegin": root.l, "dur":750*root.l, "s": Math.abs(root.eSize)});
+                var electron = o.electronFactory.createObject(null,{"xend":root.l, "xstart":0 , "xbegin":i/2*root.sf , "s": Math.abs(root.eSize)});
+             else
+                var electron = o.electronFactory.createObject(null,{"xend":0, "xbegin": i/2*root.sf,"xstart":root.l, "s": Math.abs(root.eSize)});
             electron.parent=root;
-            root.framecount=0;
+            electrons[i]=electron;
+
         }
     }
+
+    function destroyElectrons(){
+        for(var i=0;i<electrons.length;i++){
+            electrons[i].destroy();
+        }
+    }
+
+
+    //Animation-functions and objects
+
+    QQ2.NumberAnimation{
+        id:animateHeight
+        target:root
+        property:"y"
+        duration: 1000
+    }
+
+
+    function changeHeight(newValue){
+        animateHeight.to = newValue;
+        animateHeight.start();
+    }
+
 
 
 

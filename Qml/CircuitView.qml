@@ -7,6 +7,7 @@ Item {
     id:appView
 
 
+
     Scene3D{
         id:scene3D
         anchors.fill: parent
@@ -151,8 +152,22 @@ Item {
     }
 
 
+    //Button for saving edits
+    Button{
+        id:saveButton
+        width: 50; height: 50
+        anchors.top: zoomOut.bottom
+        anchors.topMargin: 10
+        anchors.right:parent.right
+        iconSource: "qrc:/assets/icons/svg/battery-power.svg"
+        onClicked: calculator.writeBackToFile();
 
-    //Menu for changing sources sizes, created after building level for firts time
+
+    }
+
+
+
+    //  Menu for changing sources sizes, created after building level for firts time
     Button{
         id:sourceEdit
         width: 50; height: 50
@@ -163,10 +178,17 @@ Item {
         menu:sourceMenu
 
     }
+
+    MouseArea {
+        anchors.fill: world3D.generator.sources[1]
+        acceptedButtons: Qt.RightButton
+        onClicked: console.log("vvvvv")
+
+
+    }
     Menu{
         id:sourceMenu
     }
-
 
     Button{
         id:resistorEdit

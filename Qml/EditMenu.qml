@@ -13,8 +13,7 @@ Menu{
         onTriggered: {
 
             increase();
-            world3D.generator.destroyLevel();
-            world3D.generator.buildLevel();
+            world3D.generator.redrawLevel();
         }
     }
 
@@ -23,8 +22,7 @@ Menu{
         onTriggered: {
 
             decrease();
-            world3D.generator.destroyLevel();
-            world3D.generator.buildLevel();
+            world3D.generator.redrawLevel();
         }
     }
 
@@ -46,7 +44,7 @@ Menu{
     function decrease(){
         if(target === "resistor")
         {
-                calculator.decreaseResistanceAtResistor(nr)
+            calculator.decreaseResistanceAtResistor(nr)
 
 
         }

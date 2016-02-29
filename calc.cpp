@@ -4,9 +4,7 @@
 #include <QTextStream>
 #include <QPoint>
 #include "Eigen/Dense"
-
-
-
+#include <QStandardPaths>
 
 
 using namespace Eigen;
@@ -35,7 +33,6 @@ void Calc::solveLevel()
     correctAngles();
     setCurrentsOfResistors();
 
-    //TODO TEMP
     for(auto w:wires){
         w->setCurrent(std::numeric_limits<float>::infinity());
     }
@@ -47,8 +44,10 @@ void Calc::solveLevel()
 
 void Calc::readFile(QString s)
 {
-    QFile * file = new QFile(s);
 
+    //TODO Checken of een file volledig juist is
+    fileName = s;
+    QFile * file = new QFile(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+"/"+s);
     if (file->open(QIODevice::ReadOnly| QIODevice::Text))
     {
         QTextStream in(file);
@@ -57,75 +56,74 @@ void Calc::readFile(QString s)
             QString line = in.readLine();
             if (!line.isEmpty()&&!line.isNull()){
 
-
-                QChar first =line.at(0).toLower();
-                switch (first.toLatin1()) //to check first character
+                switch (line.at(0).toLower().toLatin1()) //to check first character
                 {
-                case '*':{
+                case '*':
                     if(line.length()>=2 ){
 
-                        QChar second =line.at(1).toLower().toLatin1();
+                        switch(line.at(1).toLower().toLatin1()){
 
-                        if(second=='s'){
+                        case's':
                             for (int i=2;i<line.length();i++){
                                 if(line.at(i).toLower().toLatin1()=='j'){ //TODO check if index is too big necessary?
                                     qDebug()<<"start of file, found correct sj start";
                                 }
                             }
-                            break;//break from * case
-                        }
-                        else if(second=='g'){
-                            //qDebug()<<"found ground, ignored location at the moment";
                             break;
-                        }
 
-                        else if(second=='w'){
+                        case 'g':
+                            break;
+
+                        case 'w':
                             if(line.length()>2){
 
                                 auto wir=process_wire_line(line);
                                 wires.insert(std::end(wires), std::begin(wir), std::end(wir));
                             }
-                            else{
-                                break;
-                            }
+                            break;
 
-                        }
-                        else if (second=='/'){
+                        case '/':
                             if(line.length()>2){
                                 //qDebug()<<line;
                                 //#ingnore
                             }
-                        }
-                        break;
-                    }
-                }
 
-                case '\n':{
+                            break;
+
+                        default:
+                            break;
+                        }
+                    }
+                    break;
+
+
+                case '\n':
                     //just continue
                     //qDebug()<<"read a newline char"<<"\n ";
                     break;
-                }
-                case ' ':{
+
+                case ' ':
                     //just continue
                     // qDebug()<<"read a space"<<"\n ";
                     break;
-                }
-                case 'r':{
+
+                case 'r':
                     //do for resistor
                     process_resistor_line(line);
                     break;
-                }
-                case 'v':{
+
+                case 'v':
                     //do for source
                     process_source_line(line);
                     break;
-                }
-                case '.':{
+
+                case '.':
                     // do for end
                     break;
-                }
+
                 default :
                     qDebug()<<"something went wrong" <<"\n";
+                    break;
                 }
             }
 
@@ -134,6 +132,112 @@ void Calc::readFile(QString s)
         file->close();
     }
 }
+
+
+//Read lines of when a component is declared
+
+std::vector<std::shared_ptr<Wire> > Calc::process_wire_line(QString &lijn)
+{
+    std::vector<std::shared_ptr<Wire>> wir;
+    lijn.replace("*","",Qt::CaseSensitivity::CaseInsensitive); //remove *
+    lijn.replace("w","",Qt::CaseSensitivity::CaseInsensitive); //remove w
+
+    QStringList list=lijn.split(",");
+    for (QStringList::iterator it = list.begin(); it != list.end(); ++it) {
+        QString current = *it;
+        QStringList wireParams=current.split(" ",QString::SkipEmptyParts);
+        int x=wireParams.at(1).toInt();
+        int y=wireParams.at(2).toInt();
+        int angle=wireParams.at(0).toInt();
+        int length=wireParams.at(4).toInt();
+        int node=wireParams.at(3).toInt();
+        auto w =std::make_shared<Wire>(x,y,angle,length,node);
+        wir.push_back(w);
+        //TODO check if input is correct!!
+
+    }
+
+    return wir;
+}
+
+void Calc::process_resistor_line(QString &lijn)
+{
+
+    lijn.replace("r","",Qt::CaseSensitivity::CaseInsensitive); //remove r
+    QStringList list=lijn.split(" ",QString::SkipEmptyParts);
+
+    int x=list.at(5).toInt();
+    int y=list.at(6).toInt();
+    int angle=list.at(7).toInt();
+    int node1=list.at(1).toInt();
+    int node2=list.at(2).toInt();
+    float v=list.at(3).toFloat();
+    auto r =std::make_shared<Resistor>(v,node1,node2,x,y,angle);
+    resistors.push_back(r);
+
+}
+
+void Calc::process_source_line(QString &lijn)
+{
+
+    lijn.replace("v","",Qt::CaseSensitivity::CaseInsensitive); //remove v
+    QStringList list=lijn.split(" ",QString::SkipEmptyParts);
+    int x=list.at(5).toInt();
+    int y=list.at(6).toInt();
+    int angle=list.at(7).toInt();
+    int nodep=list.at(1).toInt();
+    int nodem=list.at(2).toInt();
+    float v=list.at(3).toFloat();
+    auto s =std::make_shared<Source>(v,nodep,nodem,x,y,angle);
+    sources.push_back(s);
+
+
+}
+
+void Calc::writeBackToFile()
+{
+    QString path;
+
+    path = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) ;
+    QFile file(path + "/"+ fileName);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)){
+        qDebug()<< "oops";
+        return;
+    }
+
+    //Rebuild file format
+    QTextStream out(&file);
+    out << "*sj\n";
+    out << "*g 4 1\n"; //TODO gaan we die g nog gebruiken?
+
+
+    out <<"*w\n";
+    for (auto wire:wires){
+        out<<"*"<<"w"<< wire->getAngle() <<" "<< wire->getXCoord() << " "<< wire->getYCoord()
+          <<" "<< wire->getNode() << " " << wire->getLength() << "\n";
+    }
+    out <<"*/w\n";
+    out <<"*/sj\n\n";
+
+    //TODO naam resistor: bv. R1
+    for (auto res:resistors){
+        out<<"R1 "<<res->getNode1()<<" "<<res->getNode2()<<" "<<res->getValue()<< " *sj "
+          << res->getXCoord() << " "<< res->getYCoord()<<" "<< res->getAngle() <<" */sj\n";
+    }
+
+    //TODO naam Bron: bv. V1
+    for (auto source:sources){
+        out<<"V1 "<<source->getNodep()<<" "<<source->getNodem()<<" "<<source->getValue()<< "v *sj "
+          << source->getXCoord() << " "<< source->getYCoord()<<" "<< source->getAngle() <<" */sj\n";
+    }
+
+    out <<".end\n";
+
+    file.close();
+}
+
+
+
 
 //Functie om hoek te corrigeren TODO proberen verkleinen
 void Calc::correctAngles()
@@ -624,84 +728,6 @@ void Calc::setCurrentsOfWires()
 }
 
 
-std::vector<std::shared_ptr<Wire> > Calc::process_wire_line(QString &lijn)
-{
-    std::vector<std::shared_ptr<Wire>> wir;
-    lijn.replace("*","",Qt
-
-
-
-
-
-
-
-
-
-
-
-
-
-                 ::CaseSensitivity::CaseInsensitive); //remove *
-    lijn.replace("w","",Qt::CaseSensitivity::CaseInsensitive); //remove w
-    QStringList list=lijn.split(",");
-    for (QStringList::iterator it = list.begin(); it != list.end(); ++it) {
-        QString current = *it;
-        QStringList list2=current.split(" ",QString::SkipEmptyParts);//TODO better name
-        //qDebug()<<list2.at(2);
-        int x=list2.at(1).toInt();
-        int y=list2.at(2).toInt();
-        int angle=list2.at(0).toInt();
-        int length=list2.at(4).toInt();
-        int node=list2.at(3).toInt();
-        auto w =std::make_shared<Wire>(x,y,angle,length,node);
-        wir.push_back(w);
-        //TODO check if input is correct!!
-
-
-    }
-
-    return wir;
-}
-
-void Calc::process_resistor_line(QString &lijn)
-{
-
-    lijn.replace("r","",Qt::CaseSensitivity::CaseInsensitive); //remove r
-    QStringList list=lijn.split(" ",QString::SkipEmptyParts);
-
-    int x=list.at(5).toInt();
-    int y=list.at(6).toInt();
-    int angle=list.at(7).toInt();
-    int node1=list.at(1).toInt();
-    int node2=list.at(2).toInt();
-    float v=list.at(3).toFloat();
-    auto r =std::make_shared<Resistor>(v,node1,node2,x,y,angle);
-    resistors.push_back(r);
-    //TODO check if input is correct!!
-
-
-    int i=0;
-
-}
-
-void Calc::process_source_line(QString &lijn)
-{
-
-    lijn.replace("v","",Qt::CaseSensitivity::CaseInsensitive); //remove v
-    QStringList list=lijn.split(" ",QString::SkipEmptyParts);
-    int x=list.at(5).toInt();
-    int y=list.at(6).toInt();
-    int angle=list.at(7).toInt();
-    int nodep=list.at(1).toInt();
-    int nodem=list.at(2).toInt();
-    float v=list.at(3).toFloat();
-    auto s =std::make_shared<Source>(v,nodep,nodem,x,y,angle);
-    sources.push_back(s);
-    //TODO check if input is correct!!
-
-
-}
-
 
 
 std::vector<float> Calc::computeNetwork(int  nrOfNodes)
@@ -746,7 +772,7 @@ std::vector<float> Calc::computeNetwork(int  nrOfNodes)
 
 
     //Fill matrix b
-    for(int i=0;i<sources.size();i++){
+    for(int i=0;i<m;i++){
         for (int j=1;j<=nrOfNodes;j++){
             if(sources.at(i)->getNodep()==j){
                 b(j-1,i)=1;
@@ -759,7 +785,7 @@ std::vector<float> Calc::computeNetwork(int  nrOfNodes)
     }
 
     //Fill matrix c
-    for(int i=0;i<sources.size();i++){
+    for(int i=0;i<m;i++){
         for (int j=1;j<=nrOfNodes;j++){
             if(sources.at(i)->getNodep()==j){
                 c(i,j-1)=1;
@@ -778,7 +804,7 @@ std::vector<float> Calc::computeNetwork(int  nrOfNodes)
 
 
     //fill e matrix
-    for(int i=0;i<sources.size();i++){
+    for(int i=0;i<m;i++){
         e(i,0)=sources.at(i)->getValue();
     }
 
@@ -794,7 +820,7 @@ std::vector<float> Calc::computeNetwork(int  nrOfNodes)
         solu.push_back(x(i));
     }
 
-    for (int i = 0; i< sources.size();i++){
+    for (int i = 0; i< m;i++){
         sources.at(i)->setCurrent(x(i+nrOfNodes));
     }
 

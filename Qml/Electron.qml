@@ -17,6 +17,8 @@ Entity{
     property real s: 1
 
 
+    //Original start
+    property real xstart:0
 
     //Startpoint for animation
     property real xbegin: 0
@@ -25,10 +27,10 @@ Entity{
     property real xend: 4
 
     //Duration of variable
-    property real dur: 10000
+    property real dur: 1000
 
 
-    components: [mesh,trans]
+    components: [mesh,trans,mat]
 
     SphereMesh{
         id:mesh
@@ -40,23 +42,35 @@ Entity{
         id:trans
         translation: (Qt.vector3d(x, y, z))
     }
+    PhongMaterial {
+        id:mat
+        diffuse: "darkblue"
+        ambient: "darkblue"
+        specular: "darkblue"
+        shininess: 0.2
+    }
 
-    QQ2.NumberAnimation {
+    QQ2.SequentialAnimation{
+
+
+        running: true
+        loops: QQ2.Animation.Infinite
+        QQ2.NumberAnimation {
+
             target: electron
-            running: true
-            loops: 1
-
             property: "x"
-            duration: electron.dur
+            duration: electron.dur*Math.abs(xbegin-xend)
             from: electron.xbegin
             to: electron.xend
         }
-    LogicComponent{
-        id:electronDeleter
-        onFrameUpdate: {
-            if(electron.x == xend){
-                electron.destroy();
-            }
+        QQ2.NumberAnimation {
+
+            target: electron
+            property: "x"
+            duration: electron.dur*Math.abs(xstart-xbegin)
+            from: electron.xstart
+            to: electron.xbegin
         }
+
     }
 }

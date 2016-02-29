@@ -41,8 +41,8 @@ public:
     //Sources
     Q_INVOKABLE int getNumberOfSources(){return sources.size();}
     Q_INVOKABLE float getVoltageAtSource(int sourceNr){return sources.at(sourceNr)->getValue();}
-    Q_INVOKABLE void increaseVoltageAtSource(int sourceNr){sources.at(sourceNr)->setValue(sources.at(sourceNr)->getValue()+1);}
-    Q_INVOKABLE void decreaseVoltageAtSource(int sourceNr){if(sources.at(sourceNr)->getValue()>0){sources.at(sourceNr)->setValue(sources.at(sourceNr)->getValue()-1);}}
+    Q_INVOKABLE void increaseVoltageAtSource(int sourceNr){sources.at(sourceNr)->setValue(sources.at(sourceNr)->getValue()+5);}
+    Q_INVOKABLE void decreaseVoltageAtSource(int sourceNr){if(sources.at(sourceNr)->getValue()>5){sources.at(sourceNr)->setValue(sources.at(sourceNr)->getValue()-5);}}
     Q_INVOKABLE float getCurrentofSource(int sourceNr){return sources.at(sourceNr)->getCurrent();}
     Q_INVOKABLE int getAngleOfSource(int soNr){return sources.at(soNr)->getAngle();}
     Q_INVOKABLE int getXCoordOfSource(int soNr){return sources.at(soNr)->getXCoord();}
@@ -72,9 +72,11 @@ public:
     void process_resistor_line(QString &lijn);
     void process_source_line(QString &lijn);
 
+    //Methodes for writing back file
+    Q_INVOKABLE void writeBackToFile();
+
 private:
     std::vector<float> computeNetwork(int nrOfNodes);
-    //std::vector<std::shared_ptr<Component> > readFile(QFile *file);
 
 
     //variables for circuit
@@ -83,6 +85,7 @@ private:
     std::vector<std::shared_ptr<Component>> sources;
     std::vector<std::shared_ptr<Component>> resistors;
     std::vector<std::shared_ptr<Wire>> wires;
+    QString fileName;
 };
 
 #endif // CALC_H
