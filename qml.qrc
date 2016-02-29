@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>Qml/AppView.qml</file>
+        <file>Qml/CircuitView.qml</file>
         <file>Qml/Generator.qml</file>
         <file>Qml/InputController.qml</file>
         <file>Qml/World3D.qml</file>
@@ -9,6 +9,8 @@
         <file>Qml/GroundPlane.qml</file>
 	<file>Qml/Wire.qml</file>
 	<file>Qml/Electron.qml</file>
+	<file>Qml/Main.qml</file>
+	<file>Qml/EditMenu.qml</file>
 
 
      </qresource>

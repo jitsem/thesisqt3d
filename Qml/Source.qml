@@ -5,14 +5,22 @@ import QtQuick 2.2 as QQ2
 
 
 
+
+
 Entity{
     id:source
+
     property real s: 1 //Grote van bron, bepaald door spanning
+
 
     //Positie variablen
     property real x: 0
     property real y: 0
     property real z: 0
+
+    //AnimatieVariablen
+    property real s_new:1 //Nieuwe waarde voor animatie
+    property bool animationRunning: false // Animatie in overgang
 
     components: [somesh,sotrans]
 
@@ -49,4 +57,33 @@ Entity{
 
     }
 
+    //Animation-functions and objects
+    QQ2.NumberAnimation{
+        id:animateSize
+        target: source
+        property: "s"
+        duration: 1000
+
+    }
+
+    QQ2.NumberAnimation{
+        id:animateHeight
+        target:source
+        property:"y"
+        duration: 1000
+    }
+
+
+    function changeSize(newValue){
+        animateSize.to = newValue;
+        animateSize.start();
+
+    }
+    function changeHeight(newValue){
+        animateHeight.to = newValue;
+        animateHeight.start();
+    }
+
+
 }
+

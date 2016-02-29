@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
    view.engine()->rootContext()->setContextProperty(QStringLiteral("_window"), &view);
    view.engine()->rootContext()->setContextProperty(QStringLiteral("calculator"),c);
    view.setResizeMode(QQuickView::SizeRootObjectToView);
-   view.setSource(QUrl("qrc:/Qml/AppView.qml"));
+   view.setSource(QUrl("qrc:/Qml/CircuitView.qml"));
 
 
 

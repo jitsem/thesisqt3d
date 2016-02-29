@@ -1,6 +1,7 @@
 #include "component.h"
 
 //TODO override << operator so that component can be printed
+//TODO Overerving deftiger maken
 
 Component::Component()
 {
@@ -9,22 +10,22 @@ Component::Component()
 
 int Component::getNodep() const
 {
-
+    return 0;
 }
 
 int Component::getNodem() const
 {
-
+    return 0;
 }
 
 int Component::getNode1() const
 {
-
+    return 0;
 }
 
 int Component::getNode2() const
 {
-
+    return 0;
 }
 
 int Component::getAngle() const
@@ -55,6 +56,16 @@ int Component::getYCoord() const
 void Component::setYCoord(int value)
 {
     yCoord = value;
+}
+
+float Component::getCurrent() const
+{
+    return current;
+}
+
+void Component::setCurrent(float value)
+{
+    current = value;
 }
 
 

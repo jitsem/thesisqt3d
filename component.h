@@ -26,8 +26,11 @@ public:
     virtual int getYCoord() const;
     virtual void setYCoord(int value);
 
+    virtual float getCurrent() const;
+    virtual void setCurrent(float value);
+
 protected:
-    float value;
+    float value,current;
     int angle,xCoord,yCoord;
 };
 
