@@ -43,12 +43,14 @@ Entity{
 
         PhongMaterial {
             id:mat
-            diffuse: "red"
-            ambient: "red"
-            specular: "blue"
+            diffuse: "firebrick"
+            ambient: "firebrick"
+            specular: "firebrick"
             shininess: 0.2
         }
+
     }
+
 
     Transform{
         id:sotrans

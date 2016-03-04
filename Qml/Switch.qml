@@ -15,7 +15,6 @@ Entity{
     property real z: 0
 
     //Variable voor hoek.
-    property real a: 90 //Hoek volgens z as,bepaald door spanning over weerstand
     property real orientationAngle: 0 //Hoek volgens y as, bepaald door plaatsing weerstand
 
     components: [finmesh,fintrans]
@@ -28,7 +27,7 @@ Entity{
         Entity{
             //Basismodel weestand
             id:resmesh
-            components: [mesh, trans,mat]
+            components: [mesh, trans,mat, picker]
 
             CylinderMesh {
                 id:mesh
@@ -46,29 +45,40 @@ Entity{
             PhongMaterial {
                 id:mat
                 diffuse: "darkslategray"
-                ambient: "slateblue"
+                ambient: "orange"
                 specular: "darkslategray"
-                shininess: 0.01
+                shininess: 0.2
             }
 
-        }
+            ObjectPicker{
+                id:picker
+                onClicked: {
 
+                    calculator.toggleSwitch(0);
+                    world3D.generator.redrawLevel();
+                }
+
+
+            }
+        }
         Transform{
             id:retrans
             matrix: {
                 var m = Qt.matrix4x4()
-                m.rotate(a,(Qt.vector3d(0, 0, 1)));
+                m.rotate(90,(Qt.vector3d(0, 0, 1)));
                 m.scale(1);
                 return m
             }
             scale3D: Qt.vector3d(0.005*s,l,0.005*s)
         }
     }
+
     Transform{
         id:fintrans
         rotation: fromAxisAndAngle(Qt.vector3d(0,1,0),orientationAngle)
         translation: (Qt.vector3d(x, y, z))
     }
+
 
 
     //Animation-functions and objects
@@ -94,12 +104,6 @@ Entity{
 
     }
 
-    QQ2.NumberAnimation{
-        id:animateAngle
-        target:node
-        property:"a"
-        duration: 1000
-    }
 
     QQ2.NumberAnimation{
         id:animateOrientationAngle
@@ -125,16 +129,11 @@ Entity{
         animateLength.start();
 
     }
-    function changeAngle(newValue){
-        animateAngle.to = newValue;
-        animateAngle.start();
-    }
+
     function changeOrientationAngle(newValue){
         animateOrientationAngle.to = newValue;
         animateOrientationAngle.start();
     }
 
 }
-
-
 

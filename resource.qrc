@@ -4,13 +4,16 @@
         <file>assets/Levels/inputfile_2.sj</file>
         <file>assets/Levels/inputfile_3.sj</file>
         <file>assets/textures/ground.png</file>
-	<file>assets/textures/ground.jpg</file>
+	<file>assets/textures/sky.png</file>
         <file>assets/icons/svg/turn-left-circle.svg</file>
         <file>assets/icons/svg/turn-right.svg</file>
         <file>assets/icons/svg/triangle-pointing-up.svg</file>
         <file>assets/icons/svg/turn-triangle.svg</file>
 	<file>assets/icons/svg/question-button.svg</file>
 	<file>assets/icons/svg/battery-power.svg</file>
+	<file>assets/icons/svg/inbox-symbol.svg</file>
+	<file>assets/icons/svg/mark-ribbon.svg</file>
+	
 
     </qresource>
 </RCC>

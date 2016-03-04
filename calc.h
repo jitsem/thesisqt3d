@@ -3,12 +3,15 @@
 #include <vector>
 #include <memory>
 #include <QFile>
+#include <QDebug>
+#include <QString>
 #include "resistor.h"
 #include "source.h"
 #include "component.h"
-#include <QDebug>
-#include <QString>
 #include "wire.h"
+#include "switch.h"
+
+
 
 class Calc: public QObject
 {
@@ -59,21 +62,37 @@ public:
     Q_INVOKABLE int getNodeOfWire(int wiNr){return wires.at(wiNr)->getNode();}
     Q_INVOKABLE int getLengthOfWire(int wiNr){return wires.at(wiNr)->getLength();}
 
+    //Switches
+    Q_INVOKABLE int getNumberOfSwitches(){return switches.size();}
+    Q_INVOKABLE bool isSwitchUp(int swNr){return (switches.at(swNr)->getUp());}
+    Q_INVOKABLE int getAngleOfSwitch(int swNr){return switches.at(swNr)->getAngle();}
+    Q_INVOKABLE int getXCoordOfSwitch(int swNr){return switches.at(swNr)->getXCoord();}
+    Q_INVOKABLE int getYCoordOfSwitch(int swNr){return switches.at(swNr)->getYCoord();}
+    Q_INVOKABLE int node1AtSwitch(int swNr){return switches.at(swNr)->getNode1();}
+    Q_INVOKABLE int node2AtSwitch(int swNr){return switches.at(swNr)->getNode2();}
+    Q_INVOKABLE void toggleSwitch(int swNr){switches.at(swNr)->toggleSwitch();}
+
     //Read in a new file
     Q_INVOKABLE void readFile(QString s);
 
-    //Methode voor juiste richtingen
+    //Methode voor juiste richtingen en stromen
     void correctAngles();
-    void setCurrentsOfResistors();
+    void setCurrentsOfResistorsAndSwitches();
     void setCurrentsOfWires();
+    void setCurrentsOfSwitchedWires();
+    void setCurrentsOfStrayWires();
 
     //Methodes for reading files
-    std::vector<std::shared_ptr<Wire> > process_wire_line(QString& lijn);//TODO remove return type and push_back wires in global wires var
+    void process_wire_line(QString& lijn);
     void process_resistor_line(QString &lijn);
     void process_source_line(QString &lijn);
+    void process_switch_line(QString &lijn);
 
     //Methodes for writing back file
     Q_INVOKABLE void writeBackToFile();
+
+
+
 
 private:
     std::vector<float> computeNetwork(int nrOfNodes);
@@ -85,6 +104,7 @@ private:
     std::vector<std::shared_ptr<Component>> sources;
     std::vector<std::shared_ptr<Component>> resistors;
     std::vector<std::shared_ptr<Wire>> wires;
+    std::vector<std::shared_ptr<Switch>> switches;
     QString fileName;
 };
 

@@ -13,6 +13,7 @@ Entity{
     property var sources:[]
     property var resistors :[]
     property var wires: []
+    property var switches: []
 
     QQ2.QtObject{
 
@@ -23,35 +24,31 @@ Entity{
         property var sourceFactory
         property var resistorFactory
         property var wireFactory
-
-
+        property var switchFactory
 
     }
 
-
     QQ2.Component.onCompleted: {
 
-        calculator.readFile("inputfile_1.sj");  //file moet zich bevinden in QStandardPaths::GenericDataLocation, afhankelijk van platform
+        calculator.readFile("inputfile_2.sj");  //file moet zich bevinden in QStandardPaths::GenericDataLocation, afhankelijk van platform
         buildLevel(); //Bouw Ciruict
         makeEditMenu();
+
 
     }
 
     function buildLevel(){
 
-
         calculator.solveLevel();
-
-
         o.sourceFactory=Qt.createComponent("qrc:/Qml/Source.qml");
         o.resistorFactory=Qt.createComponent("qrc:/Qml/Resistor.qml");
         o.wireFactory=Qt.createComponent("qrc:/Qml/Wire.qml");
+        o.switchFactory=Qt.createComponent("qrc:/Qml/Switch.qml");
+
 
         for(var i=0;i<calculator.getNumberOfSources();i++){
 
-
             var negNode = calculator.nodeMAtSource(i);
-
             var source = o.sourceFactory.createObject(null,{"s":calculator.getVoltageAtSource(i),
                                                           "x":calculator.getXCoordOfSource(i)*root.sf,
                                                           "z":-calculator.getYCoordOfSource(i)*root.sf,
@@ -63,8 +60,6 @@ Entity{
 
 
         }
-
-        //TODO Probleem met angle oplossen
 
         for(i=0;i<calculator.getNumberOfResistors();i++){
 
@@ -98,8 +93,6 @@ Entity{
 
 
 
-        //add wires TODO make automatisch
-
         for(i=0;i<calculator.getNumberOfWires();i++){
 
 
@@ -117,6 +110,22 @@ Entity{
 
         }
 
+        for(i=0;i<calculator.getNumberOfSwitches();i++){
+
+            var minVolt = Math.min(calculator.voltageAtNode(calculator.node1AtSwitch(i)),calculator.voltageAtNode(calculator.node2AtSwitch(i)));
+
+            var swi = o.switchFactory.createObject(null,{"s":70,
+                                                       "l": 1*root.sf,
+                                                       "x":calculator.getXCoordOfSwitch(i)*root.sf,
+                                                       "z":-calculator.getYCoordOfSwitch(i)*root.sf,
+                                                       "y":minVolt,
+                                                       "orientationAngle":90*(calculator.getAngleOfSwitch(i)-1)});
+            swi.parent=root.parent;
+            root.switches[i]=swi;
+            console.log("Switch: ", calculator.getXCoordOfSwitch(i),calculator.getYCoordOfSwitch(i));
+
+        }
+
         console.log("number of sources, resistors", root.sources.length, root.resistors.length);
 
         setSol();    //show nodal solution on screen, for debugging
@@ -125,7 +134,6 @@ Entity{
 
 
     function redrawLevel(){
-
         calculator.solveLevel();
 
         for(var i=0;i<sources.length;i++){
@@ -158,20 +166,28 @@ Entity{
             resistors[i].z=-calculator.getYCoordOfResistor(i)*root.sf;
 
 
-
         }
 
         for(var i=0;i<wires.length;i++){
 
             wires[i].changeHeight(calculator.voltageAtNode(calculator.getNodeOfWire(i)));
-            wires[i].eSize= calculator.getCurrentofWire(i);
-            wires[i].destroyElectrons();
-            wires[i].spawnElectrons();
+            wires[i].eSize = calculator.getCurrentofWire(i);
+            wires[i].adjustElectrons();
 
+        }
+        for(var i=0;i<switches.length;i++){
+            var minVolt = Math.min(calculator.voltageAtNode(calculator.node1AtSwitch(i)),calculator.voltageAtNode(calculator.node2AtSwitch(i)));
+            if(calculator.isSwitchUp(i)){
+                switches[i].changeLength(0.1*root.sf);
+                switches[i].changeHeight(minVolt)
+            }
+            else
+                switches[i].changeLength(1*root.sf);
+                switches[i].changeHeight(minVolt)
 
         }
 
-
+        setSol();
     }
 
 }

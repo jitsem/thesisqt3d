@@ -1,0 +1,23 @@
+<RCC>
+    <qresource prefix="/">
+        <file>assets/res_small.png</file>
+        <file>assets/source_small.png</file>
+        <file>dragcomponent.cpp</file>
+        <file>dragcomponent.h</file>
+        <file>drawzone.cpp</file>
+        <file>drawzone.h</file>
+        <file>main.cpp</file>
+        <file>mainwindow.cpp</file>
+        <file>mainwindow.h</file>
+        <file>assets/icons/png/arrows.png</file>
+        <file>assets/icons/png/direction.png</file>
+        <file>assets/icons/png/diskette.png</file>
+        <file>assets/icons/png/pen.png</file>
+        <file>assets/icons/png/redo-arrow.png</file>
+        <file>assets/icons/png/technology.png</file>
+        <file>assets/icons/png/undo-arrow.png</file>
+        <file>assets/wire_small.png</file>
+        <file>assets/icons/png/reload-webpage.png</file>
+        <file>assets/icons/png/cross-sign.png</file>
+    </qresource>
+</RCC>

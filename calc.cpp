@@ -5,6 +5,7 @@
 #include <QPoint>
 #include "Eigen/Dense"
 #include <QStandardPaths>
+#include <limits>
 
 
 using namespace Eigen;
@@ -26,12 +27,17 @@ void Calc::solveLevel()
         nodes.push_back(r->getNode1());
         nodes.push_back(r->getNode2());
     }
+    for(auto s:switches){
+
+        nodes.push_back(s->getNode1());
+        nodes.push_back(s->getNode2());
+    }
 
     nodes.sort();
     nodes.unique();
     sol=computeNetwork(nodes.size());
     correctAngles();
-    setCurrentsOfResistors();
+    setCurrentsOfResistorsAndSwitches();
 
     for(auto w:wires){
         w->setCurrent(std::numeric_limits<float>::infinity());
@@ -40,7 +46,6 @@ void Calc::solveLevel()
     setCurrentsOfWires();
 
 }
-
 
 void Calc::readFile(QString s)
 {
@@ -64,9 +69,13 @@ void Calc::readFile(QString s)
                         switch(line.at(1).toLower().toLatin1()){
 
                         case's':
-                            for (int i=2;i<line.length();i++){
-                                if(line.at(i).toLower().toLatin1()=='j'){ //TODO check if index is too big necessary?
-                                    qDebug()<<"start of file, found correct sj start";
+                            if(line.at(2).toLower().toLatin1()=='w' && line.length()>4)
+                                process_switch_line(line);
+                            else{
+                                for (int i=2;i<line.length();i++){
+                                    if(line.at(i).toLower().toLatin1()=='j'){ //TODO check if index is too big necessary?
+                                        qDebug()<<"start of file, found correct sj start";
+                                    }
                                 }
                             }
                             break;
@@ -77,8 +86,8 @@ void Calc::readFile(QString s)
                         case 'w':
                             if(line.length()>2){
 
-                                auto wir=process_wire_line(line);
-                                wires.insert(std::end(wires), std::begin(wir), std::end(wir));
+                                process_wire_line(line);
+
                             }
                             break;
 
@@ -90,7 +99,9 @@ void Calc::readFile(QString s)
 
                             break;
 
+
                         default:
+                            qDebug()<<"something went wrong" <<"\n";
                             break;
                         }
                     }
@@ -133,10 +144,9 @@ void Calc::readFile(QString s)
     }
 }
 
-
 //Read lines of when a component is declared
 
-std::vector<std::shared_ptr<Wire> > Calc::process_wire_line(QString &lijn)
+void Calc::process_wire_line(QString &lijn)
 {
     std::vector<std::shared_ptr<Wire>> wir;
     lijn.replace("*","",Qt::CaseSensitivity::CaseInsensitive); //remove *
@@ -152,14 +162,11 @@ std::vector<std::shared_ptr<Wire> > Calc::process_wire_line(QString &lijn)
         int length=wireParams.at(4).toInt();
         int node=wireParams.at(3).toInt();
         auto w =std::make_shared<Wire>(x,y,angle,length,node);
-        wir.push_back(w);
-        //TODO check if input is correct!!
+        wires.push_back(w);
 
     }
 
-    return wir;
 }
-
 void Calc::process_resistor_line(QString &lijn)
 {
 
@@ -176,7 +183,21 @@ void Calc::process_resistor_line(QString &lijn)
     resistors.push_back(r);
 
 }
+void Calc::process_switch_line(QString &lijn)
+{
 
+    lijn.replace("*sw","",Qt::CaseSensitivity::CaseInsensitive); //remove *sw
+    QStringList list=lijn.split(" ",QString::SkipEmptyParts);
+
+    int x=list.at(1).toInt();
+    int y=list.at(2).toInt();
+    int angle=list.at(0).toInt();
+    int node1=list.at(3).toInt();
+    int node2=list.at(4).toInt();
+    auto sw =std::make_shared<Switch>(node1,node2,x,y,angle);
+    switches.push_back(sw);
+
+}
 void Calc::process_source_line(QString &lijn)
 {
 
@@ -210,13 +231,24 @@ void Calc::writeBackToFile()
     out << "*sj\n";
     out << "*g 4 1\n"; //TODO gaan we die g nog gebruiken?
 
-
+    //Wires
     out <<"*w\n";
     for (auto wire:wires){
         out<<"*"<<"w"<< wire->getAngle() <<" "<< wire->getXCoord() << " "<< wire->getYCoord()
           <<" "<< wire->getNode() << " " << wire->getLength() << "\n";
     }
     out <<"*/w\n";
+
+    //Switches
+    out<<"*sw\n";
+    for (auto sw:switches){
+        out<<"*"<<"sw"<< sw->getAngle() <<" "<< sw->getXCoord() << " "<< sw->getYCoord()
+          <<" "<< sw->getNode1() << " " << sw->getNode2() << "\n";
+    }
+    out<<"*/sw\n";
+
+
+
     out <<"*/sj\n\n";
 
     //TODO naam resistor: bv. R1
@@ -236,13 +268,16 @@ void Calc::writeBackToFile()
     file.close();
 }
 
-
-
-
 //Functie om hoek te corrigeren TODO proberen verkleinen
 void Calc::correctAngles()
 {
-    for(auto r:resistors){
+    //Joined vector met resistors and switches
+    std::vector<std::shared_ptr<Component>> swAndR;
+    swAndR.insert( swAndR.end(), resistors.begin(), resistors.end());
+    swAndR.insert( swAndR.end(), switches.begin(), switches.end());
+
+
+    for(auto r:swAndR){
         QPoint p(r->getXCoord(),r->getYCoord());
         int angle = r->getAngle();
         int node = -1;
@@ -454,19 +489,30 @@ Correct4:
         }
     }
 }
-
-void Calc::setCurrentsOfResistors()
+void Calc::setCurrentsOfResistorsAndSwitches()
 {
     for(auto r : resistors){
         r->setCurrent(std::abs(voltageAtNode(r->getNode1())-voltageAtNode(r->getNode2()))/r->getValue());
     }
+    for(auto sw : switches){
+        if(!sw->getUp())
+            sw->setCurrent(std::abs(voltageAtNode(sw->getNode1())-voltageAtNode(sw->getNode2()))/sw->getValue());
+        else
+            sw->setCurrent(0);
+    }
 
 }
 
+
+//TODO ook checken op switches
 void Calc::setCurrentsOfWires()
 {
+    //Joined vector met resistors and switches
+    std::vector<std::shared_ptr<Component>> swAndR;
+    swAndR.insert( swAndR.end(), resistors.begin(), resistors.end());
+    swAndR.insert( swAndR.end(), switches.begin(), switches.end());
 
-    for(auto r : resistors){
+    for(auto r : swAndR){
 
         int nodemin,nodemax;
         if( std::max(voltageAtNode(r->getNode1()), voltageAtNode(r->getNode2())) == voltageAtNode(r->getNode1())){
@@ -663,7 +709,14 @@ void Calc::setCurrentsOfWires()
     }
 
 
-    //Draden die niet aan weerstand liggen
+    //Draden die niet aan weerstand of switch liggen
+    setCurrentsOfStrayWires();
+
+
+}
+
+void Calc::setCurrentsOfStrayWires(){
+
 
     //Zolang er er nog een weerstand met oneindigestromen is, in while blijven
     bool inf = true;
@@ -725,6 +778,7 @@ void Calc::setCurrentsOfWires()
         }
     }
 
+
 }
 
 
@@ -755,7 +809,7 @@ std::vector<float> Calc::computeNetwork(int  nrOfNodes)
     e<<MatrixXf::Zero(m,1);
     //Fill matrix for G
 
-    // TODO make list of nodes and loop trough
+    //Resistors
     for(auto res:resistors){
 
         for (int i=1;i<=nrOfNodes;i++){
@@ -766,6 +820,20 @@ std::vector<float> Calc::computeNetwork(int  nrOfNodes)
         if(res->getNode1()!=0&&res->getNode2()!=0){
             g(res->getNode1()-1,res->getNode2()-1)+= (-1/res->getValue());
             g(res->getNode2()-1,res->getNode1()-1)+= (-1/res->getValue());
+        }
+
+    }
+    //Switches
+    for(auto sw:switches){
+
+        for (int i=1;i<=nrOfNodes;i++){
+            if(sw->getNode1()==i||sw->getNode2()==i){
+                g(i-1,i-1)+=(1/(sw->getValue()));
+            }
+        }
+        if(sw->getNode1()!=0&&sw->getNode2()!=0){
+            g(sw->getNode1()-1,sw->getNode2()-1)+= (-1/sw->getValue());
+            g(sw->getNode2()-1,sw->getNode1()-1)+= (-1/sw->getValue());
         }
 
     }
