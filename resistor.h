@@ -14,7 +14,7 @@ public:
     void setNode2(int value);
 
 
-private:
+protected:
     int node1,node2;
 
 };

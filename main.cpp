@@ -22,44 +22,39 @@
 #include "resistor.h"
 #include "calc.h"
 #include "component.h"
+#include "mainwindow.h"
 using namespace std;
 
 int main(int argc, char *argv[])
 {
 
-
     //Dingen voor netwerkcalculation
-    Calc* c=new Calc();
+     std::shared_ptr<Calc> c=Calc::Instance();
+
+
+
+    //Dingen voor 3D
+    QApplication app(argc, argv);
+    QSurfaceFormat format;
+    if(QOpenGLContext::openGLModuleType() == QOpenGLContext::LibGL){
+        format.setVersion(4,1);
+        format.setProfile((QSurfaceFormat::CoreProfile));
+    }
+
+    format.setDepthBufferSize(24);
+    format.setSamples(4);
+    format.setStencilBufferSize(8);
+    QSurfaceFormat::setDefaultFormat(format);
+
+
+    MainWindow w;
 
 
 
 
-
-   //Dingen voor 3D
-   QApplication app(argc, argv);
-   QSurfaceFormat format;
-   if(QOpenGLContext::openGLModuleType() == QOpenGLContext::LibGL){
-       format.setVersion(4,1);
-       format.setProfile((QSurfaceFormat::CoreProfile));
-   }
-   format.setDepthBufferSize(24);
-   format.setSamples(4);
-   format.setStencilBufferSize(8);
-   QSurfaceFormat::setDefaultFormat(format);
+    w.show();
 
 
-   //load view
-   QQuickView view;
-   view.engine()->rootContext()->setContextProperty(QStringLiteral("_window"), &view);
-   view.engine()->rootContext()->setContextProperty(QStringLiteral("calculator"),c);
-   view.setResizeMode(QQuickView::SizeRootObjectToView);
-   view.setSource(QUrl("qrc:/Qml/AppView.qml"));
-
-
-
-    view.show();
-
-
-       return app.exec();
+    return app.exec();
 
 }

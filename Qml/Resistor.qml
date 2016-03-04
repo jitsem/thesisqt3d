@@ -45,10 +45,10 @@ Entity{
 
             PhongMaterial {
                 id:mat
-                diffuse: "green"
-                ambient: "green"
-                specular: "blue"
-                shininess: 0.2
+                diffuse: "darkslategray"
+                ambient: "slateblue"
+                specular: "darkslategray"
+                shininess: 0.01
             }
 
         }
@@ -69,6 +69,71 @@ Entity{
         rotation: fromAxisAndAngle(Qt.vector3d(0,1,0),orientationAngle)
         translation: (Qt.vector3d(x, y, z))
     }
+
+
+    //Animation-functions and objects
+    QQ2.NumberAnimation{
+        id:animateSize
+        target: node
+        property: "s"
+        duration: 1000
+
+    }
+
+    QQ2.NumberAnimation{
+        id:animateHeight
+        target:node
+        property:"y"
+        duration: 1000
+    }
+    QQ2.NumberAnimation{
+        id:animateLength
+        target: node
+        property: "l"
+        duration: 1000
+
+    }
+
+    QQ2.NumberAnimation{
+        id:animateAngle
+        target:node
+        property:"a"
+        duration: 1000
+    }
+
+    QQ2.NumberAnimation{
+        id:animateOrientationAngle
+        target:node
+        property:"orientationAngle"
+        duration: 1000
+    }
+
+
+
+
+    function changeSize(newValue){
+        animateSize.to = newValue;
+        animateSize.start();
+
+    }
+    function changeHeight(newValue){
+        animateHeight.to = newValue;
+        animateHeight.start();
+    }
+    function changeLength(newValue){
+        animateLength.to = newValue;
+        animateLength.start();
+
+    }
+    function changeAngle(newValue){
+        animateAngle.to = newValue;
+        animateAngle.start();
+    }
+    function changeOrientationAngle(newValue){
+        animateOrientationAngle.to = newValue;
+        animateOrientationAngle.start();
+    }
+
 }
 
 

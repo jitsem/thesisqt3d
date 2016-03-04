@@ -1,12 +1,12 @@
 #include "wire.h"
 
-Wire::Wire(int x, int y, int angle, int length, int node, float current)
+Wire::Wire(int x, int y, int ang, int length, int node, float current)
     :length(length),current(current),node(node)
 {
-    this->setValue(0);
-    this->setXCoord(x);
-    this->setAngle(angle);
-    this->setYCoord(y);
+    value=0;
+    xCoord=x;
+    angle=ang;
+    yCoord=y;
 }
 
 
@@ -19,11 +19,6 @@ int Wire::getLength() const
 void Wire::setLength(int value)
 {
     length = value;
-}
-
-float Wire::getCurrent() const
-{
-    return current;
 }
 
 int Wire::getNode() const
