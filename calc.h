@@ -18,8 +18,9 @@ class Calc: public QObject
 Q_OBJECT
 
 public:
-    Calc();
 
+    //Returns instance of this class
+    static std::shared_ptr<Calc> Instance();
 
     //Methods invokable from QML,voor tekenen van circuit. TODO verbeteren, teveel functies voor hetzelfde
     Q_INVOKABLE void solveLevel();
@@ -95,6 +96,10 @@ public:
 
 
 private:
+
+    Calc();
+    static std::shared_ptr<Calc> instance;
+
     std::vector<float> computeNetwork(int nrOfNodes);
 
 

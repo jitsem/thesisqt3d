@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 {
 
     //Dingen voor netwerkcalculation
-    Calc* c=new Calc();
+     std::shared_ptr<Calc> c=Calc::Instance();
 
 
 
@@ -49,12 +49,6 @@ int main(int argc, char *argv[])
 
     MainWindow w;
 
-    //load view
-    //   QQuickView view;
-    //   view.engine()->rootContext()->setContextProperty(QStringLiteral("_window"), &view);
-    //   view.engine()->rootContext()->setContextProperty(QStringLiteral("calculator"),c);
-    //   view.setResizeMode(QQuickView::SizeRootObjectToView);
-    //   view.setSource(QUrl("qrc:/Qml/CircuitView.qml"));
 
 
 

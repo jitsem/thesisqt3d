@@ -7,12 +7,23 @@
 #include <QStandardPaths>
 #include <limits>
 
+std::shared_ptr<Calc> Calc::instance=nullptr;
 
 using namespace Eigen;
 Calc::Calc()
 {
 
 }
+//Will make sure there is only one instance of the Calc
+std::shared_ptr<Calc> Calc::Instance()
+{
+    if(!instance){
+        instance = std::shared_ptr<Calc>(new Calc());
+    }
+
+    return instance;
+}
+
 
 void Calc::solveLevel()
 {
