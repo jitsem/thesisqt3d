@@ -36,9 +36,7 @@ protected:
     component_lb * setGray(component_lb & child);
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 private:
-    std::vector<std::shared_ptr<Component>> sources;
-    std::vector<std::shared_ptr<Component>> resistors;
-    std::vector<std::shared_ptr<Wire>> wires;
+
 };
 
 #endif // DRAWZONE_H

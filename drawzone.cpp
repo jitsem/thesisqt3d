@@ -24,7 +24,7 @@
 #include <QQuickView>
 #include <QQmlEngine>
 #include <QQmlContext>
-
+#include <QMessageBox>
 
 #include "calc.h"
 
@@ -37,7 +37,7 @@ QPoint  dragStartPosition;
 DrawZone::DrawZone(QWidget *parent)
     :QFrame(parent)
 {
-    //setFrameStyle(QFrame::Sunken | QFrame::StyledPanel);
+
     setAcceptDrops(true);
 
 
@@ -58,7 +58,7 @@ void DrawZone::slotTriggeredRotate()
                 w->setAngle(1);
             }
             else
-                w->setAngle((w->getAngle())+1);
+            w->setAngle((w->getAngle())+1);
 
         }
     }
@@ -73,7 +73,7 @@ void DrawZone::slotTriggeredDelete()
     QList<component_lb*> list = this->findChildren<component_lb *>();
     foreach(component_lb *w, list) {
         if(w->getSelected()){
-            delete w;
+           delete w;
         }
 
     }
@@ -88,14 +88,16 @@ void DrawZone::slotTriggeredSave()
     //DONE change positions to positions in grid of 50 px
     //fill out vectors of components
     //execute filewriting method
-
     updateNodePositions();
+
     QList<component_lb*> list = this->findChildren<component_lb *>();
     QList<QPoint> points;
+
     foreach(component_lb *w, list) {
         //qDebug()<<"id:"<<w->getNr()<<"n1x, n1y"<< w->getNode1x()/50 << w->getNode1y()/50<<"n2x, n2y"<< w->getNode2x()/50 << w->getNode2y()/50<< "type:"<<w->getType();
         points.push_back(QPoint(w->getNode1x(),w->getNode1y()));
         points.push_back(QPoint(w->getNode2x(),w->getNode2y()));
+
     }
     //take first element of list, check if it is in the rest of the list
     //if so, delete all occurances in the list and check next point
@@ -118,6 +120,7 @@ void DrawZone::slotTriggeredSave()
             msgBox.setDefaultButton(QMessageBox::Cancel);
             int ret = msgBox.exec();
             switch (ret) {
+
             case QMessageBox::Save:
                 qDebug()<<"save was clicked";
                 break;
@@ -127,6 +130,7 @@ void DrawZone::slotTriggeredSave()
             default:
                 // should never be reached
                 break;
+
             }
             break;
         }
@@ -138,7 +142,9 @@ void DrawZone::slotTriggeredSave()
 
         foreach(component_lb *w, list){
 
+
         }
+
 
     }
 }
@@ -149,6 +155,7 @@ void DrawZone::slotTriggered3D_Preview()
 {
     QQuickView *view = new QQuickView;
     std::shared_ptr<Calc> c=Calc::Instance();
+
     view->engine()->rootContext()->setContextProperty(QStringLiteral("_window"), view);
     view->engine()->rootContext()->setContextProperty(QStringLiteral("calculator"),c.get());
     view->setResizeMode(QQuickView::SizeRootObjectToView);
@@ -180,7 +187,7 @@ void DrawZone::dragEnterEvent(QDragEnterEvent *event)
 
 void DrawZone::dragMoveEvent(QDragMoveEvent *event)
 {
-    // qDebug()<<"drag move event ";
+// qDebug()<<"drag move event ";
     if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
         if (event->source() == this) {
             event->setDropAction(Qt::MoveAction);
@@ -297,7 +304,7 @@ void DrawZone::dropEvent(QDropEvent *event)
         updateNodePositions();
 
         if (newIcon->getSelected()){
-            setGray(*newIcon);
+           setGray(*newIcon);
         }
         else{
             removeGray(*newIcon);
@@ -321,12 +328,12 @@ void DrawZone::dropEvent(QDropEvent *event)
 
 
 
-    //    QList<component_lb*> list = this->findChildren<component_lb *>();
-    //    int i=0;
-    //    foreach(component_lb *w, list) {
-    //        i++;
-    //        qDebug()<<"element nr"<<i<<"id:"<<w->getNr()<<"'s position is :"<<w->x()<<w->y()<<"selected?:"<<w->getSelected()<<"type:"<<w->getType();
-    //    }
+//    QList<component_lb*> list = this->findChildren<component_lb *>();
+//    int i=0;
+//    foreach(component_lb *w, list) {
+//        i++;
+//        qDebug()<<"element nr"<<i<<"id:"<<w->getNr()<<"'s position is :"<<w->x()<<w->y()<<"selected?:"<<w->getSelected()<<"type:"<<w->getType();
+//    }
 
 }
 
@@ -348,7 +355,7 @@ void DrawZone::mousePressEvent(QMouseEvent *event)
     if (event->button() == Qt::LeftButton){
         dragStartPosition = event->pos();
 
-    }
+}
 }
 void DrawZone::mouseReleaseEvent(QMouseEvent *event)
 {
@@ -370,13 +377,13 @@ void DrawZone::mouseReleaseEvent(QMouseEvent *event)
         child->setSelected(0);
     }
     //qDebug()<<"mousereleaseevent";
-    return;
+        return;
 
 
 }
 component_lb * DrawZone::removeGray(component_lb &child){
 
-    // qDebug()<<child.getType();
+   // qDebug()<<child.getType();
     switch (child.getType()){
 
     case 0:
@@ -426,8 +433,8 @@ void DrawZone::paintEvent(QPaintEvent *event)
     while(i<width()){
         j=0;
         while(j<height()){
-            painter.drawRect(i,j,1,1);
-            j+=50;
+           painter.drawRect(i,j,1,1);
+           j+=50;
         }
         i+=50;
     }
