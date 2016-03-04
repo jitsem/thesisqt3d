@@ -48,9 +48,9 @@ Entity{
 
             PhongMaterial {
                 id:mat
-                diffuse: "yellow"
-                ambient: "yellow"
-                specular: "yellow"
+                diffuse: "gold"
+                ambient: "gold"
+                specular: "white"
                 shininess: 0.2
             }
 
@@ -97,7 +97,7 @@ Entity{
 
             if(root.eSize>0)
                 var electron = o.electronFactory.createObject(null,{"xend":root.l, "xstart":0 , "xbegin":i/2*root.sf , "s": Math.abs(root.eSize)});
-             else
+            else
                 var electron = o.electronFactory.createObject(null,{"xend":0, "xbegin": i/2*root.sf,"xstart":root.l, "s": Math.abs(root.eSize)});
             electron.parent=root;
             electrons[i]=electron;
@@ -125,6 +125,23 @@ Entity{
     function changeHeight(newValue){
         animateHeight.to = newValue;
         animateHeight.start();
+    }
+
+    function adjustElectrons(){
+
+        for(var i = 0 ; i < electrons.length ; i++){
+
+            electrons[i].stopAnimation();
+            electrons[i].changeSize(Math.abs(root.eSize));
+            if(root.eSize>0){
+                electrons[i].xend=root.l;
+                electrons[i].xstart = 0;
+            }else{
+                electrons[i].xend=0;
+                electrons[i].xstart =root.l;
+            }
+            electrons[i].startAnimation();
+        }
     }
 
 

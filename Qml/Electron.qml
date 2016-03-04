@@ -34,7 +34,7 @@ Entity{
 
     SphereMesh{
         id:mesh
-        radius:s*4
+        radius:s*3
     }
 
     Transform
@@ -44,15 +44,16 @@ Entity{
     }
     PhongMaterial {
         id:mat
-        diffuse: "darkblue"
-        ambient: "darkblue"
-        specular: "darkblue"
+        diffuse: "steelblue"
+        ambient: "gainsboro"
+        specular: "blue"
         shininess: 0.2
+
     }
 
     QQ2.SequentialAnimation{
 
-
+        id:currentPath
         running: true
         loops: QQ2.Animation.Infinite
         QQ2.NumberAnimation {
@@ -73,4 +74,24 @@ Entity{
         }
 
     }
+
+    QQ2.NumberAnimation{
+        id:animateSize
+        target:electron
+        property:"s"
+        duration: 1000
+    }
+
+    function changeSize(newValue){
+        animateSize.to = newValue;
+        animateSize.start();
+    }
+
+    function stopAnimation(){
+        currentPath.stop();
+    }
+    function startAnimation(){
+        currentPath.start();
+    }
+
 }

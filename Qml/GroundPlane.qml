@@ -9,7 +9,7 @@ Entity {
 
     PlaneMesh {
         id: groundMesh
-        width: 500
+        width: 300
         height: width
         meshResolution: Qt.size(2, 2)
 
@@ -22,12 +22,12 @@ Entity {
     }
 
     DiffuseSpecularMapMaterial {
-            id: groundMaterial
-            ambient: Qt.rgba(0.1,0.1,0.1,1)
-            diffuse: "qrc:/assets/textures/ground.png"
+        id: groundMaterial
+        ambient: "darkslategrey"
+        diffuse: "qrc:/assets/textures/ground.png"
 
 
-        }
+    }
 
     components: [
         groundMesh,

@@ -24,12 +24,12 @@ Item {
 
     Text{
         id:titleText
-        text: " WELCOME TO THE GAME"
+        text: "3D-Preview"
         font.pointSize: 24
         color: "red"
         anchors.horizontalCenter: parent.horizontalCenter
         style: Text.Raised
-        styleColor: "white"
+        styleColor: "yellow"
     }
 
 
@@ -44,19 +44,26 @@ Item {
         anchors.topMargin: 10
         anchors.left:parent.left
         iconSource: "qrc:/assets/icons/svg/question-button.svg"
-        onClicked: solText.visible = !solText.visible
+        onClicked: solRect.visible = !solRect.visible
     }
 
+    Rectangle{
+        id:solRect
+        width:320
+        height: 100
+        color: "steelblue"
+        visible:false
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        Text{
+            id:solText
+            text: "The circuit has following solution: "
+            font.pointSize: 10
+            color: "white"
+            style: Text.Raised
+            styleColor: "white"
 
-    Text{
-        id:solText
-        visible: false
-        text: "The circuit has following solution: "
-        font.pointSize: 10
-        color: "white"
-        anchors.verticalCenter: parent.verticalCenter
-        style: Text.Raised
-        styleColor: "white"
+        }
     }
 
 
@@ -152,22 +159,57 @@ Item {
     }
 
 
-    //Button for saving edits
+    //Objects for saving edits
     Button{
         id:saveButton
         width: 50; height: 50
         anchors.top: zoomOut.bottom
         anchors.topMargin: 10
         anchors.right:parent.right
-        iconSource: "qrc:/assets/icons/svg/battery-power.svg"
-        onClicked: calculator.writeBackToFile();
+        iconSource: "qrc:/assets/icons/svg/inbox-symbol.svg"
+        onClicked: {
 
+            calculator.writeBackToFile();
+            saveConfirm.visible = true;
+            saveConfirmTimer.start();
+
+
+        }
+
+
+    }
+    Rectangle{
+        id:saveConfirm
+        visible: false
+        width: 100; height: 100
+        color:"steelblue"
+        anchors.bottom: parent.bottom
+        anchors.right:parent.right
+        anchors.bottomMargin: 15
+        anchors.rightMargin: 15
+
+        Image {
+            width: 100; height: 100
+            fillMode: Image.PreserveAspectFit
+            smooth: true
+            source: "qrc:/assets/icons/svg/mark-ribbon.svg"
+        }
+
+    }
+
+    Timer{
+        id:saveConfirmTimer
+        interval: 4000;
+        running: false;
+        repeat: false;
+        onTriggered:  saveConfirm.visible = false
 
     }
 
 
 
-    //  Menu for changing sources sizes, created after building level for firts time
+
+    //  Menu for changing Source & Resistor sizes and toggling switches, created after building level for firts time
     Button{
         id:sourceEdit
         width: 50; height: 50
@@ -179,13 +221,7 @@ Item {
 
     }
 
-    MouseArea {
-        anchors.fill: world3D.generator.sources[1]
-        acceptedButtons: Qt.RightButton
-        onClicked: console.log("vvvvv")
 
-
-    }
     Menu{
         id:sourceMenu
     }
@@ -206,9 +242,11 @@ Item {
     }
 
 
+
     function makeEditMenu() {
 
         var menuFactory = Qt.createComponent("qrc:/Qml/EditMenu.qml");
+        var switchMenuFactory = Qt.createComponent("qrc:/Qml/SwitchMenu.qml")
         for (var i = 0; i < world3D.generator.sources.length; i++) {
             var menu = menuFactory.createObject(appView,{"target":"source", "nr":i});
             sourceMenu.insertItem(i+1,menu);
@@ -219,8 +257,10 @@ Item {
             resistorMenu.insertItem(i+1,menu);
 
         }
+  }
 
-    }
+
+
 
 }
 

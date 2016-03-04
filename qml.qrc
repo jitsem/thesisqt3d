@@ -7,11 +7,10 @@
         <file>Qml/Source.qml</file>
         <file>Qml/Resistor.qml</file>
         <file>Qml/GroundPlane.qml</file>
-	<file>Qml/Wire.qml</file>
-	<file>Qml/Electron.qml</file>
-	<file>Qml/Main.qml</file>
-	<file>Qml/EditMenu.qml</file>
-
-
-     </qresource>
+        <file>Qml/Wire.qml</file>
+        <file>Qml/Electron.qml</file>
+        <file>Qml/Main.qml</file>
+        <file>Qml/EditMenu.qml</file>
+        <file>Qml/Switch.qml</file>
+    </qresource>
 </RCC>

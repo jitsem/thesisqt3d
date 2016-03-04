@@ -10,14 +10,16 @@ SOURCES += main.cpp \
     source.cpp \
     calc.cpp \
     component.cpp \
-    wire.cpp
+    wire.cpp \
+    switch.cpp
 
 HEADERS += \
     calc.h \
     resistor.h \
     source.h \
     component.h\
-    wire.h
+    wire.h \
+    switch.h
 
 
 
@@ -34,6 +36,7 @@ DISTFILES += \
     Qml/CircuitView.qml \
     Qml/Main.qml \
     Qml/EditMenu.qml \
+    Qml/Switch.qml \
     android/AndroidManifest.xml \
     android/gradle/wrapper/gradle-wrapper.jar \
     android/gradlew \
@@ -49,3 +52,15 @@ RESOURCES += \
 INCLUDEPATH += $$PWD/Eigen/
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+
+# remove possible other optimization flags
+QMAKE_CXXFLAGS_RELEASE -= -O
+QMAKE_CXXFLAGS_RELEASE -= -O1
+QMAKE_CXXFLAGS_RELEASE -= -O2
+
+# add the desired -O3 if not present
+QMAKE_CXXFLAGS_RELEASE *= -O3
+
+
+
+
