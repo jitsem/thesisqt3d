@@ -40,7 +40,7 @@ DragComponent::DragComponent(QWidget *parent)
     res1->setAttribute(Qt::WA_DeleteOnClose);
     res1->show();
 
-    component_lb *wire1 = new component_lb(this,100,3,4,20,4,1,2);
+    component_lb *wire1 = new component_lb(this,0,3,4,20,4,1,2);
     QPixmap wir=QPixmap(":/assets/wire_small.png");
     wire1->setPixmap(wir);
     //wire1->move(0,10);
@@ -58,12 +58,11 @@ DragComponent::DragComponent(QWidget *parent)
     mainLayout->addWidget(components[2]);
 
 
-
 }
 
 void DragComponent::dragEnterEvent(QDragEnterEvent *event)
 {
-        qDebug()<<"dragenterEvent from the list";
+        //qDebug()<<"dragenterEvent from the list";
         event->ignore();
 
 }
@@ -76,33 +75,7 @@ void DragComponent::dragMoveEvent(QDragMoveEvent *event)
 
 void DragComponent::dropEvent(QDropEvent *event)
 {
-    //qDebug()<<event->mimeData()->text();
-//    if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
-//        QByteArray itemData = event->mimeData()->data("application/x-dnditemdata");
-//        QDataStream dataStream(&itemData, QIODevice::ReadOnly);
-
-//        QPixmap pixmap;
-//        QPoint offset;
-//        float value;
-//        int angle ;
-//        int type ;
-//        dataStream >> pixmap >> offset >> value >> angle >> type;
-//        qDebug()<<value<<angle<<type;
-//        component *newIcon = new component(this,value,event->pos().x(),event->pos().y(),0,0,angle,type);
-//        newIcon->setPixmap(pixmap);
-//        newIcon->move(event->pos() - offset);
-//        newIcon->show();
-//        newIcon->setAttribute(Qt::WA_DeleteOnClose);
-
-//        if (event->source() == this) {
-//            event->setDropAction(Qt::MoveAction);
-//            event->accept();
-//        } else {
-//            event->acceptProposedAction();
-//        }
-//    } else {
-//        event->ignore();
-//    }
+return;
 }
 
 void DragComponent::mousePressEvent(QMouseEvent *event)

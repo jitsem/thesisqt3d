@@ -23,7 +23,7 @@
 #include <QQuickView>
 #include <QQmlEngine>
 #include <QQmlContext>
-
+#include <QMessageBox>
 
 #include "calc.h"
 
@@ -36,7 +36,7 @@ QPoint  dragStartPosition;
 DrawZone::DrawZone(QWidget *parent)
     :QFrame(parent)
 {
-    //setFrameStyle(QFrame::Sunken | QFrame::StyledPanel);
+
     setAcceptDrops(true);
 
 
@@ -57,7 +57,7 @@ void DrawZone::slotTriggeredRotate()
                 w->setAngle(1);
             }
             else
-                w->setAngle((w->getAngle())+1);
+            w->setAngle((w->getAngle())+1);
 
         }
     }
@@ -72,7 +72,7 @@ void DrawZone::slotTriggeredDelete()
     QList<component_lb*> list = this->findChildren<component_lb *>();
     foreach(component_lb *w, list) {
         if(w->getSelected()){
-            delete w;
+           delete w;
         }
 
     }
@@ -83,55 +83,78 @@ void DrawZone::slotTriggeredDelete()
 void DrawZone::slotTriggeredSave()
 {
     //TODO
-    //check if circuit that is drawn is correct
-    //change positions to positions in grid of 50 px
+    //DONE check if circuit that is drawn is correct
+    //DONE change positions to positions in grid of 50 px
     //fill out vectors of components
     //execute filewriting method
-    //c'mon!
+
     updateNodePositions();
 
 
-    // If the number of connections (points shared between components) is equal to nr of components.. scheme is closed
 
-    //QList<component_lb*> ordered_list;
     QList<component_lb*> list = this->findChildren<component_lb *>();
     QList<QPoint> points;
-    //QList<QPoint> points;
 
     foreach(component_lb *w, list) {
-        qDebug()<<"id:"<<w->getNr()<<"n1x, n1y"<< w->getNode1x()/50 << w->getNode1y()/50<<"n2x, n2y"<< w->getNode2x()/50 << w->getNode2y()/50<< "type:"<<w->getType();
+        //qDebug()<<"id:"<<w->getNr()<<"n1x, n1y"<< w->getNode1x()/50 << w->getNode1y()/50<<"n2x, n2y"<< w->getNode2x()/50 << w->getNode2y()/50<< "type:"<<w->getType();
         points.push_back(QPoint(w->getNode1x(),w->getNode1y()));
         points.push_back(QPoint(w->getNode2x(),w->getNode2y()));
-        //        points.insert(std::pair<int,int>(w->getNode1x(),w->getNode1y()));
-        //        points.insert(std::pair<int,int>(w->getNode2x(),w->getNode2y()));
+
     }
-
-
-    foreach(QPoint p,points){
-        QPoint cur;
-        if(!points.isEmpty()){
-            cur=points.takeFirst();
+    //take first element of list, check if it is in the rest of the list
+    //if so, delete all occurances in the list and check next point
+    //if some point only occurs one time in the list, the circuit is not closed (ROOM FOR IMPROVEMENT!!??)
+    //TODO if save is clicked when no components present.. give dialog
+    QPoint cur;
+    while(!points.isEmpty()){
+        cur=points.takeFirst();
+        if(points.contains(cur)){
             while(points.contains(cur)){
                 points.erase( std::remove( points.begin(), points.end(), cur), points.end() );
 
             }
+        }
+        else{
+            //qDebug()<<"Circuit not closed!";
+            QMessageBox msgBox;
+            msgBox.setText("Circuit not closed!");
+            msgBox.setInformativeText("Do you want to save your changes? \n 3D preview will not be possible unless you close the circuit");
+            msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Cancel);
+            msgBox.setDefaultButton(QMessageBox::Cancel);
+            int ret = msgBox.exec();
+            switch (ret) {
+              case QMessageBox::Save:
+                  qDebug()<<"save was clicked";
+                  break;
+              case QMessageBox::Cancel:
+                  qDebug()<<"cancel was clicked";
+                  break;
+              default:
+                  // should never be reached
+                  break;
+            }
+            break;
+        }
+    }
+    if(points.isEmpty()){
+        qDebug()<<"tis aaneen";
+        //fill out all drawn components in singleton calc object vectors
+        //call the save function of calc class
+
+        foreach(component_lb *w, list){
 
         }
-        //        foreach(QPoint p,points) {
-        //            qDebug()<<"n1x, n1y"<< p.rx()/50 << p.ry()/50<<"n2x, n2y"<< p.rx()/50 << p.ry()/50;
-        //        }
+
     }
-
-
 }
 
 void DrawZone::slotTriggered3D_Preview()
 {
-    QQuickView *view = new QQuickView;
-    std::shared_ptr<Calc> c=Calc::Instance();
-    view->engine()->rootContext()->setContextProperty(QStringLiteral("_window"), view);
-    view->engine()->rootContext()->setContextProperty(QStringLiteral("calculator"),c.get());
-    view->setResizeMode(QQuickView::SizeRootObjectToView);
+    QQuickView view ;
+    Calc* c=new Calc();
+    view.engine()->rootContext()->setContextProperty(QStringLiteral("_window"), &view);
+    view.engine()->rootContext()->setContextProperty(QStringLiteral("calculator"),c);
+    view.setResizeMode(QQuickView::SizeRootObjectToView);
 
     view->setSource(QUrl("qrc:/Qml/CircuitView.qml"));
 
@@ -160,7 +183,7 @@ void DrawZone::dragEnterEvent(QDragEnterEvent *event)
 
 void DrawZone::dragMoveEvent(QDragMoveEvent *event)
 {
-    // qDebug()<<"drag move event ";
+// qDebug()<<"drag move event ";
     if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
         if (event->source() == this) {
             event->setDropAction(Qt::MoveAction);
@@ -277,7 +300,7 @@ void DrawZone::dropEvent(QDropEvent *event)
         updateNodePositions();
 
         if (newIcon->getSelected()){
-            setGray(*newIcon);
+           setGray(*newIcon);
         }
         else{
             removeGray(*newIcon);
@@ -301,12 +324,12 @@ void DrawZone::dropEvent(QDropEvent *event)
 
 
 
-    //    QList<component_lb*> list = this->findChildren<component_lb *>();
-    //    int i=0;
-    //    foreach(component_lb *w, list) {
-    //        i++;
-    //        qDebug()<<"element nr"<<i<<"id:"<<w->getNr()<<"'s position is :"<<w->x()<<w->y()<<"selected?:"<<w->getSelected()<<"type:"<<w->getType();
-    //    }
+//    QList<component_lb*> list = this->findChildren<component_lb *>();
+//    int i=0;
+//    foreach(component_lb *w, list) {
+//        i++;
+//        qDebug()<<"element nr"<<i<<"id:"<<w->getNr()<<"'s position is :"<<w->x()<<w->y()<<"selected?:"<<w->getSelected()<<"type:"<<w->getType();
+//    }
 
 }
 
@@ -328,7 +351,7 @@ void DrawZone::mousePressEvent(QMouseEvent *event)
     if (event->button() == Qt::LeftButton){
         dragStartPosition = event->pos();
 
-    }
+}
 }
 void DrawZone::mouseReleaseEvent(QMouseEvent *event)
 {
@@ -350,13 +373,13 @@ void DrawZone::mouseReleaseEvent(QMouseEvent *event)
         child->setSelected(0);
     }
     //qDebug()<<"mousereleaseevent";
-    return;
+        return;
 
 
 }
 component_lb * DrawZone::removeGray(component_lb &child){
 
-    // qDebug()<<child.getType();
+   // qDebug()<<child.getType();
     switch (child.getType()){
 
     case 0:
@@ -406,8 +429,8 @@ void DrawZone::paintEvent(QPaintEvent *event)
     while(i<width()){
         j=0;
         while(j<height()){
-            painter.drawRect(i,j,1,1);
-            j+=50;
+           painter.drawRect(i,j,1,1);
+           j+=50;
         }
         i+=50;
     }
