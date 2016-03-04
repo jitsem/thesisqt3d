@@ -11,7 +11,11 @@ SOURCES += main.cpp \
     calc.cpp \
     component.cpp \
     wire.cpp \
-    switch.cpp
+    switch.cpp \
+    component_lb.cpp \
+    dragcomponent.cpp \
+    drawzone.cpp \
+    mainwindow.cpp
 
 HEADERS += \
     calc.h \
@@ -19,7 +23,11 @@ HEADERS += \
     source.h \
     component.h\
     wire.h \
-    switch.h
+    switch.h \
+    component_lb.h \
+    dragcomponent.h \
+    drawzone.h \
+    mainwindow.h
 
 
 
@@ -47,7 +55,8 @@ DISTFILES += \
 
 RESOURCES += \
     qml.qrc \
-    resource.qrc
+    resource.qrc \
+    levelbuilder.qrc \
 
 INCLUDEPATH += $$PWD/Eigen/
 
@@ -60,6 +69,10 @@ QMAKE_CXXFLAGS_RELEASE -= -O2
 
 # add the desired -O3 if not present
 QMAKE_CXXFLAGS_RELEASE *= -O3
+
+FORMS += \
+    mainwindow.ui
+
 
 
 
