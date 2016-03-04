@@ -57,7 +57,7 @@ void DrawZone::slotTriggeredRotate()
                 w->setAngle(1);
             }
             else
-            w->setAngle((w->getAngle())+1);
+                w->setAngle((w->getAngle())+1);
 
         }
     }
@@ -72,7 +72,7 @@ void DrawZone::slotTriggeredDelete()
     QList<component_lb*> list = this->findChildren<component_lb *>();
     foreach(component_lb *w, list) {
         if(w->getSelected()){
-           delete w;
+            delete w;
         }
 
     }
@@ -102,8 +102,8 @@ void DrawZone::slotTriggeredSave()
         qDebug()<<"id:"<<w->getNr()<<"n1x, n1y"<< w->getNode1x()/50 << w->getNode1y()/50<<"n2x, n2y"<< w->getNode2x()/50 << w->getNode2y()/50<< "type:"<<w->getType();
         points.push_back(QPoint(w->getNode1x(),w->getNode1y()));
         points.push_back(QPoint(w->getNode2x(),w->getNode2y()));
-//        points.insert(std::pair<int,int>(w->getNode1x(),w->getNode1y()));
-//        points.insert(std::pair<int,int>(w->getNode2x(),w->getNode2y()));
+        //        points.insert(std::pair<int,int>(w->getNode1x(),w->getNode1y()));
+        //        points.insert(std::pair<int,int>(w->getNode2x(),w->getNode2y()));
     }
 
 
@@ -117,27 +117,30 @@ void DrawZone::slotTriggeredSave()
             }
 
         }
-//        foreach(QPoint p,points) {
-//            qDebug()<<"n1x, n1y"<< p.rx()/50 << p.ry()/50<<"n2x, n2y"<< p.rx()/50 << p.ry()/50;
-//        }
-}
+        //        foreach(QPoint p,points) {
+        //            qDebug()<<"n1x, n1y"<< p.rx()/50 << p.ry()/50<<"n2x, n2y"<< p.rx()/50 << p.ry()/50;
+        //        }
+    }
 
 
 }
 
 void DrawZone::slotTriggered3D_Preview()
 {
-    QQuickView view;
-    Calc* c=new Calc();
-    view.engine()->rootContext()->setContextProperty(QStringLiteral("_window"), &view);
-    view.engine()->rootContext()->setContextProperty(QStringLiteral("calculator"),c);
-    view.setResizeMode(QQuickView::SizeRootObjectToView);
+    QQuickView *view = new QQuickView;
+    std::shared_ptr<Calc> c=Calc::Instance();
+    view->engine()->rootContext()->setContextProperty(QStringLiteral("_window"), view);
+    view->engine()->rootContext()->setContextProperty(QStringLiteral("calculator"),c.get());
+    view->setResizeMode(QQuickView::SizeRootObjectToView);
 
-    view.setSource(QUrl("qrc:/Qml/CircuitView.qml"));
+    view->setSource(QUrl("qrc:/Qml/CircuitView.qml"));
+
+    QWidget *container = QWidget::createWindowContainer(view);
 
 
+    container->show();
 
-   view.show();
+
 
 }
 void DrawZone::dragEnterEvent(QDragEnterEvent *event)
@@ -157,7 +160,7 @@ void DrawZone::dragEnterEvent(QDragEnterEvent *event)
 
 void DrawZone::dragMoveEvent(QDragMoveEvent *event)
 {
-// qDebug()<<"drag move event ";
+    // qDebug()<<"drag move event ";
     if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
         if (event->source() == this) {
             event->setDropAction(Qt::MoveAction);
@@ -274,7 +277,7 @@ void DrawZone::dropEvent(QDropEvent *event)
         updateNodePositions();
 
         if (newIcon->getSelected()){
-           setGray(*newIcon);
+            setGray(*newIcon);
         }
         else{
             removeGray(*newIcon);
@@ -298,12 +301,12 @@ void DrawZone::dropEvent(QDropEvent *event)
 
 
 
-//    QList<component_lb*> list = this->findChildren<component_lb *>();
-//    int i=0;
-//    foreach(component_lb *w, list) {
-//        i++;
-//        qDebug()<<"element nr"<<i<<"id:"<<w->getNr()<<"'s position is :"<<w->x()<<w->y()<<"selected?:"<<w->getSelected()<<"type:"<<w->getType();
-//    }
+    //    QList<component_lb*> list = this->findChildren<component_lb *>();
+    //    int i=0;
+    //    foreach(component_lb *w, list) {
+    //        i++;
+    //        qDebug()<<"element nr"<<i<<"id:"<<w->getNr()<<"'s position is :"<<w->x()<<w->y()<<"selected?:"<<w->getSelected()<<"type:"<<w->getType();
+    //    }
 
 }
 
@@ -325,7 +328,7 @@ void DrawZone::mousePressEvent(QMouseEvent *event)
     if (event->button() == Qt::LeftButton){
         dragStartPosition = event->pos();
 
-}
+    }
 }
 void DrawZone::mouseReleaseEvent(QMouseEvent *event)
 {
@@ -347,13 +350,13 @@ void DrawZone::mouseReleaseEvent(QMouseEvent *event)
         child->setSelected(0);
     }
     //qDebug()<<"mousereleaseevent";
-        return;
+    return;
 
 
 }
 component_lb * DrawZone::removeGray(component_lb &child){
 
-   // qDebug()<<child.getType();
+    // qDebug()<<child.getType();
     switch (child.getType()){
 
     case 0:
@@ -403,8 +406,8 @@ void DrawZone::paintEvent(QPaintEvent *event)
     while(i<width()){
         j=0;
         while(j<height()){
-           painter.drawRect(i,j,1,1);
-           j+=50;
+            painter.drawRect(i,j,1,1);
+            j+=50;
         }
         i+=50;
     }
@@ -430,32 +433,32 @@ void DrawZone::updateNodePositions(){
     foreach(component_lb *w, list) {
         switch (w->getAngle()){
         case 1:
-           // painter.drawRect(w->x(),w->y()+(w->height()/2),2,2);//node1
-           // painter.drawRect(w->x()+w->width(),w->y()+(w->height()/2),2,2);//node2
+            // painter.drawRect(w->x(),w->y()+(w->height()/2),2,2);//node1
+            // painter.drawRect(w->x()+w->width(),w->y()+(w->height()/2),2,2);//node2
             w->setNode1x(w->x());
             w->setNode1y(w->y()+(w->height()/2));
             w->setNode2x(w->x()+w->width());
             w->setNode2y(w->y()+(w->height()/2));
             break;
         case 2:
-//            painter.drawRect(w->x()+(w->width()/2),w->y()+w->height(),2,2);//node1
-//            painter.drawRect(w->x()+(w->width()/2),w->y(),2,2);//node2
+            //            painter.drawRect(w->x()+(w->width()/2),w->y()+w->height(),2,2);//node1
+            //            painter.drawRect(w->x()+(w->width()/2),w->y(),2,2);//node2
             w->setNode1x(w->x()+(w->width()/2));
             w->setNode1y(w->y()+(w->height()));
             w->setNode2x(w->x()+(w->width()/2));
             w->setNode2y(w->y());
             break;
         case 3:
-//            painter.drawRect(w->x()+w->width(),w->y()+(w->height()/2),2,2);//node1
-//            painter.drawRect(w->x(),w->y()+(w->height()/2),2,2);//node2
+            //            painter.drawRect(w->x()+w->width(),w->y()+(w->height()/2),2,2);//node1
+            //            painter.drawRect(w->x(),w->y()+(w->height()/2),2,2);//node2
             w->setNode1x(w->x()+w->width());
             w->setNode1y(w->y()+(w->height()/2));
             w->setNode2x(w->x());
             w->setNode2y(w->y()+(w->height()/2));
             break;
         case 4:
-//            painter.drawRect(w->x()+(w->width()/2),w->y(),2,2);//node1
-//            painter.drawRect(w->x()+(w->width()/2),w->y()+w->height(),2,2);//node2
+            //            painter.drawRect(w->x()+(w->width()/2),w->y(),2,2);//node1
+            //            painter.drawRect(w->x()+(w->width()/2),w->y()+w->height(),2,2);//node2
             w->setNode1x(w->x()+(w->width()/2));
             w->setNode1y(w->y());
             w->setNode2x(w->x()+(w->width()/2));
@@ -466,14 +469,14 @@ void DrawZone::updateNodePositions(){
 }
 int DrawZone::roundUp(int numToRound, int multiple)
 {
- if(multiple == 0)
- {
-  return numToRound;
- }
- int result;
- result = numToRound + multiple/2;
- result -= result % multiple;
- return result;
+    if(multiple == 0)
+    {
+        return numToRound;
+    }
+    int result;
+    result = numToRound + multiple/2;
+    result -= result % multiple;
+    return result;
 
 }
 void DrawZone::mouseDoubleClickEvent( QMouseEvent * event )
