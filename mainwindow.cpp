@@ -10,9 +10,17 @@
 #include <QCursor>
 #include "component_lb.h"
 
+
+#include <QQmlEngine>
+#include <QQmlContext>
+#include <QMessageBox>
+#include <QWidgetAction>
+
+#include "calc.h"
+
+
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    QMainWindow(parent),ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 
@@ -29,16 +37,42 @@ MainWindow::MainWindow(QWidget *parent) :
     QGridLayout *gridlayout = new QGridLayout(drawzone_widget);
     DrawZone * drawzone =new DrawZone(ui->widget_container);
     gridlayout->addWidget(drawzone);
-   // qDebug()<<drawzone_widget->size();
+    // qDebug()<<drawzone_widget->size();
     QObject::connect (this,SIGNAL(on_actionRotate_triggered()),drawzone,SLOT(slotTriggeredRotate()));
     QObject::connect (this,SIGNAL(on_actionDelete_triggered()),drawzone,SLOT(slotTriggeredDelete()));
     QObject::connect (this,SIGNAL(on_actionSave_triggered()),drawzone,SLOT(slotTriggeredSave()));
-    QObject::connect (this,SIGNAL(on_action3D_Preview_triggered()),drawzone,SLOT(slotTriggered3D_Preview()));
+    QObject::connect (this,SIGNAL(on_action3D_Preview_triggered()),this,SLOT(slotTriggered3D_Preview()));
+
+
+
+}
+
+void MainWindow::delete3D()
+{
+    view->close();
+    this->show();
+
+}
+
+void MainWindow::slotTriggered3D_Preview()
+{
+    this->hide();
+    std::shared_ptr<Calc> c=Calc::Instance();
+
+    view = new QQuickView;
+    view->engine()->rootContext()->setContextProperty(QStringLiteral("_window"), view);
+    view->engine()->rootContext()->setContextProperty(QStringLiteral("mainWindow"),this);
+    view->engine()->rootContext()->setContextProperty(QStringLiteral("calculator"),c.get());
+    view->setResizeMode(QQuickView::SizeRootObjectToView);
+    view->setSource(QUrl("qrc:/Qml/CircuitView.qml"));
+    view->showFullScreen();
+
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+
 }
 
 void MainWindow::on_actionExit_triggered()

@@ -21,13 +21,6 @@
 #include <set>
 
 
-#include <QQuickView>
-#include <QQmlEngine>
-#include <QQmlContext>
-#include <QMessageBox>
-
-#include "calc.h"
-
 
 component_lb * selected_comp ;
 QPoint  dragStartPosition;
@@ -151,25 +144,7 @@ void DrawZone::slotTriggeredSave()
 
 
 
-void DrawZone::slotTriggered3D_Preview()
-{
-    QQuickView *view = new QQuickView;
-    std::shared_ptr<Calc> c=Calc::Instance();
 
-    view->engine()->rootContext()->setContextProperty(QStringLiteral("_window"), view);
-    view->engine()->rootContext()->setContextProperty(QStringLiteral("calculator"),c.get());
-    view->setResizeMode(QQuickView::SizeRootObjectToView);
-
-    view->setSource(QUrl("qrc:/Qml/CircuitView.qml"));
-
-    QWidget *container = QWidget::createWindowContainer(view);
-
-
-    container->show();
-
-
-
-}
 void DrawZone::dragEnterEvent(QDragEnterEvent *event)
 {
     if (event->mimeData()->hasFormat("application/x-dnditemdata")) {

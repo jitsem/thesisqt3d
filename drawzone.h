@@ -23,7 +23,6 @@ public slots:
     void slotTriggeredRotate();
     void slotTriggeredDelete();
     void slotTriggeredSave();
-    void slotTriggered3D_Preview();
 protected:
     void mouseDoubleClickEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;

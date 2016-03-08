@@ -1,7 +1,7 @@
 TEMPLATE = app
 CONFIG += console c++11
 
-QT+=qml quick widgets 3dcore 3dinput 3drender 3dquick xml svg
+QT+=qml quick widgets 3dcore 3dinput 3drender 3dquick xml svg quickwidgets
 
 QTPLUGIN += qsvg@
 
@@ -45,6 +45,7 @@ DISTFILES += \
     Qml/Main.qml \
     Qml/EditMenu.qml \
     Qml/Switch.qml \
+    Qml/SwitchMenu.qml \
     android/AndroidManifest.xml \
     android/gradle/wrapper/gradle-wrapper.jar \
     android/gradlew \

@@ -21,10 +21,11 @@ Entity {
 
     }
 
-    DiffuseSpecularMapMaterial {
+    PhongMaterial {
         id: groundMaterial
         ambient: "darkslategrey"
-        diffuse: "qrc:/assets/textures/ground.png"
+        diffuse: "black"
+        shininess:50
 
 
     }

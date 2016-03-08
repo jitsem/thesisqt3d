@@ -15,7 +15,7 @@ Entity {
     property real z: -4.5
 
     //Zoomlevel
-    property real zoomlevel: 40
+    property real zoomlevel: 50
 
 
     //Camera
@@ -23,7 +23,7 @@ Entity {
         id: mainCamera
         projectionType: CameraLens.PerspectiveProjection
         fieldOfView: 60
-        aspectRatio: _window.width / _window.height
+        aspectRatio: 16 / 9
         position: Qt.vector3d(zoomlevel*Math.sin(cameraAngle*180/Math.PI)+x*generator.sf, zoomlevel, -zoomlevel*Math.cos(cameraAngle*180/Math.PI)+z*generator.sf )
         viewCenter: Qt.vector3d(x*generator.sf, 0.0, z*generator.sf)
     }
@@ -35,7 +35,7 @@ Entity {
         id : forward_renderer
         Viewport {
             rect: Qt.rect(0.0, 0.0, 1.0, 1.0)
-            clearColor: "black"
+            clearColor: "darkslategrey"
 
             ClearBuffer {
                 buffers : ClearBuffer.ColorDepthBuffer

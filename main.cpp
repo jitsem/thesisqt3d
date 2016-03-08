@@ -1,7 +1,6 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QObject>
-#include <QQuickView>
 #include <QQuickItem>
 #include <QVariant>
 #include <QDebug>
@@ -28,8 +27,9 @@ using namespace std;
 int main(int argc, char *argv[])
 {
 
+
     //Dingen voor netwerkcalculation
-     std::shared_ptr<Calc> c=Calc::Instance();
+    std::shared_ptr<Calc> c=Calc::Instance();
 
 
 
@@ -48,11 +48,10 @@ int main(int argc, char *argv[])
 
 
     MainWindow w;
-
-
-
-
     w.show();
+
+
+
 
 
     return app.exec();

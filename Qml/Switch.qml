@@ -17,6 +17,9 @@ Entity{
     //Variable voor hoek.
     property real orientationAngle: 0 //Hoek volgens y as, bepaald door plaatsing weerstand
 
+    //Ambient color for highlighting
+    property var switchColor: "orange"
+
     components: [finmesh,fintrans]
 
     Entity{
@@ -45,7 +48,7 @@ Entity{
             PhongMaterial {
                 id:mat
                 diffuse: "darkslategray"
-                ambient: "orange"
+                ambient: switchColor
                 specular: "darkslategray"
                 shininess: 0.2
             }

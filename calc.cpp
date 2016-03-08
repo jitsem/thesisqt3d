@@ -60,6 +60,11 @@ void Calc::solveLevel()
 
 void Calc::readFile(QString s)
 {
+    //Clear all vectors
+    wires.clear();
+    sources.clear();
+    resistors.clear();
+    switches.clear();
 
     //TODO Checken of een file volledig juist is
     fileName = s;
