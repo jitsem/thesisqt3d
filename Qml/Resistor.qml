@@ -18,6 +18,7 @@ Entity{
     property real a: 90 //Hoek volgens z as,bepaald door spanning over weerstand
     property real orientationAngle: 0 //Hoek volgens y as, bepaald door plaatsing weerstand
 
+    property var resColor: "slateblue"
     components: [finmesh,fintrans]
 
     Entity{
@@ -46,7 +47,7 @@ Entity{
             PhongMaterial {
                 id:mat
                 diffuse: "darkslategray"
-                ambient: "slateblue"
+                ambient: resColor
                 specular: "darkslategray"
                 shininess: 0.01
             }
@@ -133,6 +134,8 @@ Entity{
         animateOrientationAngle.to = newValue;
         animateOrientationAngle.start();
     }
+
+
 
 }
 

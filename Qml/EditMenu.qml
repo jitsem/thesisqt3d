@@ -1,13 +1,27 @@
 import QtQuick 2.5
 import QtQuick.Controls 1.4
 
-//Menu for editing a source
+//Menu for editing a source or resistor
 
 Menu{
     id:root
     property real nr
     property string target: ""
     title: target + nr
+    onAboutToShow: {
+        if(target === "resistor")
+            toggleColorResistor(nr);
+        else if(target === "source")
+            toggleColorSource(nr);
+    }
+    onAboutToHide: {
+        if(target === "resistor")
+            toggleColorResistor(nr);
+        else if(target === "source")
+            toggleColorSource(nr);
+    }
+
+
     MenuItem {
         text: "Increase"
         onTriggered: {
@@ -15,6 +29,8 @@ Menu{
             increase();
             world3D.generator.redrawLevel();
         }
+
+
     }
 
     MenuItem {

@@ -141,6 +141,8 @@ Entity{
             sources[i].changeSize(calculator.getVoltageAtSource(i));
             sources[i].changeHeight(calculator.voltageAtNode(calculator.nodeMAtSource(i)));
 
+            //TODO tijdelijk
+            sources[i].sourceColor = "firebrick"
 
         }
 
@@ -165,6 +167,8 @@ Entity{
             resistors[i].x=calculator.getXCoordOfResistor(i)*root.sf;
             resistors[i].z=-calculator.getYCoordOfResistor(i)*root.sf;
 
+            //TODO tijdelijk
+            resistors[i].resColor = "slateblue"
 
         }
 
@@ -181,14 +185,21 @@ Entity{
                 switches[i].changeLength(0.1*root.sf);
                 switches[i].changeHeight(minVolt)
             }
-            else
+            else{
                 switches[i].changeLength(1*root.sf);
                 switches[i].changeHeight(minVolt)
+            }
+
+            //TODO tijdelijk
+            switches[i].switchColor = "orange"
 
         }
 
+
         setSol();
     }
+
+
 
 }
 

@@ -22,6 +22,8 @@ Entity{
     property real s_new:1 //Nieuwe waarde voor animatie
     property bool animationRunning: false // Animatie in overgang
 
+    //Ambient color, changed on highlight
+    property var sourceColor: "firebrick"
     components: [somesh,sotrans]
 
     Entity{
@@ -44,7 +46,7 @@ Entity{
         PhongMaterial {
             id:mat
             diffuse: "firebrick"
-            ambient: "firebrick"
+            ambient: sourceColor
             specular: "firebrick"
             shininess: 0.2
         }
@@ -85,6 +87,7 @@ Entity{
         animateHeight.to = newValue;
         animateHeight.start();
     }
+
 
 
 }

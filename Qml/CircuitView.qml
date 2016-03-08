@@ -1,6 +1,7 @@
 import QtQuick 2.5
 import QtQuick.Scene3D 2.0
 import QtQuick.Controls 1.4
+import QtQuick.Controls.Styles 1.4
 
 //Overlay met Qtquick elementen
 Item {
@@ -26,14 +27,29 @@ Item {
         id:titleText
         text: "3D-Preview"
         font.pointSize: 24
-        color: "red"
+        color: "orange"
         anchors.horizontalCenter: parent.horizontalCenter
         style: Text.Raised
-        styleColor: "yellow"
+        styleColor: "gold"
     }
 
+    Component{
+        id:butStyle
+
+        ButtonStyle{
+
+            background:     Rectangle {
+                width: parent.width<parent.height?parent.width:parent.height
+                height: width
+                border.width: control.activeFocus ? 2 : 1
+                border.color: "#888"
+                radius: width*0.5
+                color: control.pressed ? "#ccc" : "#eee"
 
 
+            }
+        }
+    }
 
     //Show nodal Solution
 
@@ -45,7 +61,9 @@ Item {
         anchors.left:parent.left
         iconSource: "qrc:/assets/icons/svg/question-button.svg"
         onClicked: solRect.visible = !solRect.visible
+        style: butStyle
     }
+
 
     Rectangle{
         id:solRect
@@ -86,6 +104,7 @@ Item {
         anchors.top:parent.top
         anchors.right:parent.right
         iconSource: "qrc:/assets/icons/svg/turn-right.svg"
+        style: butStyle
 
 
 
@@ -98,6 +117,7 @@ Item {
         anchors.top:parent.top
         anchors.left:parent.left
         iconSource: "qrc:/assets/icons/svg/turn-left-circle.svg"
+        style: butStyle
 
 
     }
@@ -109,6 +129,7 @@ Item {
         anchors.top: rotateCameraRight.bottom
         anchors.topMargin: 10
         iconSource: "qrc:/assets/icons/svg/triangle-pointing-up.svg"
+        style: butStyle
 
     }
 
@@ -120,6 +141,7 @@ Item {
         anchors.top: zoomIn.bottom
         anchors.topMargin: 5
         iconSource: "qrc:/assets/icons/svg/turn-triangle.svg"
+        style: butStyle
     }
 
     Timer {
@@ -158,6 +180,24 @@ Item {
 
     }
 
+    //Exit Menu
+
+
+    Button{
+        id:exitButton
+        width: 50; height: 50
+        anchors.bottom: parent.bottom
+        anchors.topMargin: 10
+        anchors.right:parent.right
+        iconSource: "qrc:/assets/icons/png/direction.png"
+        onClicked: {
+
+            mainWindow.delete3D();
+        }
+        style: butStyle
+    }
+
+
 
     //Objects for saving edits
     Button{
@@ -170,16 +210,17 @@ Item {
         onClicked: {
 
             calculator.writeBackToFile();
-            saveConfirm.visible = true;
-            saveConfirmTimer.start();
+            saveComfirm.visible = true;
+            saveComfirmTimer.start();
 
 
         }
+        style: butStyle
 
 
     }
     Rectangle{
-        id:saveConfirm
+        id:saveComfirm
         visible: false
         width: 100; height: 100
         color:"steelblue"
@@ -189,7 +230,11 @@ Item {
         anchors.rightMargin: 15
 
         Image {
-            width: 100; height: 100
+            width: 50; height: 50
+            anchors.left:parent.left
+            anchors.top:parent.top
+            anchors.leftMargin: 25
+            anchors.topMargin: 25
             fillMode: Image.PreserveAspectFit
             smooth: true
             source: "qrc:/assets/icons/svg/mark-ribbon.svg"
@@ -198,28 +243,30 @@ Item {
     }
 
     Timer{
-        id:saveConfirmTimer
+        id:saveComfirmTimer
         interval: 4000;
         running: false;
         repeat: false;
-        onTriggered:  saveConfirm.visible = false
+        onTriggered:  saveComfirm.visible = false
 
     }
 
 
 
 
-    //  Menu for changing Source & Resistor sizes and toggling switches, created after building level for firts time
+    //  Menu for changing Source & Resistor sizes and toggling switches, created after building level for first time
     Button{
         id:sourceEdit
         width: 50; height: 50
         anchors.top: nodalInfo.bottom
         anchors.topMargin: 10
         anchors.left:parent.left
-        iconSource: "qrc:/assets/icons/svg/battery-power.svg"
-        menu:sourceMenu
+        iconSource: "qrc:/assets/source_small.png"
+        onClicked: sourceMenu.popup()
+        style: butStyle
 
     }
+
 
 
     Menu{
@@ -232,8 +279,9 @@ Item {
         anchors.top: sourceEdit.bottom
         anchors.topMargin: 10
         anchors.left:parent.left
-        iconSource: "qrc:/assets/icons/svg/battery-power.svg"
-        menu:resistorMenu
+        iconSource: "qrc:/assets/res_small.png"
+        onClicked:resistorMenu.popup()
+        style: butStyle
 
     }
 
@@ -245,20 +293,46 @@ Item {
 
     function makeEditMenu() {
 
+
         var menuFactory = Qt.createComponent("qrc:/Qml/EditMenu.qml");
         var switchMenuFactory = Qt.createComponent("qrc:/Qml/SwitchMenu.qml")
         for (var i = 0; i < world3D.generator.sources.length; i++) {
             var menu = menuFactory.createObject(appView,{"target":"source", "nr":i});
-            sourceMenu.insertItem(i+1,menu);
+            sourceMenu.insertItem(i,menu);
 
         }
         for (var i = 0; i < world3D.generator.resistors.length; i++) {
             var menu = menuFactory.createObject(appView,{"target":"resistor", "nr":i});
-            resistorMenu.insertItem(i+1,menu);
+            resistorMenu.insertItem(i,menu);
 
         }
-  }
 
+    }
+
+
+    //Toggle Source color
+    function toggleColorSource(i){
+        if(world3D.generator.sources[i].sourceColor === "firebrick")
+            world3D.generator.sources[i].sourceColor = "yellow";
+        else
+            world3D.generator.sources[i].sourceColor = "firebrick";
+    }
+
+    //Toggle Resistor color
+    function toggleColorResistor(i){
+        if(world3D.generator.resistors[i].resColor === "slateblue")
+            world3D.generator.resistors[i].resColor = "lime";
+        else
+            world3D.generator.resistors[i].resColor = "slateblue";
+    }
+
+    //Toggle Switch color
+    function toggleColorSwitch(i){
+        if(world3D.generator.switches[i].switchColor === "orange")
+            world3D.generator.switches[i].switchColor = "lime";
+        else
+            world3D.generator.switches[i].switchColor = "orange";
+    }
 
 
 

@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QWidget>
+#include <QQuickView>
 #include <QListWidget>
 namespace Ui {
 class MainWindow;
@@ -14,7 +15,9 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
+    Q_INVOKABLE void delete3D();
     ~MainWindow();
+
 signals:
     void on_actionRotate_triggered();
     void on_actionDelete_triggered();
@@ -23,11 +26,14 @@ signals:
 
 private slots:
     void on_actionExit_triggered();
+    void slotTriggered3D_Preview();
 
 //    void on_actionRotate_triggered();
 
 private:
     Ui::MainWindow *ui;
+    QQuickView *view;
+
 };
 
 #endif // MAINWINDOW_H
