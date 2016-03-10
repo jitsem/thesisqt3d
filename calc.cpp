@@ -57,8 +57,40 @@ void Calc::solveLevel()
     setCurrentsOfWires();
 
 }
+bool Calc::addResistor(std::shared_ptr<Resistor> r)
+{
+     auto size=resistors.size();
+     resistors.push_back(r);
+     return(size>resistors.size());
+}
 
-void Calc::readFile(QString s)
+bool Calc::addSource(std::shared_ptr<Source> s)
+{
+     auto size=sources.size();
+     sources.push_back(s);
+     return(size>sources.size());
+}
+bool Calc::addWire(std::shared_ptr<Wire> w)
+{
+     auto size=wires.size();
+     wires.push_back(w);
+     return(size>wires.size());
+}
+bool Calc::addSwitch(std::shared_ptr<Switch> s)
+{
+     auto size=switches.size();
+     switches.push_back(s);
+     return(size>switches.size());
+}
+
+void Calc::emptyVectors(){
+    resistors.clear();
+    sources.clear();
+    switches.clear();
+    wires.clear();
+}
+
+void Calc::readFile()
 {
     //Clear all vectors
     wires.clear();
@@ -67,8 +99,8 @@ void Calc::readFile(QString s)
     switches.clear();
 
     //TODO Checken of een file volledig juist is
-    fileName = s;
-    QFile * file = new QFile(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+"/"+s);
+
+    QFile * file = new QFile(fileName);
     if (file->open(QIODevice::ReadOnly| QIODevice::Text))
     {
         QTextStream in(file);
@@ -233,10 +265,8 @@ void Calc::process_source_line(QString &lijn)
 
 void Calc::writeBackToFile()
 {
-    QString path;
 
-    path = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) ;
-    QFile file(path + "/"+ fileName);
+    QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)){
         qDebug()<< "oops";
         return;
@@ -785,8 +815,15 @@ void Calc::setCurrentsOfStrayWires(){
 
 
                     }
+
                 }
-                w->setCurrent(curr);
+                //TODO check of nog altijd juist
+                if(w->getAngle()!=3)
+                    w->setCurrent(curr);
+                else
+                    w->setCurrent(-curr);
+
+
                 if(std::isinf(w->getCurrent()))
                     inf=true; //Blijf in lus
 
@@ -914,6 +951,36 @@ std::vector<float> Calc::computeNetwork(int  nrOfNodes)
 
 
 
+}
+
+std::vector<std::shared_ptr<Switch> > Calc::getSwitches() const
+{
+    return switches;
+}
+
+std::vector<std::shared_ptr<Component> > Calc::getSources() const
+{
+    return sources;
+}
+
+std::vector<std::shared_ptr<Component> > Calc::getResistors() const
+{
+    return resistors;
+}
+
+std::vector<std::shared_ptr<Wire> > Calc::getWires() const
+{
+    return wires;
+}
+
+QString Calc::getFileName() const
+{
+    return fileName;
+}
+
+void Calc::setFileName(const QString &value)
+{
+    fileName = value;
 }
 
 

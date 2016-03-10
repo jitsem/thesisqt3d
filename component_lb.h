@@ -1,5 +1,6 @@
 #ifndef COMPONENT_LB_H
 #define COMPONENT_LB_H
+#define COMPONENT_IS_GROUND 666
 
 #include <QWidget>
 #include <QLabel>
@@ -10,7 +11,7 @@ class component_lb : public QLabel
 {
     Q_OBJECT
 public:
-    component_lb(QWidget * parent, float val, int n1x, int n1y, int n2x, int n2y, int ang, int type, qint64 nr=0, int selected=0);
+    component_lb(QWidget * parent, float val, int n1x, int n1y, int n2x, int n2y, int ang, int type, qint64 nr=0, int selected=0, int n1=-1, int n2=-1);
 
     float getValue() const;
     void setValue(float val);
@@ -36,25 +37,28 @@ public:
     qint64 getNr() const;
     void setNr(qint64 value);
 
-//signals:
-//    void clicked(const QPoint & pos);
 
-//public slots:
-//    void slotTriggeredRotate();
-
-//protected:
-//   void mouseReleaseEvent(QMouseEvent * event) Q_DECL_OVERRIDE;
 
     int getSelected() const;
     void setSelected(int value);
 
+    int getN1() const;
+    void setN1(int value);
+
+    int getN2() const;
+    void setN2(int value);
+
+
+
 private:
     float value;
-    int node1x,node1y,node2x,node2y,angle,type,selected;
+    int node1x,node1y,node2x,node2y,angle,type,selected,n1,n2;
     qint64 nr;
     //type 0 = source
     //1=resistor
     //2=wire
+    //3=switch open
+    //4=ground
     //probably delete node2x and y because we've got 1 node and the angle
     //angle : 1 naar rechts
     //2: naar boven

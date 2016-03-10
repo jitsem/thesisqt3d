@@ -21,8 +21,21 @@
 #include <set>
 
 
+#include <QQuickView>
+#include <QQmlEngine>
+#include <QQmlContext>
+#include <QMessageBox>
 
-component_lb * selected_comp ;
+#include "calc.h"
+#include "source.h"
+#include "resistor.h"
+#include "wire.h"
+#include "switch.h"
+#include <vector>
+
+
+
+//component_lb * selected_comp ;
 QPoint  dragStartPosition;
 
 
@@ -32,6 +45,12 @@ DrawZone::DrawZone(QWidget *parent)
 {
 
     setAcceptDrops(true);
+    setAttribute( Qt::WA_PaintUnclipped, true );
+    width=this->size().width();
+    height=size().height();
+    setFrameStyle(QFrame::Sunken | QFrame::StyledPanel);
+    //setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
+
 
 
 }
@@ -51,7 +70,7 @@ void DrawZone::slotTriggeredRotate()
                 w->setAngle(1);
             }
             else
-            w->setAngle((w->getAngle())+1);
+                w->setAngle((w->getAngle())+1);
 
         }
     }
@@ -66,7 +85,7 @@ void DrawZone::slotTriggeredDelete()
     QList<component_lb*> list = this->findChildren<component_lb *>();
     foreach(component_lb *w, list) {
         if(w->getSelected()){
-           delete w;
+            delete w;
         }
 
     }
@@ -76,74 +95,131 @@ void DrawZone::slotTriggeredDelete()
 
 void DrawZone::slotTriggeredSave()
 {
-    //TODO
+    //TODO implement save from Calc class
     //DONE check if circuit that is drawn is correct
     //DONE change positions to positions in grid of 50 px
     //fill out vectors of components
     //execute filewriting method
-    updateNodePositions();
 
-    QList<component_lb*> list = this->findChildren<component_lb *>();
-    QList<QPoint> points;
+    if(checkClosedCircuit()){
 
-    foreach(component_lb *w, list) {
-        //qDebug()<<"id:"<<w->getNr()<<"n1x, n1y"<< w->getNode1x()/50 << w->getNode1y()/50<<"n2x, n2y"<< w->getNode2x()/50 << w->getNode2y()/50<< "type:"<<w->getType();
-        points.push_back(QPoint(w->getNode1x(),w->getNode1y()));
-        points.push_back(QPoint(w->getNode2x(),w->getNode2y()));
 
-    }
-    //take first element of list, check if it is in the rest of the list
-    //if so, delete all occurances in the list and check next point
-    //if some point only occurs one time in the list, the circuit is not closed (ROOM FOR IMPROVEMENT!!??)
-    //TODO if save is clicked when no components present.. give dialog
-    QPoint cur;
-    while(!points.isEmpty()){
-        cur=points.takeFirst();
-        if(points.contains(cur)){
-            while(points.contains(cur)){
-                points.erase( std::remove( points.begin(), points.end(), cur), points.end() );
-            }
-        }
-        else{
-            //qDebug()<<"Circuit not closed!";
-            QMessageBox msgBox;
-            msgBox.setText("Circuit not closed!");
-            msgBox.setInformativeText("Do you want to save your changes? \n 3D preview will not be possible unless you close the circuit");
-            msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Cancel);
-            msgBox.setDefaultButton(QMessageBox::Cancel);
-            int ret = msgBox.exec();
-            switch (ret) {
-
-            case QMessageBox::Save:
-                qDebug()<<"save was clicked";
-                break;
-            case QMessageBox::Cancel:
-                qDebug()<<"cancel was clicked";
-                break;
-            default:
-                // should never be reached
-                break;
-
-            }
-            break;
-        }
-    }
-    if(points.isEmpty()){
-        qDebug()<<"tis aaneen";
+        calc_nodes();
+        QList<component_lb*> list = this->findChildren<component_lb *>();
         //fill out all drawn components in singleton calc object vectors
         //call the save function of calc class
-
+        std::shared_ptr<Calc> c = Calc::Instance();
+        c->emptyVectors();
         foreach(component_lb *w, list){
+            //TODO oplossen angles verkeerd
+            int angle = w->getAngle();
 
+            if(angle == 4){
+                angle = 2;
+            }
+            else if(angle == 2){
+                angle = 4;
+
+            }
+
+            switch (w->getType()){
+
+            case 0:
+            {
+                //Source(float v, int np, int nm,int x,int y,int angle);
+                auto s = std::make_shared<Source>(w->getValue(),w->getN1(),w->getN2(),w->getNode1x()/50,w->getNode1y()/50,angle);
+                //Wire(int x, int y, int ang, int length, int node, float current=0.0);
+
+                auto wir = std::make_shared<Wire>(w->getNode1x()/50,w->getNode1y()/50,angle,1,w->getN2());
+                c->addSource(s);
+                c->addWire(wir);
+                break;
+            }
+            case 1:
+            {
+                auto r = std::make_shared<Resistor>(w->getValue(),w->getN1(),w->getN2(),w->getNode1x()/50,w->getNode1y()/50,angle);
+                c->addResistor(r);
+                break;
+            }
+            case 2:
+            {
+                auto wir = std::make_shared<Wire>(w->getNode1x()/50,w->getNode1y()/50,angle,1,w->getN2());
+                c->addWire(wir);
+                break;
+            }
+            case 3:
+            {
+                //Switch::Switch(int np, int nm, int x, int y, int ang):
+                auto sw = std::make_shared<Switch>(w->getN1(),w->getN2(),w->getNode1x()/50,w->getNode1y()/50,angle);
+                c->addSwitch(sw);
+                break;
+            }
+            default :
+                //TODO ground not added
+                break;
+            }
 
         }
+        c->writeBackToFile();
+
+    }else{
 
 
+        QMessageBox msgBox;
+        msgBox.setText("Circuit not closed!");
+        msgBox.setInformativeText("Do you want to save your changes? \n 3D preview will not be possible unless you close the circuit");
+        msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Cancel);
+        msgBox.setDefaultButton(QMessageBox::Cancel);
+        int ret = msgBox.exec();
+        switch (ret) {
+
+        case QMessageBox::Save:
+            qDebug()<<"save was clicked";
+            break;
+        case QMessageBox::Cancel:
+            qDebug()<<"cancel was clicked";
+            break;
+        default:
+            // should never be reached
+            break;
+
+        }
     }
+
 }
 
 
+void DrawZone::slotTriggeredConnect()
+{
+    //TODO expand to any two components!!
+    //TODO make sure the input is tested!
 
+    QList<component_lb*> list = this->findChildren<component_lb *>();
+    int i=0;
+    foreach(component_lb *w, list) {
+        if(w->getSelected()){
+            if(w->getType()==2){
+                //keep w
+                start=QPoint(w->getNode1x()+(w->width()/2),w->getNode1y()-25);
+                w->setValue(COMPONENT_IS_GROUND);
+                i++;
+            }
+            if(w->getType()==4){
+                //keep ground
+                stop=QPoint(w->getNode1x()+(w->width()/2),w->getNode1y()-25);
+                i++;
+            }
+
+        }
+    }
+    if(i==2)
+        connect=1;
+    repaint();//or update()?
+    return;
+
+
+
+}
 
 void DrawZone::dragEnterEvent(QDragEnterEvent *event)
 {
@@ -159,10 +235,9 @@ void DrawZone::dragEnterEvent(QDragEnterEvent *event)
     }
 
 }
-
 void DrawZone::dragMoveEvent(QDragMoveEvent *event)
 {
-// qDebug()<<"drag move event ";
+    // qDebug()<<"drag move event ";
     if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
         if (event->source() == this) {
             event->setDropAction(Qt::MoveAction);
@@ -174,7 +249,6 @@ void DrawZone::dragMoveEvent(QDragMoveEvent *event)
         event->ignore();
     }
 }
-
 void DrawZone::mouseMoveEvent(QMouseEvent *event)
 {
     if (!(event->buttons() & Qt::LeftButton))
@@ -186,6 +260,8 @@ void DrawZone::mouseMoveEvent(QMouseEvent *event)
     component_lb *child = static_cast<component_lb*>(childAt(event->pos()));
     if (!child)
         return;
+
+
 
     QPixmap pixmap = *child->pixmap();
     float value = (*child).getValue();
@@ -213,6 +289,7 @@ void DrawZone::mouseMoveEvent(QMouseEvent *event)
     painter.fillRect(pixmap.rect(), QColor(127, 127, 127, 127));
     painter.end();
 
+
     child->setPixmap(tempPixmap);
 
     if (drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::CopyAction) == Qt::MoveAction) {
@@ -221,7 +298,7 @@ void DrawZone::mouseMoveEvent(QMouseEvent *event)
         delete child;
 
     } else {
-        child->show();
+        //child->show();
         child->setPixmap(pixmap);
     }
 
@@ -229,7 +306,6 @@ void DrawZone::mouseMoveEvent(QMouseEvent *event)
 
 
 }
-
 void DrawZone::dropEvent(QDropEvent *event)
 {
     //qDebug()<<"dropevent position: "<<event->pos();
@@ -247,7 +323,6 @@ void DrawZone::dropEvent(QDropEvent *event)
         qint64 nr;
         int selected;
         dataStream >> pixmap >> offset >> value >> angle >> type >> nr >> selected;
-        //qDebug()<<"dropevent van deze component:" <<value<<angle<<type<<nr;
 
 
         component_lb *newIcon = new component_lb(this,value,0,0,0,0,angle,type,0,selected);
@@ -276,10 +351,16 @@ void DrawZone::dropEvent(QDropEvent *event)
             newIcon->move(roundUp(newIcon->getNode1x(),50)-(newIcon->width()/2),roundUp(newIcon->getNode1y(),50));
             break;
         }
-        updateNodePositions();
 
+        if (newIcon->getType()==4){
+            QMessageBox msgBox;
+            msgBox.setText("Please select the ground and the wire with select tool.");
+            msgBox.exec();
+        }
+        updateNodePositions();
+        qDebug()<<newIcon->x()<<","<<newIcon->y();
         if (newIcon->getSelected()){
-           setGray(*newIcon);
+            setGray(*newIcon);
         }
         else{
             removeGray(*newIcon);
@@ -301,22 +382,9 @@ void DrawZone::dropEvent(QDropEvent *event)
         event->ignore();
     }
 
-
-
-//    QList<component_lb*> list = this->findChildren<component_lb *>();
-//    int i=0;
-//    foreach(component_lb *w, list) {
-//        i++;
-//        qDebug()<<"element nr"<<i<<"id:"<<w->getNr()<<"'s position is :"<<w->x()<<w->y()<<"selected?:"<<w->getSelected()<<"type:"<<w->getType();
-//    }
-
 }
-
 void DrawZone::mousePressEvent(QMouseEvent *event)
 {
-
-    //qDebug()<<"mousepressevent";
-
     component_lb *child = static_cast<component_lb*>(childAt(event->pos()));
     if (!child){
         QList<component_lb*> list = this->findChildren<component_lb *>();
@@ -329,8 +397,7 @@ void DrawZone::mousePressEvent(QMouseEvent *event)
 
     if (event->button() == Qt::LeftButton){
         dragStartPosition = event->pos();
-
-}
+    }
 }
 void DrawZone::mouseReleaseEvent(QMouseEvent *event)
 {
@@ -351,14 +418,11 @@ void DrawZone::mouseReleaseEvent(QMouseEvent *event)
         removeGray(*child);
         child->setSelected(0);
     }
-    //qDebug()<<"mousereleaseevent";
-        return;
-
+    return;
 
 }
-component_lb * DrawZone::removeGray(component_lb &child){
+component_lb *DrawZone::removeGray(component_lb &child){
 
-   // qDebug()<<child.getType();
     switch (child.getType()){
 
     case 0:
@@ -381,12 +445,26 @@ component_lb * DrawZone::removeGray(component_lb &child){
         auto tempPixmap = std::make_shared<QPixmap>(":/assets/wire_small.png");
         child.setPixmap((*tempPixmap));
         rotateToAngle(child);
+        break;
+    }
+    case 3:
+    {
+        auto tempPixmap = std::make_shared<QPixmap>(":/assets/sw_open.png");
+        child.setPixmap((*tempPixmap));
+        rotateToAngle(child);
+        break;
+    }
+    case 4:
+    {
+        auto tempPixmap = std::make_shared<QPixmap>(":/assets/gnd.png");
+        child.setPixmap((*tempPixmap));
+        rotateToAngle(child);
+        break;
     }
         break;
     }
     return &child;
 }
-
 component_lb *DrawZone::setGray(component_lb &child)
 {
     QPixmap tempPixmap = *(child.pixmap());
@@ -397,28 +475,521 @@ component_lb *DrawZone::setGray(component_lb &child)
     child.setPixmap(tempPixmap);
     return &child;
 }
-
 void DrawZone::paintEvent(QPaintEvent *event)
 {
-    setFrameStyle(QFrame::Sunken | QFrame::StyledPanel);
     QPainter painter(this);
 
     int i=0;
     int j=0;
-    while(i<width()){
+    //qDebug()<<frameRect().height();
+    while(i<frameRect().width()){
         j=0;
-        while(j<height()){
-           painter.drawRect(i,j,1,1);
-           j+=50;
+        while(j<frameRect().height()){
+            painter.drawRect(i,j,1,1);
+            j+=50;
         }
         i+=50;
     }
+    if(connect){
+        painter.drawLine(start,stop);
+        connect=0;
+    }
+    painter.end();
+}
+bool DrawZone::checkClosedCircuit(){
+    updateNodePositions();
+
+    QList<component_lb*> list = this->findChildren<component_lb *>();
+    QList<QPoint> points;
+
+    foreach(component_lb *w, list) {
+        if(!(w->getType()==4)){
+            points.push_back(QPoint(w->getNode1x(),w->getNode1y()));
+            points.push_back(QPoint(w->getNode2x(),w->getNode2y()));
+        }
+    }
+    //take first element of list, check if it is in the rest of the list
+    //if so, delete all occurances in the list and check next point
+    //if some point only occurs one time in the list, the circuit is not closed (ROOM FOR IMPROVEMENT!!??)
+    QPoint cur;
+    while(!points.isEmpty()){
+        cur=points.takeFirst();
+        if(points.contains(cur)){
+            while(points.contains(cur)){
+                points.erase( std::remove( points.begin(), points.end(), cur), points.end() );
+            }
+        }
+        else{
+            //TODO add alert to user
+            qDebug()<<"Circuit not closed!";
+            return false;
+            break;
+        }
+    }
+    if(points.isEmpty()){
+        qDebug()<<"tis aaneen";
+        return true;
+
+    }
+}
+
+void DrawZone::calc_nodes(){
 
 
+    QList<component_lb*> list = this->findChildren<component_lb *>();
+    component_lb *current;
+    foreach(component_lb *w, list){
+        if (w->getType()==2 && w->getValue()==COMPONENT_IS_GROUND){
+            w->setN1(0);
+            w->setN2(0);
+            current=w;
+        }
+        if(w->getType()==4){
+            list.removeOne(w);
+        }
+    }
+    int curnode=0;
+    QList<component_lb*> stack;
+    stack.push_back(current);
+    QList<component_lb*> overschot=solveNode(list,current,curnode,stack);
+    while(!(overschot.isEmpty())){
+        curnode++;
+        current=overschot.first();
+        if (current->getN1()==-1){
+            current->setN1(curnode);
+        }
+        else if (current->getN2()==-1){
+            current->setN2(curnode);
+        }
+        overschot=solveNode(list,current,curnode,stack);
+        int pos=0;
+        foreach (component_lb* w, overschot) {
+            if((w->getN1()!=-1) && (w->getN2()!=-1)){
+                overschot.removeAt(pos);
+                pos++;
 
+            }
+        }
+    }
+    //hier nog resterende nodenummers invullen van componenten (niet draden) die hebben er maar 1 ingevuld maar aangrenzende component heeft normaal het juiste
+    QList<component_lb*> lastList = this->findChildren<component_lb *>();
+    int pos=0;
+    foreach(component_lb* w,lastList){
+        if(w->getType()==4){
+
+            lastList.removeAt(pos);
+            pos++;
+        }
+        if(w->getType()!=2){
+            if(w->getN1()==-1){
+                QList<component_lb*>neig=getNeighbours(lastList,*w);
+                foreach (component_lb* n, neig) {
+                    if(w!=n){
+                        if(n->getNode1x()==w->getNode1x()&&n->getNode1y()==w->getNode1y()){
+                            w->setN1(n->getN1());
+                        }
+                        if(n->getNode2x()==w->getNode1x()&&n->getNode2y()==w->getNode1y()){
+                            w->setN1(n->getN2());
+                        }
+                    }
+                }
+            }
+            else if(w->getN2()==-1){
+                QList<component_lb*>neig=getNeighbours(lastList,*w);
+                foreach (component_lb* n, neig) {
+                    if(w!=n){
+                        if(n->getNode1x()==w->getNode2x()&&n->getNode1y()==w->getNode2y()){
+                            w->setN2(n->getN1());
+                        }
+                        if(n->getNode2x()==w->getNode2x()&&n->getNode2y()==w->getNode2y()){
+                            w->setN2(n->getN2());
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+QList<component_lb *> DrawZone::solveNode(QList<component_lb *> &l, component_lb *current, int & curnode, QList<component_lb *> & stack){
+
+    QList<component_lb*> halfaf;
+    QList<component_lb*> neighbours;
+
+    while(!l.isEmpty()){
+
+        neighbours = getNeighbours(l,*current);
+        if(neighbours.isEmpty()){
+            if(!stack.isEmpty()){
+                current=(stack.takeLast());
+            }
+            else {//empty stack means this node is solved
+                return halfaf;
+                break;
+            }
+
+        }
+        else if (!neighbours.isEmpty()){
+            component_lb * b=neighbours.takeFirst();
+            if(b->getType()==2){
+                b->setN1(curnode);
+                b->setN2(curnode);
+                stack.push_back(b);
+                l.removeOne(b);
+                current=b;
+
+
+            }
+
+            else {
+
+                //node that is the same as current gets same nodenr
+
+                if((current->getNode2x()==b->getNode1x())&&(current->getNode2y()==b->getNode1y())){
+                    b->setN1(curnode);
+                }
+                if((current->getNode1x()==b->getNode2x())&&(current->getNode1y()==b->getNode2y())){
+                    b->setN2(curnode);
+                }
+                if((current->getNode1x()==b->getNode1x())&&(current->getNode1y()==b->getNode1y())){
+                    b->setN1(curnode);
+                }
+                if((current->getNode2x()==b->getNode2x())&&(current->getNode2y()==b->getNode2y())){
+                    b->setN2(curnode);
+                }
+
+                // add other component than wire to halfaf
+                if(!halfaf.contains(b))
+                    halfaf.append(b);
+                //mark visited
+                l.removeOne(b);
+
+                if(!stack.isEmpty()){
+                    current=stack.takeLast();
+                }
+                else{}//stack empty
+            }
+        }
+    }//end while all cells are visited
+    if(!halfaf.isEmpty()){
+        return halfaf;
+    }
+    QList<component_lb *> leeg;
+    return leeg;
 
 
 }
+QList<component_lb *> DrawZone::getNeighbours(QList<component_lb *> &l, component_lb & current){
+
+    QList<component_lb *> neighbours;
+    foreach(component_lb *w, l){
+        if((current.getNode2x()==w->getNode1x())&&(current.getNode2y()==w->getNode1y())){
+            neighbours.append(w);
+        }
+        if((current.getNode1x()==w->getNode2x())&&(current.getNode1y()==w->getNode2y())){
+            neighbours.append(w);
+        }
+        if((current.getNode1x()==w->getNode1x())&&(current.getNode1y()==w->getNode1y())){
+            neighbours.append(w);
+        }
+        if((current.getNode2x()==w->getNode2x())&&(current.getNode2y()==w->getNode2y())){
+            neighbours.append(w);
+        }
+    }
+
+    return neighbours;
+
+}
+void DrawZone::drawCircuit()
+{
+    //TODO vorige tekening clearen
+    //TODO code ietwat verkleinen
+    //TODO draad aan bron
+
+    //Clear drawingfield
+    QList<component_lb*> list = this->findChildren<component_lb *>();
+    foreach(component_lb *w, list) {
+        delete w;
+    }
+
+    std::shared_ptr<Calc> calculator=Calc::Instance();
+    auto wires = calculator->getWires();
+    auto sources = calculator->getSources();
+    auto resistors = calculator->getResistors();
+    auto switches = calculator->getSwitches();
+
+
+    auto pixmap = std::make_shared<QPixmap>(":/assets/wire_small.png");
+    for(auto w:wires){
+        int XCoord =  w->getXCoord()*50;
+        int YCoord =  w->getYCoord()*50;
+        int XCoord2;
+        int YCoord2;
+        int angle = w->getAngle();
+        for(int i = 0; i < w->getLength();i++){
+            switch(angle){
+            case 1:
+                if(i==0)
+                    YCoord -=25;
+                else
+                    XCoord +=50;
+                XCoord2 = XCoord +50;
+                YCoord2 = YCoord;
+
+                break;
+            case 2:
+                if(i==0)
+                    XCoord -=25;
+                else
+                    YCoord += 50;
+                YCoord2 = YCoord + 50;
+                XCoord2 = XCoord;
+                break;
+            case 3:
+                if(i==0)
+                    YCoord -=25;
+                else
+                    XCoord -=50;
+                XCoord2 = XCoord -50;
+                YCoord2 = YCoord;
+                break;
+            case 4:
+                if(i==0)
+                    XCoord -=25;
+                else
+                    YCoord -=50;
+                YCoord2 = YCoord - 50;
+                XCoord2 = XCoord;
+                break;
+            default:
+                break;
+            }
+
+            component_lb *newIcon = new component_lb(this, 0, XCoord, YCoord, XCoord2,YCoord2, angle, 2, 0, 0, w->getNode(),w->getNode());
+
+            newIcon->setPixmap(*pixmap);
+            if(angle == 1 || angle == 2)
+                newIcon->move(QPoint(XCoord, YCoord));
+            else
+                newIcon->move(QPoint(XCoord2,YCoord2));
+            rotateToAngle(*newIcon);
+            newIcon->show();
+            newIcon->setAttribute(Qt::WA_DeleteOnClose);
+            newIcon->setFocusPolicy(Qt::StrongFocus);
+            newIcon->setNr(qint64(newIcon));
+
+            updateNodePositions();
+
+            //TODO if already component on the same spot, ignore or smth
+            //TODO display values next to components
+
+
+        }
+    }
+
+    pixmap = std::make_shared<QPixmap>(":/assets/source_small.png");
+    for(auto s:sources){
+
+
+
+        int XCoord =  s->getXCoord()*50;
+        int YCoord =  s->getYCoord()*50;
+        int XCoord2;
+        int YCoord2;
+        int angle = s->getAngle();
+
+        QList<component_lb*> list = this->findChildren<component_lb *>();
+        foreach(component_lb *w, list) {
+            if(w->getNode1x()==XCoord && w->getNode1y()==YCoord && w->getAngle() == angle){
+                delete w;
+            }
+
+        }
+
+        switch(angle){
+        case 1:
+
+            YCoord -=25;
+            XCoord2 = XCoord +50;
+            YCoord2 = YCoord;
+
+            break;
+        case 2:
+
+            XCoord -=25;
+            YCoord2 = YCoord + 50;
+            XCoord2 = XCoord;
+
+            break;
+        case 3:
+
+            YCoord -=25;
+            XCoord2 = XCoord -50;
+            YCoord2 = YCoord;
+
+            break;
+        case 4:
+
+            XCoord -=25;
+            YCoord2 = YCoord - 50;
+            XCoord2 = XCoord;
+
+            break;
+        default:
+            break;
+        }
+
+        component_lb *newIcon = new component_lb(this, 0, XCoord, YCoord, XCoord2,YCoord2, angle, 0, 0, 0, s->getNodem(),s->getNodep());
+
+        newIcon->setPixmap(*pixmap);
+        if(angle == 1 || angle == 2)
+
+            newIcon->move(QPoint(XCoord, YCoord));
+        else
+            newIcon->move(QPoint(XCoord2,YCoord2));
+        rotateToAngle(*newIcon);
+        newIcon->show();
+        newIcon->setAttribute(Qt::WA_DeleteOnClose);
+        newIcon->setFocusPolicy(Qt::StrongFocus);
+        newIcon->setNr(qint64(newIcon));
+
+        updateNodePositions();
+
+        //TODO if already component on the same spot, ignore or smth
+        //TODO display values next to components
+
+
+    }
+
+    pixmap = std::make_shared<QPixmap>(":/assets/res_small.png");
+    for(auto r:resistors){
+
+        int XCoord =  r->getXCoord()*50;
+        int YCoord =  r->getYCoord()*50;
+        int XCoord2;
+        int YCoord2;
+        int angle = r->getAngle();
+
+        switch(angle){
+        case 1:
+
+            YCoord -=25;
+            XCoord2 = XCoord +50;
+            YCoord2 = YCoord;
+
+            break;
+        case 2:
+
+            XCoord -=25;
+            YCoord2 = YCoord + 50;
+            XCoord2 = XCoord;
+
+            break;
+        case 3:
+
+            YCoord -=25;
+            XCoord2 = XCoord -50;
+            YCoord2 = YCoord;
+
+            break;
+        case 4:
+
+            XCoord -=25;
+            YCoord2 = YCoord - 50;
+            XCoord2 = XCoord;
+
+            break;
+        default:
+            break;
+        }
+
+        component_lb *newIcon = new component_lb(this, 0, XCoord, YCoord, XCoord2,YCoord2, angle, 1, 0, 0, r->getNode1(),r->getNode2());
+
+        newIcon->setPixmap(*pixmap);
+        if(angle == 1 || angle == 2)
+            newIcon->move(QPoint(XCoord, YCoord));
+        else
+            newIcon->move(QPoint(XCoord2,YCoord2));
+        rotateToAngle(*newIcon);
+        newIcon->show();
+        newIcon->setAttribute(Qt::WA_DeleteOnClose);
+        newIcon->setFocusPolicy(Qt::StrongFocus);
+        newIcon->setNr(qint64(newIcon));
+
+        updateNodePositions();
+
+        //TODO if already component on the same spot, ignore or smth
+        //TODO display values next to components
+
+
+    }
+
+    pixmap = std::make_shared<QPixmap>(":/assets/sw_open.png");
+    for(auto s:switches){
+
+        int XCoord =  s->getXCoord()*50;
+        int YCoord =  s->getYCoord()*50;
+        int XCoord2;
+        int YCoord2;
+        int angle = s->getAngle();
+
+        switch(angle){
+        case 1:
+
+            YCoord -=25;
+            XCoord2 = XCoord +50;
+            YCoord2 = YCoord;
+
+            break;
+        case 2:
+
+            XCoord -=25;
+            YCoord2 = YCoord + 50;
+            XCoord2 = XCoord;
+
+            break;
+        case 3:
+
+            YCoord -=25;
+            XCoord2 = XCoord -50;
+            YCoord2 = YCoord;
+
+            break;
+        case 4:
+
+            XCoord -=25;
+            YCoord2 = YCoord - 50;
+            XCoord2 = XCoord;
+
+            break;
+        default:
+            break;
+        }
+
+        component_lb *newIcon = new component_lb(this, 0, XCoord, YCoord, XCoord2,YCoord2, angle, 3, 0, 0, s->getNode1(),s->getNode2());
+
+        newIcon->setPixmap(*pixmap);
+        if(angle == 1 || angle == 2)
+            newIcon->move(QPoint(XCoord, YCoord));
+        else
+            newIcon->move(QPoint(XCoord2,YCoord2));
+        rotateToAngle(*newIcon);
+        newIcon->show();
+        newIcon->setAttribute(Qt::WA_DeleteOnClose);
+        newIcon->setFocusPolicy(Qt::StrongFocus);
+        newIcon->setNr(qint64(newIcon));
+
+        updateNodePositions();
+
+        //TODO if already component on the same spot, ignore or smth
+        //TODO display values next to components
+
+
+    }
+
+}
+
+
 void DrawZone::rotateToAngle(component_lb &child){
 
     int curangle=child.getAngle();

@@ -19,5 +19,9 @@
         <file>assets/wire_small.png</file>
         <file>assets/icons/png/reload-webpage.png</file>
         <file>assets/icons/png/cross-sign.png</file>
+      <file>assets/gnd.png</file>
+        <file>assets/sw_closed.png</file>
+        <file>assets/sw_open.png</file>
+	<file>assets/icons/png/closed-folder.png</file>
     </qresource>
 </RCC>

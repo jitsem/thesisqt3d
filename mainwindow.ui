@@ -16,7 +16,11 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="QWidget" name="widget_container" native="true"/>
+     <widget class="QWidget" name="widget_container" native="true">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -34,6 +38,7 @@
      <string>&amp;File</string>
     </property>
     <addaction name="actionNew"/>
+    <addaction name="actionOpen_File"/>
     <addaction name="actionSave"/>
     <addaction name="actionSave_as"/>
     <addaction name="actionExit"/>
@@ -74,10 +79,13 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionNew"/>
+   <addaction name="actionOpen_File"/>
    <addaction name="actionSave"/>
    <addaction name="separator"/>
    <addaction name="actionRotate"/>
    <addaction name="actionDelete"/>
+   <addaction name="actionConnect"/>
+   <addaction name="separator"/>
    <addaction name="action3D_Preview"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
@@ -94,6 +102,9 @@
    </property>
   </action>
   <action name="actionSave">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="levelbuilder.qrc">
      <normaloff>:/assets/icons/png/diskette.png</normaloff>:/assets/icons/png/diskette.png</iconset>
@@ -118,6 +129,9 @@
    </property>
   </action>
   <action name="actionSave_as">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="levelbuilder.qrc">
      <normaloff>:/assets/icons/png/technology.png</normaloff>:/assets/icons/png/technology.png</iconset>
@@ -130,6 +144,9 @@
    </property>
   </action>
   <action name="actionRotate">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="levelbuilder.qrc">
      <normaloff>:/assets/icons/png/reload-webpage.png</normaloff>:/assets/icons/png/reload-webpage.png</iconset>
@@ -145,6 +162,9 @@
    </property>
   </action>
   <action name="actionDelete">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="levelbuilder.qrc">
      <normaloff>:/assets/icons/png/cross-sign.png</normaloff>:/assets/icons/png/cross-sign.png</iconset>
@@ -160,6 +180,9 @@
    </property>
   </action>
   <action name="action3D_Preview">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="levelbuilder.qrc">
      <normaloff>:/assets/icons/png/direction.png</normaloff>:/assets/icons/png/direction.png</iconset>
@@ -172,6 +195,39 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+D</string>
+   </property>
+  </action>
+  <action name="actionOpen_File">
+   <property name="icon">
+    <iconset resource="levelbuilder.qrc">
+     <normaloff>:/assets/icons/png/closed-folder.png</normaloff>:/assets/icons/png/closed-folder.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open File</string>
+   </property>
+   <property name="toolTip">
+    <string>Open an existing file</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionConnect">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="levelbuilder.qrc">
+     <normaloff>:/assets/icons/png/redo-arrow.png</normaloff>:/assets/icons/png/redo-arrow.png</iconset>
+   </property>
+   <property name="text">
+    <string>Connect</string>
+   </property>
+   <property name="toolTip">
+    <string>select two components to connect them</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+L</string>
    </property>
   </action>
  </widget>

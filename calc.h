@@ -40,7 +40,7 @@ public:
     Q_INVOKABLE int getYCoordOfResistor(int resNr){return resistors.at(resNr)->getYCoord();}
     Q_INVOKABLE int node1AtResistor(int resNr){return resistors.at(resNr)->getNode1();}
     Q_INVOKABLE int node2AtResistor(int resNr){return resistors.at(resNr)->getNode2();}
-
+    bool addResistor(std::shared_ptr<Resistor> r);
 
     //Sources
     Q_INVOKABLE int getNumberOfSources(){return sources.size();}
@@ -53,6 +53,7 @@ public:
     Q_INVOKABLE int getYCoordOfSource(int soNr){return sources.at(soNr)->getYCoord();}
     Q_INVOKABLE int nodePAtSource(int sourceNr){return sources.at(sourceNr)->getNodep();}
     Q_INVOKABLE int nodeMAtSource(int sourceNr){return sources.at(sourceNr)->getNodem();}
+        bool addSource(std::shared_ptr<Source> s);
 
     //Wires
     Q_INVOKABLE int getNumberOfWires(){return wires.size();}
@@ -62,6 +63,7 @@ public:
     Q_INVOKABLE int getYCoordOfWire(int wiNr){return wires.at(wiNr)->getYCoord();}
     Q_INVOKABLE int getNodeOfWire(int wiNr){return wires.at(wiNr)->getNode();}
     Q_INVOKABLE int getLengthOfWire(int wiNr){return wires.at(wiNr)->getLength();}
+        bool addWire(std::shared_ptr<Wire> w);
 
     //Switches
     Q_INVOKABLE int getNumberOfSwitches(){return switches.size();}
@@ -73,8 +75,10 @@ public:
     Q_INVOKABLE int node2AtSwitch(int swNr){return switches.at(swNr)->getNode2();}
     Q_INVOKABLE void toggleSwitch(int swNr){switches.at(swNr)->toggleSwitch();}
 
-    //Read in a new file
-    Q_INVOKABLE void readFile(QString s);
+            bool addSwitch(std::shared_ptr<Switch> s);
+
+            //Read in a new file
+    Q_INVOKABLE void readFile();
 
     //Methode voor juiste richtingen en stromen
     void correctAngles();
@@ -92,8 +96,15 @@ public:
     //Methodes for writing back file
     Q_INVOKABLE void writeBackToFile();
 
+    void setFileName(const QString &value);
+    QString getFileName() const;
 
-
+    void emptyVectors();
+    //Getters and settters for vectors
+    std::vector<std::shared_ptr<Wire>> getWires() const;
+    std::vector<std::shared_ptr<Component> > getResistors() const;
+    std::vector<std::shared_ptr<Component> > getSources() const;
+    std::vector<std::shared_ptr<Switch> > getSwitches() const;
 
 private:
 
