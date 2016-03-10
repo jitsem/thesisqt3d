@@ -27,7 +27,10 @@
 #include <QMessageBox>
 
 #include "calc.h"
+#include "source.h"
+#include "resistor.h"
 #include "wire.h"
+#include "switch.h"
 #include <vector>
 
 
@@ -99,7 +102,66 @@ void DrawZone::slotTriggeredSave()
     //execute filewriting method
 
     if(checkClosedCircuit()){
-        qDebug()<<"save was clicked";
+
+
+        calc_nodes();
+        QList<component_lb*> list = this->findChildren<component_lb *>();
+        //fill out all drawn components in singleton calc object vectors
+        //call the save function of calc class
+        std::shared_ptr<Calc> c = Calc::Instance();
+        c->emptyVectors();
+        foreach(component_lb *w, list){
+            //TODO oplossen angles verkeerd
+            int angle = w->getAngle();
+
+            if(angle == 4){
+                angle = 2;
+            }
+            else if(angle == 2){
+                angle = 4;
+
+            }
+
+            switch (w->getType()){
+
+            case 0:
+            {
+                //Source(float v, int np, int nm,int x,int y,int angle);
+                auto s = std::make_shared<Source>(w->getValue(),w->getN1(),w->getN2(),w->getNode1x()/50,w->getNode1y()/50,angle);
+                //Wire(int x, int y, int ang, int length, int node, float current=0.0);
+
+                auto wir = std::make_shared<Wire>(w->getNode1x()/50,w->getNode1y()/50,angle,1,w->getN2());
+                c->addSource(s);
+                c->addWire(wir);
+                break;
+            }
+            case 1:
+            {
+                auto r = std::make_shared<Resistor>(w->getValue(),w->getN1(),w->getN2(),w->getNode1x()/50,w->getNode1y()/50,angle);
+                c->addResistor(r);
+                break;
+            }
+            case 2:
+            {
+                auto wir = std::make_shared<Wire>(w->getNode1x()/50,w->getNode1y()/50,angle,1,w->getN2());
+                c->addWire(wir);
+                break;
+            }
+            case 3:
+            {
+                //Switch::Switch(int np, int nm, int x, int y, int ang):
+                auto sw = std::make_shared<Switch>(w->getN1(),w->getN2(),w->getNode1x()/50,w->getNode1y()/50,angle);
+                c->addSwitch(sw);
+                break;
+            }
+            default :
+                //TODO ground not added
+                break;
+            }
+
+        }
+        c->writeBackToFile();
+
     }else{
 
 
@@ -130,7 +192,6 @@ void DrawZone::slotTriggeredSave()
 void DrawZone::slotTriggeredConnect()
 {
     //TODO expand to any two components!!
-    //QPoint start,stop;
     //TODO make sure the input is tested!
 
     QList<component_lb*> list = this->findChildren<component_lb *>();
@@ -157,7 +218,9 @@ void DrawZone::slotTriggeredConnect()
     return;
 
 
+
 }
+
 void DrawZone::dragEnterEvent(QDragEnterEvent *event)
 {
     if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
@@ -172,7 +235,6 @@ void DrawZone::dragEnterEvent(QDragEnterEvent *event)
     }
 
 }
-
 void DrawZone::dragMoveEvent(QDragMoveEvent *event)
 {
     // qDebug()<<"drag move event ";
@@ -187,7 +249,6 @@ void DrawZone::dragMoveEvent(QDragMoveEvent *event)
         event->ignore();
     }
 }
-
 void DrawZone::mouseMoveEvent(QMouseEvent *event)
 {
     if (!(event->buttons() & Qt::LeftButton))
@@ -245,8 +306,6 @@ void DrawZone::mouseMoveEvent(QMouseEvent *event)
 
 
 }
-
-
 void DrawZone::dropEvent(QDropEvent *event)
 {
     //qDebug()<<"dropevent position: "<<event->pos();
@@ -264,7 +323,6 @@ void DrawZone::dropEvent(QDropEvent *event)
         qint64 nr;
         int selected;
         dataStream >> pixmap >> offset >> value >> angle >> type >> nr >> selected;
-        //qDebug()<<"dropevent van deze component:" <<value<<angle<<type<<nr;
 
 
         component_lb *newIcon = new component_lb(this,value,0,0,0,0,angle,type,0,selected);
@@ -325,14 +383,8 @@ void DrawZone::dropEvent(QDropEvent *event)
     }
 
 }
-
-
-
 void DrawZone::mousePressEvent(QMouseEvent *event)
 {
-
-    //qDebug()<<"mousepressevent";
-
     component_lb *child = static_cast<component_lb*>(childAt(event->pos()));
     if (!child){
         QList<component_lb*> list = this->findChildren<component_lb *>();
@@ -345,7 +397,6 @@ void DrawZone::mousePressEvent(QMouseEvent *event)
 
     if (event->button() == Qt::LeftButton){
         dragStartPosition = event->pos();
-
     }
 }
 void DrawZone::mouseReleaseEvent(QMouseEvent *event)
@@ -372,7 +423,6 @@ void DrawZone::mouseReleaseEvent(QMouseEvent *event)
 }
 component_lb *DrawZone::removeGray(component_lb &child){
 
-    // qDebug()<<child.getType();
     switch (child.getType()){
 
     case 0:
@@ -415,7 +465,6 @@ component_lb *DrawZone::removeGray(component_lb &child){
     }
     return &child;
 }
-
 component_lb *DrawZone::setGray(component_lb &child)
 {
     QPixmap tempPixmap = *(child.pixmap());
@@ -426,10 +475,8 @@ component_lb *DrawZone::setGray(component_lb &child)
     child.setPixmap(tempPixmap);
     return &child;
 }
-
 void DrawZone::paintEvent(QPaintEvent *event)
 {
-
     QPainter painter(this);
 
     int i=0;
@@ -448,39 +495,6 @@ void DrawZone::paintEvent(QPaintEvent *event)
         connect=0;
     }
     painter.end();
-    //painter.drawLine(start,stop);
-    //    if(connect){
-    //        painter.drawLine(start,stop);
-    //        connect=0;
-    //    }
-    //        painter.end();
-    //    painter.drawLine(0,0,100,100);
-
-    //    if (selectmode && (for_groundconnection_comp_ptr!= nullptr)){
-    //            component_lb *gnd;
-    //            component_lb *wir;
-    //            int found=0;
-    //            QList<component_lb*> list = this->findChildren<component_lb *>();
-    //            foreach(component_lb *w, list) {
-    //                    if (w->getType()==4){
-    //                       gnd=w;
-    //                    }
-    //                    else if ((w->getType()==2 )&& (w->getSelected())){
-    //                           wir=w;
-    //                           found=1;
-    //                           break;
-    //                       }
-    //                    }
-
-    //        if(found){
-    //        painter.drawLine(0,0,100,100);
-    //        painter.setPen(palette().dark().color());
-    //        found=0;
-    //        }
-    //        else return;
-    // }
-
-
 }
 bool DrawZone::checkClosedCircuit(){
     updateNodePositions();
@@ -489,7 +503,6 @@ bool DrawZone::checkClosedCircuit(){
     QList<QPoint> points;
 
     foreach(component_lb *w, list) {
-        qDebug()<<"id:"<<w->getNr()<<"n1x, n1y"<< w->getNode1x()/50 << w->getNode1y()/50<<"n2x, n2y"<< w->getNode2x()/50 << w->getNode2y()/50<< "type:"<<w->getType();
         if(!(w->getType()==4)){
             points.push_back(QPoint(w->getNode1x(),w->getNode1y()));
             points.push_back(QPoint(w->getNode2x(),w->getNode2y()));
@@ -507,8 +520,10 @@ bool DrawZone::checkClosedCircuit(){
             }
         }
         else{
+            //TODO add alert to user
             qDebug()<<"Circuit not closed!";
             return false;
+            break;
         }
     }
     if(points.isEmpty()){
@@ -518,50 +533,184 @@ bool DrawZone::checkClosedCircuit(){
     }
 }
 
-void DrawZone::calc_nodes()
-{
+void DrawZone::calc_nodes(){
 
-    if(checkClosedCircuit()){
-        QList<component_lb*> list = this->findChildren<component_lb *>();
 
-        component_lb * current;
-        foreach(component_lb *w, list){
-            if (w->getType()==2 &&w->getValue()==COMPONENT_IS_GROUND){
-                w->setN1(0);
-                w->setN2(0);
-                current=w;
+    QList<component_lb*> list = this->findChildren<component_lb *>();
+    component_lb *current;
+    foreach(component_lb *w, list){
+        if (w->getType()==2 && w->getValue()==COMPONENT_IS_GROUND){
+            w->setN1(0);
+            w->setN2(0);
+            current=w;
+        }
+        if(w->getType()==4){
+            list.removeOne(w);
+        }
+    }
+    int curnode=0;
+    QList<component_lb*> stack;
+    stack.push_back(current);
+    QList<component_lb*> overschot=solveNode(list,current,curnode,stack);
+    while(!(overschot.isEmpty())){
+        curnode++;
+        current=overschot.first();
+        if (current->getN1()==-1){
+            current->setN1(curnode);
+        }
+        else if (current->getN2()==-1){
+            current->setN2(curnode);
+        }
+        overschot=solveNode(list,current,curnode,stack);
+        int pos=0;
+        foreach (component_lb* w, overschot) {
+            if((w->getN1()!=-1) && (w->getN2()!=-1)){
+                overschot.removeAt(pos);
+                pos++;
+
             }
         }
-        int curnode=1;
-        QList<qint64> done;
-        done.append(current->getNr());
-        QList<component_lb*> neigbours;
-        list.removeOne(current);
-        component_lb* neigbour = static_cast<component_lb*>(childAt(current->x()+current->width()+1,current->y()));
-        if(neigbour){
-            if (neigbour->getN1()==-1){
-                if(neigbour->getType()==2){
-                    neigbour->setN1(current->getN2());
-                    neigbour->setN2(neigbour->getN1());
+    }
+    //hier nog resterende nodenummers invullen van componenten (niet draden) die hebben er maar 1 ingevuld maar aangrenzende component heeft normaal het juiste
+    QList<component_lb*> lastList = this->findChildren<component_lb *>();
+    int pos=0;
+    foreach(component_lb* w,lastList){
+        if(w->getType()==4){
+
+            lastList.removeAt(pos);
+            pos++;
+        }
+        if(w->getType()!=2){
+            if(w->getN1()==-1){
+                QList<component_lb*>neig=getNeighbours(lastList,*w);
+                foreach (component_lb* n, neig) {
+                    if(w!=n){
+                        if(n->getNode1x()==w->getNode1x()&&n->getNode1y()==w->getNode1y()){
+                            w->setN1(n->getN1());
+                        }
+                        if(n->getNode2x()==w->getNode1x()&&n->getNode2y()==w->getNode1y()){
+                            w->setN1(n->getN2());
+                        }
+                    }
                 }
             }
-
+            else if(w->getN2()==-1){
+                QList<component_lb*>neig=getNeighbours(lastList,*w);
+                foreach (component_lb* n, neig) {
+                    if(w!=n){
+                        if(n->getNode1x()==w->getNode2x()&&n->getNode1y()==w->getNode2y()){
+                            w->setN2(n->getN1());
+                        }
+                        if(n->getNode2x()==w->getNode2x()&&n->getNode2y()==w->getNode2y()){
+                            w->setN2(n->getN2());
+                        }
+                    }
+                }
+            }
         }
-        else {
-            //try other direction
-        }
-        qDebug()<<neigbour->getNr();
-    }
-    else{
-        qDebug()<<"cant calculate nodes because circuit is not closed";
-        return;
     }
 }
 
+QList<component_lb *> DrawZone::solveNode(QList<component_lb *> &l, component_lb *current, int & curnode, QList<component_lb *> & stack){
+
+    QList<component_lb*> halfaf;
+    QList<component_lb*> neighbours;
+
+    while(!l.isEmpty()){
+
+        neighbours = getNeighbours(l,*current);
+        if(neighbours.isEmpty()){
+            if(!stack.isEmpty()){
+                current=(stack.takeLast());
+            }
+            else {//empty stack means this node is solved
+                return halfaf;
+                break;
+            }
+
+        }
+        else if (!neighbours.isEmpty()){
+            component_lb * b=neighbours.takeFirst();
+            if(b->getType()==2){
+                b->setN1(curnode);
+                b->setN2(curnode);
+                stack.push_back(b);
+                l.removeOne(b);
+                current=b;
+
+
+            }
+
+            else {
+
+                //node that is the same as current gets same nodenr
+
+                if((current->getNode2x()==b->getNode1x())&&(current->getNode2y()==b->getNode1y())){
+                    b->setN1(curnode);
+                }
+                if((current->getNode1x()==b->getNode2x())&&(current->getNode1y()==b->getNode2y())){
+                    b->setN2(curnode);
+                }
+                if((current->getNode1x()==b->getNode1x())&&(current->getNode1y()==b->getNode1y())){
+                    b->setN1(curnode);
+                }
+                if((current->getNode2x()==b->getNode2x())&&(current->getNode2y()==b->getNode2y())){
+                    b->setN2(curnode);
+                }
+
+                // add other component than wire to halfaf
+                if(!halfaf.contains(b))
+                    halfaf.append(b);
+                //mark visited
+                l.removeOne(b);
+
+                if(!stack.isEmpty()){
+                    current=stack.takeLast();
+                }
+                else{}//stack empty
+            }
+        }
+    }//end while all cells are visited
+    if(!halfaf.isEmpty()){
+        return halfaf;
+    }
+    QList<component_lb *> leeg;
+    return leeg;
+
+
+}
+QList<component_lb *> DrawZone::getNeighbours(QList<component_lb *> &l, component_lb & current){
+
+    QList<component_lb *> neighbours;
+    foreach(component_lb *w, l){
+        if((current.getNode2x()==w->getNode1x())&&(current.getNode2y()==w->getNode1y())){
+            neighbours.append(w);
+        }
+        if((current.getNode1x()==w->getNode2x())&&(current.getNode1y()==w->getNode2y())){
+            neighbours.append(w);
+        }
+        if((current.getNode1x()==w->getNode1x())&&(current.getNode1y()==w->getNode1y())){
+            neighbours.append(w);
+        }
+        if((current.getNode2x()==w->getNode2x())&&(current.getNode2y()==w->getNode2y())){
+            neighbours.append(w);
+        }
+    }
+
+    return neighbours;
+
+}
 void DrawZone::drawCircuit()
 {
     //TODO vorige tekening clearen
+    //TODO code ietwat verkleinen
     //TODO draad aan bron
+
+    //Clear drawingfield
+    QList<component_lb*> list = this->findChildren<component_lb *>();
+    foreach(component_lb *w, list) {
+        delete w;
+    }
 
     std::shared_ptr<Calc> calculator=Calc::Instance();
     auto wires = calculator->getWires();

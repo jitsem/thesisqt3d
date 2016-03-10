@@ -57,6 +57,38 @@ void Calc::solveLevel()
     setCurrentsOfWires();
 
 }
+bool Calc::addResistor(std::shared_ptr<Resistor> r)
+{
+     auto size=resistors.size();
+     resistors.push_back(r);
+     return(size>resistors.size());
+}
+
+bool Calc::addSource(std::shared_ptr<Source> s)
+{
+     auto size=sources.size();
+     sources.push_back(s);
+     return(size>sources.size());
+}
+bool Calc::addWire(std::shared_ptr<Wire> w)
+{
+     auto size=wires.size();
+     wires.push_back(w);
+     return(size>wires.size());
+}
+bool Calc::addSwitch(std::shared_ptr<Switch> s)
+{
+     auto size=switches.size();
+     switches.push_back(s);
+     return(size>switches.size());
+}
+
+void Calc::emptyVectors(){
+    resistors.clear();
+    sources.clear();
+    switches.clear();
+    wires.clear();
+}
 
 void Calc::readFile()
 {
@@ -783,8 +815,15 @@ void Calc::setCurrentsOfStrayWires(){
 
 
                     }
+
                 }
-                w->setCurrent(curr);
+                //TODO check of nog altijd juist
+                if(w->getAngle()!=3)
+                    w->setCurrent(curr);
+                else
+                    w->setCurrent(-curr);
+
+
                 if(std::isinf(w->getCurrent()))
                     inf=true; //Blijf in lus
 

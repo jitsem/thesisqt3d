@@ -8,7 +8,7 @@
 
 #include "component_lb.h"
 #include "component.h"
-#include "wire.h"
+
 
 class DrawZone :public QFrame
 {
@@ -21,11 +21,16 @@ public:
     bool checkClosedCircuit();
     void drawCircuit();
 
+    QList<component_lb *> getNeighbours(QList<component_lb *> &l, component_lb &current);
+    QList<component_lb *> solveNode(QList<component_lb *> &l, component_lb *current, int &curnode, QList<component_lb *> &stack);
+    void calc_nodes();
+
 public slots:
     void slotTriggeredRotate();
     void slotTriggeredDelete();
     void slotTriggeredSave();
     void slotTriggeredConnect();
+
 protected:
     void mouseDoubleClickEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
@@ -34,11 +39,10 @@ protected:
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
-    //void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
     component_lb * removeGray(component_lb & child);
     component_lb * setGray(component_lb & child);
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
-    void calc_nodes();
+
 
 private:
     int connect=0;
