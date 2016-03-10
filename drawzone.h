@@ -18,11 +18,14 @@ public:
     void rotateToAngle(component_lb &child);
     void updateNodePositions();
     int roundUp(int numToRound, int multiple);
+    bool checkClosedCircuit();
+    void drawCircuit();
 
 public slots:
     void slotTriggeredRotate();
     void slotTriggeredDelete();
     void slotTriggeredSave();
+    void slotTriggeredConnect();
 protected:
     void mouseDoubleClickEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
@@ -31,11 +34,17 @@ protected:
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    //void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
     component_lb * removeGray(component_lb & child);
     component_lb * setGray(component_lb & child);
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
-private:
+    void calc_nodes();
 
+private:
+    int connect=0;
+    QPoint start,stop;
+    int width;
+    int height;
 };
 
 #endif // DRAWZONE_H

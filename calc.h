@@ -74,7 +74,7 @@ public:
     Q_INVOKABLE void toggleSwitch(int swNr){switches.at(swNr)->toggleSwitch();}
 
     //Read in a new file
-    Q_INVOKABLE void readFile(QString s);
+    Q_INVOKABLE void readFile();
 
     //Methode voor juiste richtingen en stromen
     void correctAngles();
@@ -92,8 +92,14 @@ public:
     //Methodes for writing back file
     Q_INVOKABLE void writeBackToFile();
 
+    void setFileName(const QString &value);
+    QString getFileName() const;
 
-
+    //Getters and settters for vectors
+    std::vector<std::shared_ptr<Wire>> getWires() const;
+    std::vector<std::shared_ptr<Component> > getResistors() const;
+    std::vector<std::shared_ptr<Component> > getSources() const;
+    std::vector<std::shared_ptr<Switch> > getSwitches() const;
 
 private:
 

@@ -5,6 +5,12 @@
 #include <QWidget>
 #include <QQuickView>
 #include <QListWidget>
+
+#include <memory>
+
+class DrawZone;
+class Calc;
+
 namespace Ui {
 class MainWindow;
 }
@@ -18,21 +24,28 @@ public:
     Q_INVOKABLE void delete3D();
     ~MainWindow();
 
+    void enableIcons();
 signals:
     void on_actionRotate_triggered();
     void on_actionDelete_triggered();
     void on_actionSave_triggered();
-    void on_action3D_Preview_triggered();
+    void on_actionConnect_triggered();
+
+
 
 private slots:
     void on_actionExit_triggered();
-    void slotTriggered3D_Preview();
+    void on_actionOpen_File_triggered();
+    void on_action3D_Preview_triggered();
+    void on_actionNew_triggered();
 
-//    void on_actionRotate_triggered();
+
 
 private:
     Ui::MainWindow *ui;
     QQuickView *view;
+    DrawZone *drawzoneWidget;
+    std::shared_ptr<Calc> calculator;
 
 };
 

@@ -58,7 +58,7 @@ void Calc::solveLevel()
 
 }
 
-void Calc::readFile(QString s)
+void Calc::readFile()
 {
     //Clear all vectors
     wires.clear();
@@ -67,8 +67,8 @@ void Calc::readFile(QString s)
     switches.clear();
 
     //TODO Checken of een file volledig juist is
-    fileName = s;
-    QFile * file = new QFile(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+"/"+s);
+
+    QFile * file = new QFile(fileName);
     if (file->open(QIODevice::ReadOnly| QIODevice::Text))
     {
         QTextStream in(file);
@@ -233,10 +233,8 @@ void Calc::process_source_line(QString &lijn)
 
 void Calc::writeBackToFile()
 {
-    QString path;
 
-    path = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) ;
-    QFile file(path + "/"+ fileName);
+    QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)){
         qDebug()<< "oops";
         return;
@@ -914,6 +912,36 @@ std::vector<float> Calc::computeNetwork(int  nrOfNodes)
 
 
 
+}
+
+std::vector<std::shared_ptr<Switch> > Calc::getSwitches() const
+{
+    return switches;
+}
+
+std::vector<std::shared_ptr<Component> > Calc::getSources() const
+{
+    return sources;
+}
+
+std::vector<std::shared_ptr<Component> > Calc::getResistors() const
+{
+    return resistors;
+}
+
+std::vector<std::shared_ptr<Wire> > Calc::getWires() const
+{
+    return wires;
+}
+
+QString Calc::getFileName() const
+{
+    return fileName;
+}
+
+void Calc::setFileName(const QString &value)
+{
+    fileName = value;
 }
 
 

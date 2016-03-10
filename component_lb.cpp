@@ -1,24 +1,13 @@
 #include "component_lb.h"
 #include <QDebug>
-component_lb::component_lb(QWidget *parent, float val, int n1x, int n1y, int n2x, int n2y, int ang, int type, qint64 nr, int selected)
-    :QLabel(parent),value(val), node1x(n1x),node1y(n1y),node2x(n2x),node2y(n2y),angle(ang),type(type),nr(nr),selected(selected)
+
+component_lb::component_lb(QWidget *parent, float val, int n1x, int n1y, int n2x, int n2y, int ang, int type, qint64 nr, int selected,int n1,int n2)
+    :QLabel(parent),value(val), node1x(n1x),node1y(n1y),node2x(n2x),node2y(n2y),angle(ang),type(type),nr(nr),selected(selected),n1(n1),n2(n2)
 {
-    //connect (this,SIGNAL(clicked(const QPoint & )),this,SLOT(slotClicked()));
 
 
 }
-//toremove
-//void component::slotClicked()
-//{
-//    //qDebug()<<"Clicked";
-//}
 
-//void component::mouseReleaseEvent(QMouseEvent *event)
-//{
-    //qDebug()<<"mouse release event van component";
-    //emit clicked((event->pos()));
-    //TODO delete, done in drawzone
-//}
 
 float component_lb::getValue() const
 {
@@ -109,3 +98,25 @@ void component_lb::setSelected(int value)
 {
     selected = value;
 }
+
+int component_lb::getN1() const
+{
+    return n1;
+}
+
+void component_lb::setN1(int value)
+{
+    n1 = value;
+}
+
+int component_lb::getN2() const
+{
+    return n2;
+}
+
+void component_lb::setN2(int value)
+{
+    n2 = value;
+}
+
+

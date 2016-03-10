@@ -30,7 +30,7 @@ Entity{
 
     QQ2.Component.onCompleted: {
 
-        calculator.readFile("inputfile_1.sj");  //file moet zich bevinden in QStandardPaths::GenericDataLocation, afhankelijk van platform
+
         buildLevel(); //Bouw Ciruict
         makeEditMenu();
 

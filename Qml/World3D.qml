@@ -7,7 +7,7 @@ import Qt3D.Logic 2.0
 
 Entity {
     id: world3D
-    property real cameraAngle
+    property real cameraAngle:1
 
     //CiruitMiddle
     property real x: 4.5
