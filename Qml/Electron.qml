@@ -46,8 +46,8 @@ Entity{
         id:mat
         diffuse: "steelblue"
         ambient: "gainsboro"
-        specular: "blue"
-        shininess: 0.2
+        specular: "steelblue"
+        shininess: 200
 
     }
 

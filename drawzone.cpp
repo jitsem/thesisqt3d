@@ -539,6 +539,8 @@ void DrawZone::calc_nodes(){
     QList<component_lb*> list = this->findChildren<component_lb *>();
     component_lb *current;
     foreach(component_lb *w, list){
+        w->setN1(-1);
+        w->setN2(-1);
         if (w->getType()==2 && w->getValue()==COMPONENT_IS_GROUND){
             w->setN1(0);
             w->setN2(0);
@@ -552,24 +554,49 @@ void DrawZone::calc_nodes(){
     QList<component_lb*> stack;
     stack.push_back(current);
     QList<component_lb*> overschot=solveNode(list,current,curnode,stack);
-    while(!(overschot.isEmpty())){
-        curnode++;
-        current=overschot.first();
-        if (current->getN1()==-1){
-            current->setN1(curnode);
-        }
-        else if (current->getN2()==-1){
-            current->setN2(curnode);
-        }
-        overschot=solveNode(list,current,curnode,stack);
-        int pos=0;
-        foreach (component_lb* w, overschot) {
-            if((w->getN1()!=-1) && (w->getN2()!=-1)){
-                overschot.removeAt(pos);
-                pos++;
+    while(!list.isEmpty()){
+        while(!(overschot.isEmpty())){
+            curnode++;
+            current=overschot.first();
+            if (current->getN1()==-1){
+                current->setN1(curnode);
+            }
+            else if (current->getN2()==-1){
+                current->setN2(curnode);
+            }
+            overschot=solveNode(list,current,curnode,stack);
+            int pos=0;
+            foreach (component_lb* w, overschot) {
+                if((w->getN1()!=-1) && (w->getN2()!=-1)){
+                    overschot.removeAt(pos);
+                    pos++;
 
+                }
             }
         }
+        if (!list.isEmpty()){
+            QList<component_lb*> list2 = this->findChildren<component_lb *>();
+            foreach (component_lb* w, list2) {
+                if(w->getType()!=4){
+                    int done=0;
+                    if((w->getN1()==-1)){
+                        w->setN1(curnode);
+                        current=w;
+                        done=1;
+                    }
+                    if(w->getN2()==-1){
+                        w->setN2(curnode);
+                        current=w;
+                        done=1;
+                    }
+                    if (done)
+                        break;
+                }
+            }
+            stack.push_back(current);
+            solveNode(list,current,curnode,stack);
+        }
+
     }
     //hier nog resterende nodenummers invullen van componenten (niet draden) die hebben er maar 1 ingevuld maar aangrenzende component heeft normaal het juiste
     QList<component_lb*> lastList = this->findChildren<component_lb *>();
@@ -606,6 +633,11 @@ void DrawZone::calc_nodes(){
                         }
                     }
                 }
+            }
+        }
+        else {
+            if (w->getN1()==-1 ||w->getN2()==-1){
+                qDebug()<<"Something went terribly wrong!";
             }
         }
     }
@@ -683,17 +715,19 @@ QList<component_lb *> DrawZone::getNeighbours(QList<component_lb *> &l, componen
 
     QList<component_lb *> neighbours;
     foreach(component_lb *w, l){
-        if((current.getNode2x()==w->getNode1x())&&(current.getNode2y()==w->getNode1y())){
-            neighbours.append(w);
-        }
-        if((current.getNode1x()==w->getNode2x())&&(current.getNode1y()==w->getNode2y())){
-            neighbours.append(w);
-        }
-        if((current.getNode1x()==w->getNode1x())&&(current.getNode1y()==w->getNode1y())){
-            neighbours.append(w);
-        }
-        if((current.getNode2x()==w->getNode2x())&&(current.getNode2y()==w->getNode2y())){
-            neighbours.append(w);
+        if(!(w==&current)){
+            if((current.getNode2x()==w->getNode1x())&&(current.getNode2y()==w->getNode1y())){
+                neighbours.append(w);
+            }
+            if((current.getNode1x()==w->getNode2x())&&(current.getNode1y()==w->getNode2y())){
+                neighbours.append(w);
+            }
+            if((current.getNode1x()==w->getNode1x())&&(current.getNode1y()==w->getNode1y())){
+                neighbours.append(w);
+            }
+            if((current.getNode2x()==w->getNode2x())&&(current.getNode2y()==w->getNode2y())){
+                neighbours.append(w);
+            }
         }
     }
 
@@ -765,7 +799,7 @@ void DrawZone::drawCircuit()
                 break;
             }
 
-            component_lb *newIcon = new component_lb(this, 0, XCoord, YCoord, XCoord2,YCoord2, angle, 2, 0, 0, w->getNode(),w->getNode());
+            component_lb *newIcon = new component_lb(this, w->getValue(), XCoord, YCoord, XCoord2,YCoord2, angle, 2, 0, 0, w->getNode(),w->getNode());
 
             newIcon->setPixmap(*pixmap);
             if(angle == 1 || angle == 2)
@@ -838,8 +872,8 @@ void DrawZone::drawCircuit()
         default:
             break;
         }
-
-        component_lb *newIcon = new component_lb(this, 0, XCoord, YCoord, XCoord2,YCoord2, angle, 0, 0, 0, s->getNodem(),s->getNodep());
+        //TODO check if nodem en p are correct with node1 en node2
+        component_lb *newIcon = new component_lb(this, s->getValue(), XCoord, YCoord, XCoord2,YCoord2, angle, 0, 0, 0, s->getNodep(),s->getNodem());
 
         newIcon->setPixmap(*pixmap);
         if(angle == 1 || angle == 2)
@@ -903,7 +937,7 @@ void DrawZone::drawCircuit()
             break;
         }
 
-        component_lb *newIcon = new component_lb(this, 0, XCoord, YCoord, XCoord2,YCoord2, angle, 1, 0, 0, r->getNode1(),r->getNode2());
+        component_lb *newIcon = new component_lb(this, r->getValue(), XCoord, YCoord, XCoord2,YCoord2, angle, 1, 0, 0, r->getNode1(),r->getNode2());
 
         newIcon->setPixmap(*pixmap);
         if(angle == 1 || angle == 2)
@@ -966,7 +1000,7 @@ void DrawZone::drawCircuit()
             break;
         }
 
-        component_lb *newIcon = new component_lb(this, 0, XCoord, YCoord, XCoord2,YCoord2, angle, 3, 0, 0, s->getNode1(),s->getNode2());
+        component_lb *newIcon = new component_lb(this, s->getValue(), XCoord, YCoord, XCoord2,YCoord2, angle, 3, 0, 0, s->getNode1(),s->getNode2());
 
         newIcon->setPixmap(*pixmap);
         if(angle == 1 || angle == 2)
@@ -1063,3 +1097,5 @@ void DrawZone::mouseDoubleClickEvent( QMouseEvent * event )
         }
     }
 }
+
+

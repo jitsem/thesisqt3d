@@ -75,9 +75,8 @@ public:
     Q_INVOKABLE int node2AtSwitch(int swNr){return switches.at(swNr)->getNode2();}
     Q_INVOKABLE void toggleSwitch(int swNr){switches.at(swNr)->toggleSwitch();}
 
-            bool addSwitch(std::shared_ptr<Switch> s);
-
-            //Read in a new file
+     bool addSwitch(std::shared_ptr<Switch> s);
+     //Read in a new file
     Q_INVOKABLE void readFile();
 
     //Methode voor juiste richtingen en stromen
