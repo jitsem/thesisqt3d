@@ -763,6 +763,7 @@ void Calc::setCurrentsOfWires()
 
 void Calc::setCurrentsOfStrayWires(){
 
+    //TODO testen of nog altijd juist
 
     //Zolang er er nog een weerstand met oneindigestromen is, in while blijven
     bool inf = true;
@@ -785,27 +786,39 @@ void Calc::setCurrentsOfStrayWires(){
                         switch (wire->getAngle()) {
 
                         case 1:
-                            if(pos==QPoint(xp,yp) || pos == QPoint(xp+l,yp)){
+                            if(pos==QPoint(xp,yp) ){
                                 curr += wire->getCurrent();
+                            }
+                            else if(pos == QPoint(xp+l,yp)){
+                                curr -= wire->getCurrent();
                             }
 
                             break;
                         case 2:
-                            if(pos==QPoint(xp,yp) || pos== QPoint(xp,yp+l)){
+                            if(pos==QPoint(xp,yp)){
                                 curr += wire->getCurrent();
+                            }
+                            else if ( pos== QPoint(xp,yp+l)){
+                                curr -= wire->getCurrent();
                             }
 
                             break;
                         case 3:
-                            if(pos == QPoint(xp,yp) ||pos == QPoint(xp-l,yp)){
+                            if(pos==QPoint(xp,yp)){
                                 curr += wire->getCurrent();
+                            }
+                            else if ( pos== QPoint(xp-l,yp)){
+                                curr -= wire->getCurrent();
                             }
 
 
                             break;
                         case 4:
-                            if(pos==QPoint(xp,yp) || pos == QPoint(xp,yp-l)){
+                            if(pos==QPoint(xp,yp)){
                                 curr += wire->getCurrent();
+                            }
+                            else if ( pos== QPoint(xp,yp-l)){
+                                curr -= wire->getCurrent();
                             }
 
                             break;
@@ -817,10 +830,7 @@ void Calc::setCurrentsOfStrayWires(){
                     }
 
                 }
-                //TODO check of nog altijd juist
-                if(w->getAngle()!=3)
-                    w->setCurrent(curr);
-                else
+
                     w->setCurrent(-curr);
 
 
@@ -833,8 +843,6 @@ void Calc::setCurrentsOfStrayWires(){
 
 
 }
-
-
 
 
 std::vector<float> Calc::computeNetwork(int  nrOfNodes)

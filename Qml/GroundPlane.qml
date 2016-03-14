@@ -9,7 +9,7 @@ Entity {
 
     PlaneMesh {
         id: groundMesh
-        width: 300
+        width: 500
         height: width
         meshResolution: Qt.size(2, 2)
 
@@ -17,7 +17,7 @@ Entity {
 
     Transform {
         id: groundTransform
-        translation: Qt.vector3d(0,-5,0);
+        translation: Qt.vector3d(0,-50,0);
 
     }
 

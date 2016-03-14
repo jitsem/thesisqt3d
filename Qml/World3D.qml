@@ -10,9 +10,9 @@ Entity {
     property real cameraAngle:1
 
     //CiruitMiddle
-    property real x: 4.5
+    property real x: 0
     property real y: 0
-    property real z: -4.5
+    property real z: 0
 
     //Zoomlevel
     property real zoomlevel: 50
@@ -23,19 +23,22 @@ Entity {
         id: mainCamera
         projectionType: CameraLens.PerspectiveProjection
         fieldOfView: 60
-        aspectRatio: 16 / 9
-        position: Qt.vector3d(zoomlevel*Math.sin(cameraAngle*180/Math.PI)+x*generator.sf, zoomlevel, -zoomlevel*Math.cos(cameraAngle*180/Math.PI)+z*generator.sf )
-        viewCenter: Qt.vector3d(x*generator.sf, 0.0, z*generator.sf)
-    }
+        aspectRatio: _window.width / _window.height
+        position: Qt.vector3d(zoomlevel*Math.sin(cameraAngle*180/Math.PI)+x, zoomlevel, -zoomlevel*Math.cos(cameraAngle*180/Math.PI)+z )
+        viewCenter: Qt.vector3d(x, 0.0, -z)
 
+    }
 
 
     //Render settings
     FrameGraph {
         id : forward_renderer
+
         Viewport {
+
             rect: Qt.rect(0.0, 0.0, 1.0, 1.0)
             clearColor: "darkslategrey"
+
 
             ClearBuffer {
                 buffers : ClearBuffer.ColorDepthBuffer
@@ -65,6 +68,7 @@ Entity {
     property Entity inputController: InputController{
         id:inputController
     }
+
 
 
 
