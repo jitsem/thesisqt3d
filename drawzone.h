@@ -24,6 +24,7 @@ public:
     QList<component_lb *> getNeighbours(QList<component_lb *> &l, component_lb &current);
     QList<component_lb *> solveNode(QList<component_lb *> &l, component_lb *current, int &curnode, QList<component_lb *> &stack);
     void calc_nodes();
+    void writeToVectors();
 
 public slots:
     void slotTriggeredRotate();

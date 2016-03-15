@@ -18,14 +18,14 @@ Entity {
     property real zoomlevel: 50
 
 
-    //Camera
+    //Cameraword3D.
     Camera {
         id: mainCamera
         projectionType: CameraLens.PerspectiveProjection
         fieldOfView: 60
         aspectRatio: _window.width / _window.height
-        position: Qt.vector3d(zoomlevel*Math.sin(cameraAngle*180/Math.PI)+x, zoomlevel, -zoomlevel*Math.cos(cameraAngle*180/Math.PI)+z )
-        viewCenter: Qt.vector3d(x, 0.0, -z)
+        position: Qt.vector3d(zoomlevel*Math.sin(cameraAngle*180/Math.PI)+x*generator.sf, zoomlevel, -zoomlevel*Math.cos(cameraAngle*180/Math.PI)-z*generator.sf )
+        viewCenter: Qt.vector3d(x*generator.sf, 0.0, -0*generator.sf)
 
     }
 
@@ -53,6 +53,7 @@ Entity {
     }
 
 
+
     components: [forward_renderer,inputController]
 
     //World generation
@@ -70,6 +71,15 @@ Entity {
     }
 
 
+    //Set middle of camera
+    function setCam(camx,camy){
+        x = camx/generator.sf;
+        z = camy/generator.sf;
+        console.log("cam",x,z);
+        mainCamera.viewCenter =  Qt.vector3d(camx, 0.0, -camy);
+
+    }
 
 
 }
+

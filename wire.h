@@ -14,6 +14,10 @@ public:
     int getNode() const;
     void setNode(int value);
 
+    //For compability
+    int getNode1() const;
+    int getNode2() const;
+
 private:
     int length,node;
     float current;

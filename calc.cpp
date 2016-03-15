@@ -1,11 +1,17 @@
 #include "calc.h"
+
 #include <iostream>
 #include <vector>
+#include <limits>
+
 #include <QTextStream>
 #include <QPoint>
-#include "Eigen/Dense"
 #include <QStandardPaths>
-#include <limits>
+#include <QDebug>
+#include <QFile>
+
+
+#include "Eigen/Dense"
 
 std::shared_ptr<Calc> Calc::instance=nullptr;
 
@@ -14,7 +20,8 @@ Calc::Calc()
 {
 
 }
-//Will make sure there is only one instance of the Calc
+
+
 std::shared_ptr<Calc> Calc::Instance()
 {
     if(!instance){
@@ -59,28 +66,28 @@ void Calc::solveLevel()
 }
 bool Calc::addResistor(std::shared_ptr<Resistor> r)
 {
-     auto size=resistors.size();
-     resistors.push_back(r);
-     return(size>resistors.size());
+    auto size=resistors.size();
+    resistors.push_back(r);
+    return(size>resistors.size());
 }
 
 bool Calc::addSource(std::shared_ptr<Source> s)
 {
-     auto size=sources.size();
-     sources.push_back(s);
-     return(size>sources.size());
+    auto size=sources.size();
+    sources.push_back(s);
+    return(size>sources.size());
 }
 bool Calc::addWire(std::shared_ptr<Wire> w)
 {
-     auto size=wires.size();
-     wires.push_back(w);
-     return(size>wires.size());
+    auto size=wires.size();
+    wires.push_back(w);
+    return(size>wires.size());
 }
 bool Calc::addSwitch(std::shared_ptr<Switch> s)
 {
-     auto size=switches.size();
-     switches.push_back(s);
-     return(size>switches.size());
+    auto size=switches.size();
+    switches.push_back(s);
+    return(size>switches.size());
 }
 
 void Calc::emptyVectors(){
@@ -97,6 +104,7 @@ void Calc::readFile()
     sources.clear();
     resistors.clear();
     switches.clear();
+    goals.clear();
 
     //TODO Checken of een file volledig juist is
 
@@ -129,6 +137,7 @@ void Calc::readFile()
                             break;
 
                         case 'g':
+                            process_goal_line(line);
                             break;
 
                         case 'w':
@@ -138,7 +147,9 @@ void Calc::readFile()
 
                             }
                             break;
-
+                        case 'c':
+                            process_click_line(line);
+                            break;
                         case '/':
                             if(line.length()>2){
                                 //qDebug()<<line;
@@ -191,8 +202,6 @@ void Calc::readFile()
         file->close();
     }
 }
-
-//Read lines of when a component is declared
 
 void Calc::process_wire_line(QString &lijn)
 {
@@ -263,8 +272,36 @@ void Calc::process_source_line(QString &lijn)
 
 }
 
+void Calc::process_goal_line(QString &lijn)
+{
+
+    lijn.replace("*","",Qt::CaseSensitivity::CaseInsensitive); //remove *
+    lijn.replace("g","",Qt::CaseSensitivity::CaseInsensitive); //remove g
+    QStringList list=lijn.split(" ");
+
+
+    int x = list.at(0).toInt();
+    int y = list.at(1).toInt();
+    int node = list.at(2).toInt();
+    auto g = std::make_shared<Goal>(x,y,node);
+    goals.push_back(g);
+
+}
+
+void Calc::process_click_line(QString &lijn)
+{
+
+    lijn.replace("*","",Qt::CaseSensitivity::CaseInsensitive); //remove *
+    lijn.replace("c","",Qt::CaseSensitivity::CaseInsensitive); //remove c
+    QStringList list=lijn.split(" ");
+
+    twoStar = list.at(0).toInt();
+    threeStar = list.at(1).toInt();
+}
+
 void Calc::writeBackToFile()
 {
+     //Rebuild file format from vectors in the Calc class
 
     QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)){
@@ -272,10 +309,16 @@ void Calc::writeBackToFile()
         return;
     }
 
-    //Rebuild file format
     QTextStream out(&file);
     out << "*sj\n";
-    out << "*g 4 1\n"; //TODO gaan we die g nog gebruiken?
+
+    //Goals for other team
+    for (auto goal:goals){
+        out << "*g"<< goal->getGoalCoords().x() << " " << goal->getGoalCoords().y() << " " << goal->getGoalNode()<< "\n";
+
+    }
+    //Goals for the other team
+    out<<"*c"<<twoStar << " " << threeStar <<"\n";
 
     //Wires
     out <<"*w\n";
@@ -314,53 +357,62 @@ void Calc::writeBackToFile()
     file.close();
 }
 
-//Functie om hoek te corrigeren TODO proberen verkleinen
+
 void Calc::correctAngles()
 {
-    //Joined vector met resistors and switches
+    //Joined vector with resistors and switches
     std::vector<std::shared_ptr<Component>> swAndR;
     swAndR.insert( swAndR.end(), resistors.begin(), resistors.end());
     swAndR.insert( swAndR.end(), switches.begin(), switches.end());
 
-
+    std::vector<std::shared_ptr<Component>> toCheck;
+    toCheck.insert( toCheck.end(), wires.begin(), wires.end());
+    toCheck.insert(toCheck.end(),swAndR.begin(),swAndR.end());
+    //If the lowest voltage isn't at the starting side of the component, turn it around
     for(auto r:swAndR){
         QPoint p(r->getXCoord(),r->getYCoord());
         int angle = r->getAngle();
-        int node = -1;
+        int checkNode1 = -1;
+        int checkNode2 = -1;
+
 
         switch (angle) {
 
         case 1:
 
-            for(auto w:wires){
+            for(auto w: toCheck){
                 int xp = w->getXCoord();
                 int yp = w->getYCoord();
                 int l = w->getLength();
                 switch (w->getAngle()) {
                 case 1:
                     if(p == QPoint(xp+l,yp)){
-                        node = w->getNode();
+                        checkNode1 = w->getNode1();
+                        checkNode2 = w->getNode2();
                         goto Correct1;
                     }
 
                     break;
                 case 2:
                     if(p==QPoint(xp,yp) || p == QPoint(xp,yp+l)){
-                        node = w->getNode();
+                        checkNode1 = w->getNode1();
+                        checkNode2 = w->getNode2();
                         goto Correct1;
                     }
 
                     break;
                 case 3:
                     if(p == QPoint(xp,yp)){
-                        node = w->getNode();
+                        checkNode1 = w->getNode1();
+                        checkNode2 = w->getNode2();
                         goto Correct1;
                     }
 
                     break;
                 case 4:
                     if(p==QPoint(xp,yp) || p == QPoint(xp,yp-l)){
-                        node = w->getNode();
+                        checkNode1 = w->getNode1();
+                        checkNode2 = w->getNode2();
                         goto Correct1;
                     }
 
@@ -370,9 +422,9 @@ void Calc::correctAngles()
                 }
             }
 Correct1:
-            if(node != -1)
+            if(checkNode1 != -1)
             {
-                if(voltageAtNode(node) == std::max(voltageAtNode(r->getNode1()), voltageAtNode(r->getNode2()))){
+                if(voltageAtNode(checkNode1) == std::max(voltageAtNode(r->getNode1()), voltageAtNode(r->getNode2())) || voltageAtNode(checkNode2) == std::max(voltageAtNode(r->getNode1()), voltageAtNode(r->getNode2())) ){
                     r->setAngle(3);
                     r->setXCoord(r->getXCoord() + 1);
 
@@ -391,28 +443,32 @@ Correct1:
                 switch (w->getAngle()) {
                 case 1:
                     if(p==QPoint(xp,yp) || p == QPoint(xp+l,yp)){
-                        node = w->getNode();
+                        checkNode1 = w->getNode1();
+                        checkNode2 = w->getNode2();
                         goto Correct2;
                     }
 
                     break;
                 case 2:
                     if(p == QPoint(xp,yp+l)){
-                        node = w->getNode();
+                        checkNode1 = w->getNode1();
+                        checkNode2 = w->getNode2();
                         goto Correct2;
                     }
 
                     break;
                 case 3:
                     if(p==QPoint(xp,yp) || p == QPoint(xp-l,yp)){
-                        node = w->getNode();
+                        checkNode1 = w->getNode1();
+                        checkNode2 = w->getNode2();
                         goto Correct2;
                     }
 
                     break;
                 case 4:
                     if(p == QPoint(xp,yp)){
-                        node = w->getNode();
+                        checkNode1 = w->getNode1();
+                        checkNode2 = w->getNode2();
                         goto Correct2;
                     }
 
@@ -422,9 +478,9 @@ Correct1:
                 }
             }
 Correct2:
-            if(node != -1)
+            if(checkNode1 != -1)
             {
-                if(voltageAtNode(node) == std::max(voltageAtNode(r->getNode1()), voltageAtNode(r->getNode2()))){
+                if(voltageAtNode(checkNode1) == std::max(voltageAtNode(r->getNode1()), voltageAtNode(r->getNode2())) || voltageAtNode(checkNode2) == std::max(voltageAtNode(r->getNode1()), voltageAtNode(r->getNode2())) ){
                     r->setAngle(4);
                     r->setYCoord(r->getYCoord() + 1);
 
@@ -440,28 +496,32 @@ Correct2:
                 switch (w->getAngle()) {
                 case 1:
                     if(p == QPoint(xp,yp)){
-                        node = w->getNode();
+                        checkNode1 = w->getNode1();
+                        checkNode2 = w->getNode2();
                         goto Correct3;
                     }
 
                     break;
                 case 2:
                     if(p==QPoint(xp,yp) || p == QPoint(xp,yp+l)){
-                        node = w->getNode();
+                        checkNode1 = w->getNode1();
+                        checkNode2 = w->getNode2();
                         goto Correct3;
                     }
 
                     break;
                 case 3:
                     if(p == QPoint(xp-l,yp)){
-                        node = w->getNode();
+                        checkNode1 = w->getNode1();
+                        checkNode2 = w->getNode2();
                         goto Correct3;
                     }
 
                     break;
                 case 4:
                     if(p==QPoint(xp,yp) || p == QPoint(xp,yp-l)){
-                        node = w->getNode();
+                        checkNode1 = w->getNode1();
+                        checkNode2 = w->getNode2();
                         goto Correct3;
                     }
 
@@ -471,9 +531,9 @@ Correct2:
                 }
             }
 Correct3:
-            if(node != -1)
+            if(checkNode1 != -1)
             {
-                if(voltageAtNode(node) == std::max(voltageAtNode(r->getNode1()), voltageAtNode(r->getNode2()))){
+                if(voltageAtNode(checkNode1) == std::max(voltageAtNode(r->getNode1()), voltageAtNode(r->getNode2())) || voltageAtNode(checkNode2) == std::max(voltageAtNode(r->getNode1()), voltageAtNode(r->getNode2())) ){
                     r->setAngle(1);
                     r->setXCoord(r->getXCoord() - 1);
 
@@ -489,28 +549,32 @@ Correct3:
                 switch (w->getAngle()) {
                 case 1:
                     if(p==QPoint(xp,yp) || p == QPoint(xp+l,yp)){
-                        node = w->getNode();
+                        checkNode1 = w->getNode1();
+                        checkNode2 = w->getNode2();
                         goto Correct4;
                     }
 
                     break;
                 case 2:
                     if(p == QPoint(xp,yp)){
-                        node = w->getNode();
+                        checkNode1 = w->getNode1();
+                        checkNode2 = w->getNode2();
                         goto Correct4;
                     }
 
                     break;
                 case 3:
                     if(p==QPoint(xp,yp) || p == QPoint(xp-l,yp)){
-                        node = w->getNode();
+                        checkNode1 = w->getNode1();
+                        checkNode2 = w->getNode2();
                         goto Correct4;
                     }
 
                     break;
                 case 4:
                     if(p == QPoint(xp,yp-l)){
-                        node = w->getNode();
+                        checkNode1 = w->getNode1();
+                        checkNode2 = w->getNode2();
                         goto Correct4;
                     }
 
@@ -520,9 +584,9 @@ Correct3:
                 }
             }
 Correct4:
-            if(node != -1)
+            if(checkNode1 != -1)
             {
-                if(voltageAtNode(node) == std::max(voltageAtNode(r->getNode1()), voltageAtNode(r->getNode2()))){
+                if(voltageAtNode(checkNode1) == std::max(voltageAtNode(r->getNode1()), voltageAtNode(r->getNode2())) || voltageAtNode(checkNode2) == std::max(voltageAtNode(r->getNode1()), voltageAtNode(r->getNode2())) ){
                     r->setAngle(2);
                     r->setYCoord(r->getYCoord() - 1);
 
@@ -535,6 +599,7 @@ Correct4:
         }
     }
 }
+
 void Calc::setCurrentsOfResistorsAndSwitches()
 {
     for(auto r : resistors){
@@ -553,7 +618,7 @@ void Calc::setCurrentsOfResistorsAndSwitches()
 //TODO ook checken op switches
 void Calc::setCurrentsOfWires()
 {
-    //Joined vector met resistors and switches
+    //Joined vector with resistors and switches
     std::vector<std::shared_ptr<Component>> swAndR;
     swAndR.insert( swAndR.end(), resistors.begin(), resistors.end());
     swAndR.insert( swAndR.end(), switches.begin(), switches.end());
@@ -831,7 +896,7 @@ void Calc::setCurrentsOfStrayWires(){
 
                 }
 
-                    w->setCurrent(-curr);
+                w->setCurrent(-curr);
 
 
                 if(std::isinf(w->getCurrent()))
@@ -966,12 +1031,12 @@ std::vector<std::shared_ptr<Switch> > Calc::getSwitches() const
     return switches;
 }
 
-std::vector<std::shared_ptr<Component> > Calc::getSources() const
+std::vector<std::shared_ptr<Source> > Calc::getSources() const
 {
     return sources;
 }
 
-std::vector<std::shared_ptr<Component> > Calc::getResistors() const
+std::vector<std::shared_ptr<Resistor> > Calc::getResistors() const
 {
     return resistors;
 }

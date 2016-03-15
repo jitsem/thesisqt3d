@@ -129,8 +129,7 @@ Entity{
         console.log("number of sources, resistors", root.sources.length, root.resistors.length);
 
         setSol();    //show nodal solution on screen, for debugging
-        setMiddleX();
-        setMiddleY();
+        setMiddle(); //set camera position
 
     }
 
@@ -201,36 +200,34 @@ Entity{
         setSol();
     }
 
-    //Functions for getting middle of circuit
-    function setMiddleX(){
+    //Function for getting middle of circuit
+    function setMiddle(){
 
-        var MaxX = -1;
-        var MinX= 100000;
+    var MaxX = 1;
+    var MinX= 100000;
 
-        for(var i=0;i<wires.length;i++){
-            MaxX= Math.max(MaxX,wires[i].x);
-            MinX=Math.min(MinX,wires[i].x);
-
-        }
-
-        world3D.x = (((MaxX-MinX)/2)+MinX);
+    for(var i=0;i<wires.length;i++){
+        MaxX= Math.max(MaxX,wires[i].x);
+        MinX=Math.min(MinX,wires[i].x);
 
     }
-    function setMiddleY(){
 
-        var MaxY = -1;
-        var MinY= 100000;
 
-        for(var i=0;i<wires.length;i++){
-            MaxY= Math.max(MaxY,wires[i].y);
-            MinY=Math.min(MinY,wires[i].y);
 
-        }
 
-        world3D.y = (((MaxY-MinY)/2)+MinY);
+    var MaxY = 1;
+    var MinY= 100000;
+
+    for(var i=0;i<wires.length;i++){
+        MaxY= Math.max(MaxY,-wires[i].z);
+        MinY=Math.min(MinY,-wires[i].z);
 
     }
-}
+
+        setCam( (((MaxX-MinX)/2)+MinX), (((MaxY-MinY)/2)+MinY));
+
+    }
+    }
 
 
 
