@@ -50,6 +50,7 @@ MainWindow::MainWindow(QWidget *parent) :
 void MainWindow::delete3D()
 {
     view->close();
+    drawzoneWidget->drawCircuit();
     this->show();
 
 }
@@ -115,8 +116,10 @@ void MainWindow::on_actionNew_triggered()
 
     if(!fileName.isEmpty()){
 
+        calculator->emptyVectors();
         calculator->setFileName(fileName);
         calculator->writeBackToFile();  //Write to create file. TODO check of nodig
+        drawzoneWidget->drawCircuit();
         enableIcons();
 
     }

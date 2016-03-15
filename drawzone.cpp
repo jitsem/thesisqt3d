@@ -216,11 +216,15 @@ void DrawZone::mouseMoveEvent(QMouseEvent *event)
             < QApplication::startDragDistance())
         return;
 
-    component_lb *child = static_cast<component_lb*>(childAt(event->pos()));
+    component_lb *child = dynamic_cast<component_lb*>(childAt(event->pos()));
     if (!child)
         return;
-
-
+    QWidget *b =child->buddy();
+    if (b){
+        //b->hide();
+        b->close();
+        //delete b;
+    }
 
     QPixmap pixmap = *child->pixmap();
     float value = (*child).getValue();
@@ -228,6 +232,8 @@ void DrawZone::mouseMoveEvent(QMouseEvent *event)
     int type = (*child).getType();
     qint64 nr = (*child).getNr();
     int selected =(*child).getSelected();
+
+
 
     QByteArray itemData;
     QDataStream dataStream(&itemData, QIODevice::WriteOnly);
@@ -289,10 +295,10 @@ void DrawZone::dropEvent(QDropEvent *event)
         //check if there is no component already there
         component_lb *child;
         if (event->source()==this)
-            child = static_cast<component_lb*>(childAt(event->pos()));
+            child = dynamic_cast<component_lb*>(childAt(event->pos()));
         else
             //TODO als het ding van de lijst komt de juiste positie voor child vinden
-            child = static_cast<component_lb*>(childAt(event->pos().rx()-100,event->pos().ry()));
+            child = dynamic_cast<component_lb*>(childAt(event->pos().rx()-100,event->pos().ry()));
 
 
         newIcon->move(event->pos() - offset);
@@ -305,6 +311,25 @@ void DrawZone::dropEvent(QDropEvent *event)
         //TODO display values next to components
         updateNodePositions();
         //move new component to nearest multiple of 50 pixels. (for every angle!!)
+        if (newIcon->getType()==0 || newIcon->getType()==1){
+            QLabel    *valueLabel = new QLabel(QString::number(newIcon->getValue()), this);
+            switch (newIcon->getAngle()){
+            case 1 :
+                valueLabel->move(roundUp(newIcon->getNode1x(),50),roundUp(newIcon->getNode1y(),50)-newIcon->height()/2);
+                break;
+            case 2:
+                valueLabel->move(roundUp(newIcon->getNode1x(),50)-(newIcon->width()/2),roundUp(newIcon->getNode2y(),50));
+                break;
+            case 3:(
+                valueLabel->move(roundUp(newIcon->getNode2x(),50),roundUp(newIcon->getNode1y(),50)-newIcon->height()/2));
+                break;
+            case 4:
+                valueLabel->move(roundUp(newIcon->getNode1x(),50)-(newIcon->width()/2),roundUp(newIcon->getNode1y(),50));
+                break;
+            }
+            newIcon->setBuddy(valueLabel);
+            valueLabel->show();
+        }
         switch (newIcon->getAngle()){
         case 1 :
             newIcon->move(roundUp(newIcon->getNode1x(),50),roundUp(newIcon->getNode1y(),50)-newIcon->height()/2);
@@ -326,9 +351,8 @@ void DrawZone::dropEvent(QDropEvent *event)
             msgBox.exec();
         }
         updateNodePositions();
-        QLabel    *valueLabel = new QLabel(QString::number(newIcon->getValue()), this);
-        valueLabel->setBuddy(newIcon);
-        valueLabel->show();
+
+
         if(child){
             //TODO check if direction is oposite!
             if((newIcon->getNode1x()==child->getNode1x())&&(newIcon->getNode1y()==child->getNode1y())&&(newIcon->getNode2x()==child->getNode2x())&&(newIcon->getNode2y()==child->getNode2y())){
@@ -364,7 +388,7 @@ void DrawZone::dropEvent(QDropEvent *event)
 }
 void DrawZone::mousePressEvent(QMouseEvent *event)
 {
-    component_lb *child = static_cast<component_lb*>(childAt(event->pos()));
+    component_lb *child = dynamic_cast<component_lb*>(childAt(event->pos()));
     if (!child){
         QList<component_lb*> list = this->findChildren<component_lb *>();
         foreach(component_lb *w, list) {
@@ -380,13 +404,14 @@ void DrawZone::mousePressEvent(QMouseEvent *event)
 }
 void DrawZone::mouseReleaseEvent(QMouseEvent *event)
 {
-    component_lb *child = static_cast<component_lb*>(childAt(event->pos()));
+    component_lb *child = dynamic_cast<component_lb*>(childAt(event->pos()));
     if (!child)
         return;
     if (event->pos()!=dragStartPosition){
         qDebug()<<"ignored move";
         return;
     }
+    //if (child->is)
     if(!(child->getSelected())){
         child->setSelected(1);
         //kleur object grijs
@@ -446,6 +471,7 @@ component_lb *DrawZone::removeGray(component_lb &child){
 }
 component_lb *DrawZone::setGray(component_lb &child)
 {
+
     QPixmap tempPixmap = *(child.pixmap());
     QPainter painter;
     painter.begin(&tempPixmap);
@@ -705,6 +731,7 @@ void DrawZone::writeToVectors()
         case 2:
         {
             auto wir = std::make_shared<Wire>(w->getNode1x()/50,w->getNode1y()/50,angle,1,w->getN2());
+            wir->setValue(w->getValue());
             c->addWire(wir);
             break;
         }
@@ -799,7 +826,6 @@ void DrawZone::drawCircuit()
             newIcon->setAttribute(Qt::WA_DeleteOnClose);
             newIcon->setFocusPolicy(Qt::StrongFocus);
             newIcon->setNr(qint64(newIcon));
-
             updateNodePositions();
 
             //TODO if already component on the same spot, ignore or smth
@@ -879,7 +905,7 @@ void DrawZone::drawCircuit()
 
         //TODO if already component on the same spot, ignore or smth
         //TODO display values next to components
-
+        addValueToComponent(newIcon);
 
     }
 
@@ -942,6 +968,7 @@ void DrawZone::drawCircuit()
 
         //TODO if already component on the same spot, ignore or smth
         //TODO display values next to components
+        addValueToComponent(newIcon);
 
 
     }
@@ -1003,13 +1030,36 @@ void DrawZone::drawCircuit()
 
         updateNodePositions();
 
+
         //TODO if already component on the same spot, ignore or smth
         //TODO display values next to components
 
-
     }
 
+
 }
+void DrawZone::addValueToComponent(component_lb * &newIcon){
+    if(newIcon->getType()==0 || newIcon->getType()==1){
+        QLabel    *valueLabel = new QLabel(QString::number(newIcon->getValue()), this);
+        switch (newIcon->getAngle()){
+        case 1 :
+            valueLabel->move(roundUp(newIcon->getNode1x(),50),roundUp(newIcon->getNode1y(),50)-newIcon->height()/2);
+            break;
+        case 2:
+            valueLabel->move(roundUp(newIcon->getNode1x(),50)-(newIcon->width()/2),roundUp(newIcon->getNode2y(),50));
+            break;
+        case 3:(
+            valueLabel->move(roundUp(newIcon->getNode2x(),50),roundUp(newIcon->getNode1y(),50)-newIcon->height()/2));
+            break;
+        case 4:
+            valueLabel->move(roundUp(newIcon->getNode1x(),50)-(newIcon->width()/2),roundUp(newIcon->getNode1y(),50));
+            break;
+        }
+        newIcon->setBuddy(valueLabel);
+        valueLabel->show();
+    }
+}
+
 void DrawZone::rotateToAngle(component_lb &child){
 
     int curangle=child.getAngle();
@@ -1076,7 +1126,7 @@ void DrawZone::mouseDoubleClickEvent( QMouseEvent * event )
 {
     if ( event->button() == Qt::LeftButton )
     {
-        component_lb *child = static_cast<component_lb*>(childAt(event->pos()));
+        component_lb *child = dynamic_cast<component_lb*>(childAt(event->pos()));
         if (child!=nullptr){
             child->setValue(QInputDialog::getDouble(this,"tis voor aan te passen","enter new value here",child->getValue(),-2147483647,2147483647,2));
 

@@ -199,57 +199,6 @@ Item {
 
 
 
-    //Objects for saving edits
-    Button{
-        id:saveButton
-        width: 50; height: 50
-        anchors.top: zoomOut.bottom
-        anchors.topMargin: 10
-        anchors.right:parent.right
-        iconSource: "qrc:/assets/icons/svg/inbox-symbol.svg"
-        onClicked: {
-
-            calculator.writeBackToFile();
-            saveComfirm.visible = true;
-            saveComfirmTimer.start();
-
-
-        }
-        style: butStyle
-
-
-    }
-    Rectangle{
-        id:saveComfirm
-        visible: false
-        width: 100; height: 100
-        color:"steelblue"
-        anchors.bottom: parent.bottom
-        anchors.right:parent.right
-        anchors.bottomMargin: 15
-        anchors.rightMargin: 15
-
-        Image {
-            width: 50; height: 50
-            anchors.left:parent.left
-            anchors.top:parent.top
-            anchors.leftMargin: 25
-            anchors.topMargin: 25
-            fillMode: Image.PreserveAspectFit
-            smooth: true
-            source: "qrc:/assets/icons/svg/mark-ribbon.svg"
-        }
-
-    }
-
-    Timer{
-        id:saveComfirmTimer
-        interval: 4000;
-        running: false;
-        repeat: false;
-        onTriggered:  saveComfirm.visible = false
-
-    }
 
 
 

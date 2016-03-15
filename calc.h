@@ -110,6 +110,8 @@ public:
     std::vector<std::shared_ptr<Resistor> > getResistors() const;
     std::vector<std::shared_ptr<Source> > getSources() const;
     std::vector<std::shared_ptr<Switch> > getSwitches() const;
+
+    //Empty all vectors
     void emptyVectors();
 
 
