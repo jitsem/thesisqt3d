@@ -2,7 +2,8 @@
 
 //TODO Overerving deftiger maken
 
-Component::Component()
+Component::Component():
+   isAdjustable(true),beginvalue(value), stepSize(5.0)
 {
 
 }
@@ -82,3 +83,40 @@ void Component::setValue(float value)
 {
     this->value=value;
 }
+
+//Functions for other teams game elements
+bool Component::getIsAdjustable() const
+{
+    return isAdjustable;
+}
+
+void Component::setIsAdjustable(bool value)
+{
+    isAdjustable = value;
+}
+
+float Component::getBeginvalue() const
+{
+    return beginvalue;
+}
+
+void Component::setBeginvalue(float value)
+{
+    beginvalue = value;
+}
+
+float Component::getStepSize() const
+{
+    return stepSize;
+}
+
+void Component::setStepSize(float value)
+{
+    stepSize = value;
+}
+
+int Component::getLength()
+{
+    return 1;
+}
+

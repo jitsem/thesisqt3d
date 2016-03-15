@@ -86,6 +86,8 @@ void MainWindow::on_action3D_Preview_triggered()
     //Check if cicuit is good
     if(drawzoneWidget->checkClosedCircuit()){
 
+        drawzoneWidget->writeToVectors();
+
         this->hide();
         view = new QQuickView;
         view->engine()->rootContext()->setContextProperty(QStringLiteral("_window"), view);

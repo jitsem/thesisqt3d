@@ -7,6 +7,7 @@ Wire::Wire(int x, int y, int ang, int length, int node, float current)
     xCoord=x;
     angle=ang;
     yCoord=y;
+
 }
 
 
@@ -29,4 +30,14 @@ int Wire::getNode() const
 void Wire::setNode(int value)
 {
     node = value;
+}
+
+int Wire::getNode1() const
+{
+    return getNode();
+}
+
+int Wire::getNode2() const
+{
+    return getNode();
 }

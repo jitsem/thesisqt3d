@@ -29,9 +29,26 @@ public:
     virtual float getCurrent() const;
     virtual void setCurrent(float value);
 
+    virtual bool getIsAdjustable() const;
+    virtual void setIsAdjustable(bool value);
+
+    virtual float getBeginvalue() const;
+    virtual void setBeginvalue(float value);
+
+    virtual float getStepSize() const;
+    virtual void setStepSize(float value);
+
+    //For non-wires, returns 1
+    virtual int getLength();
+
 protected:
     float value,current;
     int angle,xCoord,yCoord;
+
+    // Compabiltiy with other team (game elements)
+    bool isAdjustable;
+    float beginvalue;
+    float stepSize;
 };
 
 #endif // COMPONENT_H
