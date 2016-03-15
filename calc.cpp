@@ -95,11 +95,12 @@ void Calc::emptyVectors(){
     sources.clear();
     switches.clear();
     wires.clear();
+    goals.clear();
 }
 
 void Calc::readFile()
 {
-    //Clear all vectors
+
     wires.clear();
     sources.clear();
     resistors.clear();
@@ -219,6 +220,7 @@ void Calc::process_wire_line(QString &lijn)
         int length=wireParams.at(4).toInt();
         int node=wireParams.at(3).toInt();
         auto w =std::make_shared<Wire>(x,y,angle,length,node);
+        w->setValue(wireParams.at(5).toFloat());
         wires.push_back(w);
 
     }
@@ -324,7 +326,7 @@ void Calc::writeBackToFile()
     out <<"*w\n";
     for (auto wire:wires){
         out<<"*"<<"w"<< wire->getAngle() <<" "<< wire->getXCoord() << " "<< wire->getYCoord()
-          <<" "<< wire->getNode() << " " << wire->getLength() << "\n";
+          <<" "<< wire->getNode() << " " << wire->getLength() << " " << wire->getValue()<< "\n";
     }
     out <<"*/w\n";
 

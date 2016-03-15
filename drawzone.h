@@ -26,6 +26,8 @@ public:
     void calc_nodes();
     void writeToVectors();
 
+    void addValueToComponent(component_lb *&newIcon);
+
 public slots:
     void slotTriggeredRotate();
     void slotTriggeredDelete();
