@@ -5,7 +5,7 @@
 class Wire : public Component
 {
 public:
-    Wire(int x, int y, int ang, int length, int node, float current=0.0);
+    Wire(float v, int x, int y, int ang, int length, int node, float current=0.0, int isG=0);
 
     int getLength() const;
     void setLength(int value);
@@ -18,9 +18,14 @@ public:
     int getNode1() const;
     int getNode2() const;
 
+
+    int getIsGoal() const;
+    void setIsGoal(int value);
+
 private:
     int length,node;
     float current;
+    int isGoal;
 };
 
 #endif // WIRE_H

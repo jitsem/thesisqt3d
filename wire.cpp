@@ -1,12 +1,9 @@
 #include "wire.h"
 
-Wire::Wire(int x, int y, int ang, int length, int node, float current)
-    :length(length),current(current),node(node)
+Wire::Wire(float v, int x, int y, int ang, int length, int node, float current, int isG)
+    :Component(v,x,y,ang),length(length),current(current),node(node),isGoal(isG)
 {
-    value=0;
-    xCoord=x;
-    angle=ang;
-    yCoord=y;
+
 
 }
 
@@ -40,4 +37,14 @@ int Wire::getNode1() const
 int Wire::getNode2() const
 {
     return getNode();
+}
+
+int Wire::getIsGoal() const
+{
+    return isGoal;
+}
+
+void Wire::setIsGoal(int value)
+{
+    isGoal = value;
 }

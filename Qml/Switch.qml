@@ -20,6 +20,9 @@ Entity{
     //Ambient color for highlighting
     property var switchColor: "orange"
 
+    //Nr for switching
+    property real switchNr
+
     components: [finmesh,fintrans]
 
     Entity{
@@ -57,7 +60,7 @@ Entity{
                 id:picker
                 onClicked: {
 
-                    calculator.toggleSwitch(0);
+                    calculator.toggleSwitch(switchNr);
                     world3D.generator.redrawLevel();
                 }
 

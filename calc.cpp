@@ -214,13 +214,14 @@ void Calc::process_wire_line(QString &lijn)
     for (QStringList::iterator it = list.begin(); it != list.end(); ++it) {
         QString current = *it;
         QStringList wireParams=current.split(" ",QString::SkipEmptyParts);
+        int angle=wireParams.at(0).toInt();
         int x=wireParams.at(1).toInt();
         int y=wireParams.at(2).toInt();
-        int angle=wireParams.at(0).toInt();
-        int length=wireParams.at(4).toInt();
         int node=wireParams.at(3).toInt();
-        auto w =std::make_shared<Wire>(x,y,angle,length,node);
-        w->setValue(wireParams.at(5).toFloat());
+        int length=wireParams.at(4).toInt();
+        float val= wireParams.at(5).toFloat();
+        int isGoal =wireParams.at(6).toInt();
+        auto w =std::make_shared<Wire>(val,x,y,angle,length,node,0.0,isGoal);
         wires.push_back(w);
 
     }
@@ -232,13 +233,17 @@ void Calc::process_resistor_line(QString &lijn)
     lijn.replace("r","",Qt::CaseSensitivity::CaseInsensitive); //remove r
     QStringList list=lijn.split(" ",QString::SkipEmptyParts);
 
-    int x=list.at(5).toInt();
-    int y=list.at(6).toInt();
-    int angle=list.at(7).toInt();
     int node1=list.at(1).toInt();
     int node2=list.at(2).toInt();
     float v=list.at(3).toFloat();
-    auto r =std::make_shared<Resistor>(v,node1,node2,x,y,angle);
+    int x=list.at(5).toInt();
+    int y=list.at(6).toInt();
+    int angle=list.at(7).toInt();
+    int adjust=list.at(8).toInt();
+    float begin=list.at(9).toFloat();
+    float stepSize = list.at(10).toFloat();
+
+    auto r =std::make_shared<Resistor>(v,node1,node2,x,y,angle,adjust,begin,stepSize);
     resistors.push_back(r);
 
 }
@@ -262,13 +267,18 @@ void Calc::process_source_line(QString &lijn)
 
     lijn.replace("v","",Qt::CaseSensitivity::CaseInsensitive); //remove v
     QStringList list=lijn.split(" ",QString::SkipEmptyParts);
-    int x=list.at(5).toInt();
-    int y=list.at(6).toInt();
-    int angle=list.at(7).toInt();
+
     int nodep=list.at(1).toInt();
     int nodem=list.at(2).toInt();
     float v=list.at(3).toFloat();
-    auto s =std::make_shared<Source>(v,nodep,nodem,x,y,angle);
+    int x=list.at(5).toInt();
+    int y=list.at(6).toInt();
+    int angle=list.at(7).toInt();
+    int adjust=list.at(8).toInt();
+    float begin=list.at(9).toFloat();
+    float stepSize = list.at(10).toFloat();
+
+    auto s =std::make_shared<Source>(v,nodep,nodem,x,y,angle,adjust,begin,stepSize);
     sources.push_back(s);
 
 
@@ -326,7 +336,7 @@ void Calc::writeBackToFile()
     out <<"*w\n";
     for (auto wire:wires){
         out<<"*"<<"w"<< wire->getAngle() <<" "<< wire->getXCoord() << " "<< wire->getYCoord()
-          <<" "<< wire->getNode() << " " << wire->getLength() << " " << wire->getValue()<< "\n";
+          <<" "<< wire->getNode() << " " << wire->getLength() << " " << wire->getValue()<<" "<<wire->getIsGoal()<< "\n";
     }
     out <<"*/w\n";
 
@@ -345,13 +355,15 @@ void Calc::writeBackToFile()
     //TODO naam resistor: bv. R1
     for (auto res:resistors){
         out<<"R1 "<<res->getNode1()<<" "<<res->getNode2()<<" "<<res->getValue()<< " *sj "
-          << res->getXCoord() << " "<< res->getYCoord()<<" "<< res->getAngle() <<" */sj\n";
+          << res->getXCoord() << " "<< res->getYCoord()<<" "<< res->getAngle()<< " "<< res->getIsAdjustable()<<" "<<res->getBeginValue()
+          << " " <<res->getStepSize()<<" */sj\n";
     }
 
     //TODO naam Bron: bv. V1
     for (auto source:sources){
         out<<"V1 "<<source->getNodep()<<" "<<source->getNodem()<<" "<<source->getValue()<< "v *sj "
-          << source->getXCoord() << " "<< source->getYCoord()<<" "<< source->getAngle() <<" */sj\n";
+          << source->getXCoord() << " "<< source->getYCoord()<<" "<< source->getAngle() << " "<< source->getIsAdjustable()
+          <<" "<<source->getBeginValue()<< " " <<source->getStepSize()<<" */sj\n";
     }
 
     out <<".end\n";
@@ -834,12 +846,24 @@ void Calc::setCurrentsOfStrayWires(){
 
     //Zolang er er nog een weerstand met oneindigestromen is, in while blijven
     bool inf = true;
+    std::vector<std::shared_ptr<Wire>> strayWires;
     while(inf){
 
         inf = false;
 
+        //TODO dirty workaround
+        strayWires.clear();
+        for(auto wi:wires){
+          if(std::isinf(wi->getCurrent())){
+              strayWires.push_back(wi);
+              if(wi->getAngle() == 2){
+                  wi->setAngle(4);
+                  wi->setYCoord(wi->getYCoord()+1);
+              }
+          }
+        }
         //Check alle draden waar nog geen stroom aan toegekend is
-        for(auto w:wires){
+        for(auto w:strayWires){
             if(std::isinf(w->getCurrent())){
                 QPoint pos(w->getXCoord(),w->getYCoord());
                 float curr = 0;
@@ -865,7 +889,7 @@ void Calc::setCurrentsOfStrayWires(){
                             if(pos==QPoint(xp,yp)){
                                 curr += wire->getCurrent();
                             }
-                            else if ( pos== QPoint(xp,yp+l)){
+                            else if (pos== QPoint(xp,yp+l)){
                                 curr -= wire->getCurrent();
                             }
 
@@ -904,8 +928,10 @@ void Calc::setCurrentsOfStrayWires(){
                 if(std::isinf(w->getCurrent()))
                     inf=true; //Blijf in lus
 
+
             }
         }
+
     }
 
 

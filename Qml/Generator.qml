@@ -114,7 +114,8 @@ Entity{
 
             var minVolt = Math.min(calculator.voltageAtNode(calculator.node1AtSwitch(i)),calculator.voltageAtNode(calculator.node2AtSwitch(i)));
 
-            var swi = o.switchFactory.createObject(null,{"s":70,
+            var swi = o.switchFactory.createObject(null,{"switchNr":i,
+                                                       "s":70,
                                                        "l": 1*root.sf,
                                                        "x":calculator.getXCoordOfSwitch(i)*root.sf,
                                                        "z":-calculator.getYCoordOfSwitch(i)*root.sf,

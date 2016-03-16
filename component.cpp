@@ -2,8 +2,8 @@
 
 //TODO Overerving deftiger maken
 
-Component::Component():
-   isAdjustable(true),beginvalue(value), stepSize(5.0)
+Component::Component(float val,int x,int y,int ang,int isAdj,float begValue,float sS):
+   value(val),xCoord(x),yCoord(y),angle(ang),isAdjustable(isAdj),beginvalue(begValue), stepSize(sS)
 {
 
 }
@@ -69,11 +69,6 @@ void Component::setCurrent(float value)
 }
 
 
-Component::Component(float v)
-{
-    this->value = v;
-}
-
 float Component::getValue() const
 {
     return value;
@@ -85,22 +80,22 @@ void Component::setValue(float value)
 }
 
 //Functions for other teams game elements
-bool Component::getIsAdjustable() const
+int Component::getIsAdjustable() const
 {
     return isAdjustable;
 }
 
-void Component::setIsAdjustable(bool value)
+void Component::setIsAdjustable(int value)
 {
     isAdjustable = value;
 }
 
-float Component::getBeginvalue() const
+float Component::getBeginValue() const
 {
     return beginvalue;
 }
 
-void Component::setBeginvalue(float value)
+void Component::setBeginValue(float value)
 {
     beginvalue = value;
 }
