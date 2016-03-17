@@ -100,11 +100,21 @@ void MainWindow::on_actionOpen_File_triggered()
 
 void MainWindow::on_action3D_Preview_triggered()
 {
-    //Check if cicuit is good
-    if(drawzoneWidget->checkClosedCircuit()){
+
+    if (!drawzoneWidget->checkClosedCircuit()||!drawzoneWidget->getGroundpresent()){
+        QMessageBox msgBox;
+        if(!drawzoneWidget->checkClosedCircuit())
+            msgBox.setText("Circuit not closed!");
+        else
+            msgBox.setText("You have to ground a wire to complete the circuit");
+        msgBox.setInformativeText("3D preview is not possible");
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.setDefaultButton(QMessageBox::Ok);
+        msgBox.exec();
+    }
+    else {
 
         drawzoneWidget->writeToVectors();
-
         this->hide();
         view = new QQuickView;
         view->engine()->rootContext()->setContextProperty(QStringLiteral("_window"), view);
@@ -113,14 +123,6 @@ void MainWindow::on_action3D_Preview_triggered()
         view->setResizeMode(QQuickView::SizeRootObjectToView);
         view->setSource(QUrl("qrc:/Qml/CircuitView.qml"));
         view->showFullScreen();
-    }
-    else{
-        QMessageBox msgBox;
-        msgBox.setText("Circuit not closed!");
-        msgBox.setInformativeText("3D preview is not possible");
-        msgBox.setStandardButtons(QMessageBox::Ok);
-        msgBox.setDefaultButton(QMessageBox::Ok);
-        int ret = msgBox.exec();
     }
 
 }

@@ -221,7 +221,7 @@
    </property>
    <property name="icon">
     <iconset resource="levelbuilder.qrc">
-     <normaloff>:/assets/icons/png/redo-arrow.png</normaloff>:/assets/icons/png/redo-arrow.png</iconset>
+     <normaloff>:/assets/gnd.png</normaloff>:/assets/gnd.png</iconset>
    </property>
    <property name="text">
     <string>Connect</string>

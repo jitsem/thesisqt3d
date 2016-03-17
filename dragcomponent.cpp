@@ -57,12 +57,7 @@ DragComponent::DragComponent(QWidget *parent)
     sw_op->setAttribute(Qt::WA_DeleteOnClose);
     sw_op->show();
 
-    component_lb *gnd = new component_lb(this,0,0,0,0,0,1,4);
-    QPixmap grnd=QPixmap(":/assets/gnd.png");
-    gnd->setPixmap(grnd);
-    gnd->setScaledContents(true);
-    gnd->setAttribute(Qt::WA_DeleteOnClose);
-    gnd->show();
+
 
     //foreach component
     //components.append(resistorIcon);
@@ -70,13 +65,10 @@ DragComponent::DragComponent(QWidget *parent)
     components.append(res1);
     components.append(wire1);
     components.append(sw_op);
-    components.append(gnd);
     mainLayout->addWidget(components[0]);
     mainLayout->addWidget(components[1]);
     mainLayout->addWidget(components[2]);
     mainLayout->addWidget(components[3]);
-    mainLayout->addWidget(components[4]);
-
 
 }
 
