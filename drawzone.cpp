@@ -21,6 +21,7 @@
 #include <QCheckBox>
 #include <QDialogButtonBox>
 #include <QDoubleSpinBox>
+#include <QDialog>
 #include <set>
 
 
@@ -1144,6 +1145,7 @@ void DrawZone::mouseDoubleClickEvent( QMouseEvent * event )
                 vbox->addWidget(buttonBox);
 
                 d->setLayout(vbox);
+                d->setWindowTitle("Set Component Values");
 
                 int result = d->exec();
                 if(result == QDialog::Accepted)

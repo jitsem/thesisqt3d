@@ -38,7 +38,7 @@ private slots:
     void on_actionOpen_File_triggered();
     void on_action3D_Preview_triggered();
     void on_actionNew_triggered();
-
+    void on_actionEdit_Goals_triggered();
 
 
 private:

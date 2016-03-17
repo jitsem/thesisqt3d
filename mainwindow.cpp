@@ -13,6 +13,9 @@
 #include <QDebug>
 #include <QCursor>
 #include <QFileDialog>
+#include <QDialog>
+#include <QSpinBox>
+#include <QDialogButtonBox>
 
 
 #include "dragcomponent.h"
@@ -74,11 +77,24 @@ void MainWindow::on_actionOpen_File_triggered()
                                                     tr("Open Level"), QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation), tr("Levels (*.sj)"),0,QFileDialog::ReadOnly);
 
     if(!fileName.isEmpty()){
-        enableIcons();
+
+        auto temp = calculator->getFileName();
         calculator->setFileName(fileName);
 
-        calculator->readFile();
-        drawzoneWidget->drawCircuit();
+        bool succes = calculator->readFile();
+        if(succes){
+            enableIcons();
+            drawzoneWidget->drawCircuit();
+        }
+        else{
+            calculator->setFileName(temp);
+            QMessageBox msgBox;
+            msgBox.setText("Error!");
+            msgBox.setInformativeText("Invalid File!");
+            msgBox.setStandardButtons(QMessageBox::Ok);
+            msgBox.setDefaultButton(QMessageBox::Ok);
+            int ret = msgBox.exec();
+        }
     }
 }
 
@@ -125,6 +141,54 @@ void MainWindow::on_actionNew_triggered()
     }
 }
 
+void MainWindow::on_actionEdit_Goals_triggered()
+{
+    //Make dialog for setting variables
+    QDialog * d = new QDialog();
+    QVBoxLayout * vbox = new QVBoxLayout();
+
+    //Box for 3 start
+    QLabel * label3Star = new QLabel("Number of clicks for 3 stars");
+    QSpinBox * threeStarValue = new QSpinBox();
+    threeStarValue->setRange(0,100);
+    threeStarValue->setValue(calculator->getThreeStar());
+
+    //Box for 3 start
+    QLabel * label2Star = new QLabel("Number of clicks for 2 stars");
+    QSpinBox * twoStarValue = new QSpinBox();
+    twoStarValue->setRange(0,100);
+    twoStarValue->setValue(calculator->getTwoStar());
+    QDialogButtonBox * buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok
+                                                        | QDialogButtonBox::Cancel);
+
+
+
+
+    QObject::connect(buttonBox, SIGNAL(accepted()), d, SLOT(accept()));
+    QObject::connect(buttonBox, SIGNAL(rejected()), d, SLOT(reject()));
+
+
+    vbox->addWidget(label3Star);
+    vbox->addWidget(threeStarValue);
+    vbox->addWidget(label2Star);
+    vbox->addWidget(twoStarValue);
+    vbox->addWidget(buttonBox);
+
+    d->setLayout(vbox);
+    d->setWindowTitle("Edit Level Goals");
+
+    int result = d->exec();
+    if(result == QDialog::Accepted)
+    {
+        calculator->setThreeStar(threeStarValue->value());
+        calculator->setTwoStar(twoStarValue->value());
+    }
+
+    //Clean up
+    delete d,vbox,label3Star,threeStarValue,label2Star,twoStarValue,buttonBox;
+}
+
+
 void MainWindow::enableIcons(){
 
     //Enable some buttons
@@ -134,6 +198,7 @@ void MainWindow::enableIcons(){
     ui->actionConnect->setEnabled(true);
     ui->actionDelete->setEnabled(true);
     ui->actionRotate->setEnabled(true);
+    ui->actionEdit_Goals->setEnabled(true);
 
     //Enable editor
     ui->widget_container->setEnabled(true);
