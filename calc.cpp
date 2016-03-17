@@ -98,7 +98,7 @@ void Calc::emptyVectors(){
     goals.clear();
 }
 
-void Calc::readFile()
+bool Calc::readFile()
 {
 
     wires.clear();
@@ -126,8 +126,10 @@ void Calc::readFile()
                         switch(line.at(1).toLower().toLatin1()){
 
                         case's':
-                            if(line.at(2).toLower().toLatin1()=='w' && line.length()>4)
-                                process_switch_line(line);
+                            if(line.at(2).toLower().toLatin1()=='w' && line.length()>4){
+                                if(!process_switch_line(line))
+                                    return false;
+                            }
                             else{
                                 for (int i=2;i<line.length();i++){
                                     if(line.at(i).toLower().toLatin1()=='j'){ //TODO check if index is too big necessary?
@@ -138,18 +140,20 @@ void Calc::readFile()
                             break;
 
                         case 'g':
-                            process_goal_line(line);
+                            if(!process_goal_line(line))
+                                return false;
                             break;
 
                         case 'w':
                             if(line.length()>2){
-
-                                process_wire_line(line);
+                                if(!process_wire_line(line))
+                                    return false;
 
                             }
                             break;
                         case 'c':
-                            process_click_line(line);
+                            if(!process_click_line(line))
+                                return false;
                             break;
                         case '/':
                             if(line.length()>2){
@@ -158,10 +162,14 @@ void Calc::readFile()
                             }
 
                             break;
+                        case'*':
+                            //ignore, for comments
+                            break;
 
 
                         default:
                             qDebug()<<"something went wrong" <<"\n";
+                            return false;
                             break;
                         }
                     }
@@ -180,12 +188,14 @@ void Calc::readFile()
 
                 case 'r':
                     //do for resistor
-                    process_resistor_line(line);
+                    if(!process_resistor_line(line))
+                        return false;
                     break;
 
                 case 'v':
                     //do for source
-                    process_source_line(line);
+                    if(!process_source_line(line))
+                        return false;
                     break;
 
                 case '.':
@@ -194,6 +204,7 @@ void Calc::readFile()
 
                 default :
                     qDebug()<<"something went wrong" <<"\n";
+                    return false;
                     break;
                 }
             }
@@ -201,10 +212,12 @@ void Calc::readFile()
 
         }
         file->close();
+        return true;
     }
+    return false;
 }
 
-void Calc::process_wire_line(QString &lijn)
+bool Calc::process_wire_line(QString &lijn)
 {
     std::vector<std::shared_ptr<Wire>> wir;
     lijn.replace("*","",Qt::CaseSensitivity::CaseInsensitive); //remove *
@@ -214,96 +227,143 @@ void Calc::process_wire_line(QString &lijn)
     for (QStringList::iterator it = list.begin(); it != list.end(); ++it) {
         QString current = *it;
         QStringList wireParams=current.split(" ",QString::SkipEmptyParts);
-        int x=wireParams.at(1).toInt();
-        int y=wireParams.at(2).toInt();
-        int angle=wireParams.at(0).toInt();
-        int length=wireParams.at(4).toInt();
-        int node=wireParams.at(3).toInt();
-        auto w =std::make_shared<Wire>(x,y,angle,length,node);
-        w->setValue(wireParams.at(5).toFloat());
-        wires.push_back(w);
-
+        if(wireParams.size() == 7){   //Check for right amount of parameters
+            int angle=wireParams.at(0).toInt();
+            int x=wireParams.at(1).toInt();
+            int y=wireParams.at(2).toInt();
+            int node=wireParams.at(3).toInt();
+            int length=wireParams.at(4).toInt();
+            float val= wireParams.at(5).toFloat();
+            int isGoal =wireParams.at(6).toInt();
+            auto w =std::make_shared<Wire>(val,x,y,angle,length,node,0.0,isGoal);
+            wires.push_back(w);
+            return true;
+        }
+        else{
+            qDebug()<<"Bad wire";
+            return false;
+        }
     }
 
 }
-void Calc::process_resistor_line(QString &lijn)
+bool Calc::process_resistor_line(QString &lijn)
 {
 
     lijn.replace("r","",Qt::CaseSensitivity::CaseInsensitive); //remove r
     QStringList list=lijn.split(" ",QString::SkipEmptyParts);
 
-    int x=list.at(5).toInt();
-    int y=list.at(6).toInt();
-    int angle=list.at(7).toInt();
-    int node1=list.at(1).toInt();
-    int node2=list.at(2).toInt();
-    float v=list.at(3).toFloat();
-    auto r =std::make_shared<Resistor>(v,node1,node2,x,y,angle);
-    resistors.push_back(r);
+    if(list.size()==12){
 
+        int node1=list.at(1).toInt();
+        int node2=list.at(2).toInt();
+        float v=list.at(3).toFloat();
+        int x=list.at(5).toInt();
+        int y=list.at(6).toInt();
+        int angle=list.at(7).toInt();
+        int adjust=list.at(8).toInt();
+        float begin=list.at(9).toFloat();
+        float stepSize = list.at(10).toFloat();
+        auto r =std::make_shared<Resistor>(v,node1,node2,x,y,angle,adjust,begin,stepSize);
+        resistors.push_back(r);
+        return true;
+    }
+    else{
+        qDebug()<<"Bad resistor";
+        return false;
+    }
 }
-void Calc::process_switch_line(QString &lijn)
+bool Calc::process_switch_line(QString &lijn)
 {
 
     lijn.replace("*sw","",Qt::CaseSensitivity::CaseInsensitive); //remove *sw
     QStringList list=lijn.split(" ",QString::SkipEmptyParts);
 
-    int x=list.at(1).toInt();
-    int y=list.at(2).toInt();
-    int angle=list.at(0).toInt();
-    int node1=list.at(3).toInt();
-    int node2=list.at(4).toInt();
-    auto sw =std::make_shared<Switch>(node1,node2,x,y,angle);
-    switches.push_back(sw);
-
+    if(list.size()==5){
+        int x=list.at(1).toInt();
+        int y=list.at(2).toInt();
+        int angle=list.at(0).toInt();
+        int node1=list.at(3).toInt();
+        int node2=list.at(4).toInt();
+        auto sw =std::make_shared<Switch>(node1,node2,x,y,angle);
+        switches.push_back(sw);
+        return true;
+    }
+    else{
+        qDebug()<<"Bad switch";
+        return false;
+    }
 }
-void Calc::process_source_line(QString &lijn)
+bool Calc::process_source_line(QString &lijn)
 {
 
     lijn.replace("v","",Qt::CaseSensitivity::CaseInsensitive); //remove v
     QStringList list=lijn.split(" ",QString::SkipEmptyParts);
-    int x=list.at(5).toInt();
-    int y=list.at(6).toInt();
-    int angle=list.at(7).toInt();
-    int nodep=list.at(1).toInt();
-    int nodem=list.at(2).toInt();
-    float v=list.at(3).toFloat();
-    auto s =std::make_shared<Source>(v,nodep,nodem,x,y,angle);
-    sources.push_back(s);
 
+    if(list.size()==12){
 
+        int nodep=list.at(1).toInt();
+        int nodem=list.at(2).toInt();
+        float v=list.at(3).toFloat();
+        int x=list.at(5).toInt();
+        int y=list.at(6).toInt();
+        int angle=list.at(7).toInt();
+        int adjust=list.at(8).toInt();
+        float begin=list.at(9).toFloat();
+        float stepSize = list.at(10).toFloat();
+
+        auto s =std::make_shared<Source>(v,nodep,nodem,x,y,angle,adjust,begin,stepSize);
+        sources.push_back(s);
+        return true;
+    }
+    else{
+        qDebug()<<"Bad source";
+        return false;
+    }
 }
 
-void Calc::process_goal_line(QString &lijn)
+bool Calc::process_goal_line(QString &lijn)
 {
 
     lijn.replace("*","",Qt::CaseSensitivity::CaseInsensitive); //remove *
     lijn.replace("g","",Qt::CaseSensitivity::CaseInsensitive); //remove g
     QStringList list=lijn.split(" ");
 
+    if(list.size()==2){
+        int x = list.at(0).toInt();
+        int y = list.at(1).toInt();
+        int node = list.at(2).toInt();
+        auto g = std::make_shared<Goal>(x,y,node);
+        goals.push_back(g);
+        return true;
+    }
+    else{
+        qDebug()<<"Bad Goal";
+        return false;
 
-    int x = list.at(0).toInt();
-    int y = list.at(1).toInt();
-    int node = list.at(2).toInt();
-    auto g = std::make_shared<Goal>(x,y,node);
-    goals.push_back(g);
-
+    }
 }
 
-void Calc::process_click_line(QString &lijn)
+bool Calc::process_click_line(QString &lijn)
 {
 
     lijn.replace("*","",Qt::CaseSensitivity::CaseInsensitive); //remove *
     lijn.replace("c","",Qt::CaseSensitivity::CaseInsensitive); //remove c
     QStringList list=lijn.split(" ");
 
-    twoStar = list.at(0).toInt();
-    threeStar = list.at(1).toInt();
+    if(list.size()==2){
+        twoStar = list.at(0).toInt();
+        threeStar = list.at(1).toInt();
+        return true;
+    }
+    else{
+        qDebug()<<"Bad clickGoal";
+        return false;
+    }
 }
 
 void Calc::writeBackToFile()
 {
-     //Rebuild file format from vectors in the Calc class
+    //Rebuild file format from vectors in the Calc class
 
     QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)){
@@ -326,7 +386,7 @@ void Calc::writeBackToFile()
     out <<"*w\n";
     for (auto wire:wires){
         out<<"*"<<"w"<< wire->getAngle() <<" "<< wire->getXCoord() << " "<< wire->getYCoord()
-          <<" "<< wire->getNode() << " " << wire->getLength() << " " << wire->getValue()<< "\n";
+          <<" "<< wire->getNode() << " " << wire->getLength() << " " << wire->getValue()<<" "<<wire->getIsGoal()<< "\n";
     }
     out <<"*/w\n";
 
@@ -345,13 +405,15 @@ void Calc::writeBackToFile()
     //TODO naam resistor: bv. R1
     for (auto res:resistors){
         out<<"R1 "<<res->getNode1()<<" "<<res->getNode2()<<" "<<res->getValue()<< " *sj "
-          << res->getXCoord() << " "<< res->getYCoord()<<" "<< res->getAngle() <<" */sj\n";
+          << res->getXCoord() << " "<< res->getYCoord()<<" "<< res->getAngle()<< " "<< res->getIsAdjustable()<<" "<<res->getBeginValue()
+          << " " <<res->getStepSize()<<" */sj\n";
     }
 
     //TODO naam Bron: bv. V1
     for (auto source:sources){
         out<<"V1 "<<source->getNodep()<<" "<<source->getNodem()<<" "<<source->getValue()<< "v *sj "
-          << source->getXCoord() << " "<< source->getYCoord()<<" "<< source->getAngle() <<" */sj\n";
+          << source->getXCoord() << " "<< source->getYCoord()<<" "<< source->getAngle() << " "<< source->getIsAdjustable()
+          <<" "<<source->getBeginValue()<< " " <<source->getStepSize()<<" */sj\n";
     }
 
     out <<".end\n";
@@ -834,12 +896,24 @@ void Calc::setCurrentsOfStrayWires(){
 
     //Zolang er er nog een weerstand met oneindigestromen is, in while blijven
     bool inf = true;
+    std::vector<std::shared_ptr<Wire>> strayWires;
     while(inf){
 
         inf = false;
 
+        //TODO dirty workaround
+        strayWires.clear();
+        for(auto wi:wires){
+            if(std::isinf(wi->getCurrent())){
+                strayWires.push_back(wi);
+                if(wi->getAngle() == 2){
+                    wi->setAngle(4);
+                    wi->setYCoord(wi->getYCoord()+1);
+                }
+            }
+        }
         //Check alle draden waar nog geen stroom aan toegekend is
-        for(auto w:wires){
+        for(auto w:strayWires){
             if(std::isinf(w->getCurrent())){
                 QPoint pos(w->getXCoord(),w->getYCoord());
                 float curr = 0;
@@ -865,7 +939,7 @@ void Calc::setCurrentsOfStrayWires(){
                             if(pos==QPoint(xp,yp)){
                                 curr += wire->getCurrent();
                             }
-                            else if ( pos== QPoint(xp,yp+l)){
+                            else if (pos== QPoint(xp,yp+l)){
                                 curr -= wire->getCurrent();
                             }
 
@@ -904,8 +978,10 @@ void Calc::setCurrentsOfStrayWires(){
                 if(std::isinf(w->getCurrent()))
                     inf=true; //Blijf in lus
 
+
             }
         }
+
     }
 
 
@@ -1026,6 +1102,38 @@ std::vector<float> Calc::computeNetwork(int  nrOfNodes)
 
 
 
+}
+
+std::vector<std::shared_ptr<Goal> > Calc::getGoals() const
+{
+    return goals;
+}
+
+bool Calc::addGoal(std::shared_ptr<Goal> g)
+{
+    auto size=goals.size();
+    goals.push_back(g);
+    return(size>goals.size());
+}
+
+int Calc::getThreeStar() const
+{
+    return threeStar;
+}
+
+void Calc::setThreeStar(int value)
+{
+    threeStar = value;
+}
+
+int Calc::getTwoStar() const
+{
+    return twoStar;
+}
+
+void Calc::setTwoStar(int value)
+{
+    twoStar = value;
 }
 
 std::vector<std::shared_ptr<Switch> > Calc::getSwitches() const

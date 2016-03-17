@@ -1,5 +1,5 @@
 TEMPLATE = app
-CONFIG += console c++11
+CONFIG += c++11
 
 QT+=qml quick widgets 3dcore 3dinput 3drender 3dquick xml svg quickwidgets
 

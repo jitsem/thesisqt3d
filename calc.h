@@ -89,16 +89,16 @@ public:
     void setCurrentsOfStrayWires();
 
     //Methodes for reading and writing file
-    Q_INVOKABLE void readFile();
+    Q_INVOKABLE bool readFile();
     Q_INVOKABLE void writeBackToFile();
 
     //Read line of levelfile when a component is declared
-    void process_wire_line(QString& lijn);
-    void process_resistor_line(QString &lijn);
-    void process_source_line(QString &lijn);
-    void process_switch_line(QString &lijn);
-    void process_goal_line(QString &lijn); //For other team
-    void process_click_line(QString &lijn); //For other team
+    bool process_wire_line(QString& lijn);
+    bool process_resistor_line(QString &lijn);
+    bool process_source_line(QString &lijn);
+    bool process_switch_line(QString &lijn);
+    bool process_goal_line(QString &lijn); //For other team
+    bool process_click_line(QString &lijn); //For other team
 
     //Set file path
     void setFileName(const QString &value);
@@ -116,6 +116,14 @@ public:
 
 
 
+    //Getters and setters for level Goals
+    int getTwoStar() const;
+    void setTwoStar(int value);
+
+    int getThreeStar() const;
+    void setThreeStar(int value);
+    std::vector<std::shared_ptr<Goal> > getGoals() const;
+    bool addGoal(std::shared_ptr<Goal> g);
 
 private:
 

@@ -1,8 +1,10 @@
 #include "component_lb.h"
 #include <QDebug>
 
-component_lb::component_lb(QWidget *parent, float val, int n1x, int n1y, int n2x, int n2y, int ang, int type, qint64 nr, int selected,int n1,int n2)
-    :QLabel(parent),value(val), node1x(n1x),node1y(n1y),node2x(n2x),node2y(n2y),angle(ang),type(type),nr(nr),selected(selected),n1(n1),n2(n2)
+component_lb::component_lb(QWidget *parent, float val, int n1x, int n1y, int n2x, int n2y, int ang, int type,
+                           qint64 nr, int selected, int n1, int n2, int adj, float beg, float ss, int go)
+    :QLabel(parent),value(val), node1x(n1x),node1y(n1y),node2x(n2x),node2y(n2y),angle(ang),
+      type(type),nr(nr),selected(selected),n1(n1),n2(n2),adjust(adj),begin(beg),stepSize(ss),goal(go)
 {
 
 
@@ -117,6 +119,46 @@ int component_lb::getN2() const
 void component_lb::setN2(int value)
 {
     n2 = value;
+}
+
+int component_lb::getAdjust() const
+{
+    return adjust;
+}
+
+void component_lb::setAdjust(int value)
+{
+    adjust = value;
+}
+
+float component_lb::getBegin() const
+{
+    return begin;
+}
+
+void component_lb::setBegin(float value)
+{
+    begin = value;
+}
+
+float component_lb::getStepSize() const
+{
+    return stepSize;
+}
+
+void component_lb::setStepSize(float value)
+{
+    stepSize = value;
+}
+
+int component_lb::getGoal() const
+{
+    return goal;
+}
+
+void component_lb::setGoal(int value)
+{
+    goal = value;
 }
 
 

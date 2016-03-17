@@ -49,6 +49,8 @@
     </property>
     <addaction name="actionRotate"/>
     <addaction name="actionDelete"/>
+    <addaction name="separator"/>
+    <addaction name="actionEdit_Goals"/>
    </widget>
    <widget class="QMenu" name="menu3D">
     <property name="title">
@@ -85,6 +87,7 @@
    <addaction name="actionRotate"/>
    <addaction name="actionDelete"/>
    <addaction name="actionConnect"/>
+   <addaction name="actionEdit_Goals"/>
    <addaction name="separator"/>
    <addaction name="action3D_Preview"/>
   </widget>
@@ -218,7 +221,7 @@
    </property>
    <property name="icon">
     <iconset resource="levelbuilder.qrc">
-     <normaloff>:/assets/icons/png/redo-arrow.png</normaloff>:/assets/icons/png/redo-arrow.png</iconset>
+     <normaloff>:/assets/gnd.png</normaloff>:/assets/gnd.png</iconset>
    </property>
    <property name="text">
     <string>Connect</string>
@@ -228,6 +231,21 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+L</string>
+   </property>
+  </action>
+  <action name="actionEdit_Goals">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="levelbuilder.qrc">
+     <normaloff>:/assets/icons/png/flag-waving.png</normaloff>:/assets/icons/png/flag-waving.png</iconset>
+   </property>
+   <property name="text">
+    <string>Edit Level Goals</string>
+   </property>
+   <property name="toolTip">
+    <string>Edit level goals</string>
    </property>
   </action>
  </widget>

@@ -25,7 +25,7 @@ Entity {
         fieldOfView: 60
         aspectRatio: _window.width / _window.height
         position: Qt.vector3d(zoomlevel*Math.sin(cameraAngle*180/Math.PI)+x*generator.sf, zoomlevel, -zoomlevel*Math.cos(cameraAngle*180/Math.PI)-z*generator.sf )
-        viewCenter: Qt.vector3d(x*generator.sf, 0.0, -0*generator.sf)
+        viewCenter: Qt.vector3d(x*generator.sf, 0.0, -z*generator.sf)
 
     }
 

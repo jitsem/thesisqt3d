@@ -28,6 +28,9 @@ public:
 
     void addValueToComponent(component_lb *&newIcon);
 
+    int getGroundpresent() const;
+    void setGroundpresent(int value);
+
 public slots:
     void slotTriggeredRotate();
     void slotTriggeredDelete();
@@ -48,10 +51,11 @@ protected:
 
 
 private:
-    int connect=0;
-    QPoint start,stop;
+    int groundpresent=0;
+
     int width;
     int height;
+    QPoint polypoints[3];
 };
 
 #endif // DRAWZONE_H
