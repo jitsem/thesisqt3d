@@ -22,7 +22,6 @@
 #include <QDialogButtonBox>
 #include <QDoubleSpinBox>
 #include <QDialog>
-#include <set>
 
 
 #include <QQuickView>
@@ -35,6 +34,7 @@
 #include "resistor.h"
 #include "wire.h"
 #include "switch.h"
+#include "ui_mainwindow.h"
 #include <vector>
 
 
@@ -47,7 +47,7 @@ QPoint  dragStartPosition;
 DrawZone::DrawZone(QWidget *parent)
     :QFrame(parent)
 {
-
+    main_Window = dynamic_cast<MainWindow *>(parent);
     setAcceptDrops(true);
     setAttribute( Qt::WA_PaintUnclipped, true );
     width=this->size().width();
@@ -61,52 +61,6 @@ DrawZone::DrawZone(QWidget *parent)
 
 
 }
-
-
-void DrawZone::slotTriggeredRotate()
-{
-
-    QList<component_lb*> list = this->findChildren<component_lb *>();
-    foreach(component_lb *w, list) {
-        if(w->getSelected()){
-            auto orig=std::make_shared<QPixmap>(*(w->pixmap()));
-            QTransform transform;
-            transform.rotate(-90);
-            w->setPixmap(orig->transformed(transform));
-            if (w->getAngle()==4){
-                w->setAngle(1);
-            }
-            else
-                w->setAngle((w->getAngle())+1);
-
-        }
-    }
-
-
-
-
-}
-void DrawZone::slotTriggeredDelete()
-{
-    QList<component_lb*> list = this->findChildren<component_lb *>();
-    foreach(component_lb *w, list) {
-        if(w->getSelected()){
-            if(w->getType()==4){
-                groundpresent=0;
-                update();
-            }
-            if(!(w->buddy()==nullptr)){
-                    delete w->buddy();
-        }
-
-            delete w;
-        }
-        if (w->getValue()==COMPONENT_IS_GROUND)
-            w->setValue(0);
-    }
-
-}
-
 
 
 void DrawZone::slotTriggeredSave()
@@ -376,6 +330,7 @@ void DrawZone::dropEvent(QDropEvent *event)
         //move new component to nearest multiple of 50 pixels. (for every angle!!)
         if (newIcon->getType()==0 || newIcon->getType()==1){
             QLabel    *valueLabel = new QLabel(QString::number(newIcon->getValue()), this);
+            valueLabel->setAttribute(Qt::WA_DeleteOnClose);
             switch (newIcon->getAngle()){
             case 1 :
                 valueLabel->move(roundUp(newIcon->getNode1x(),50),roundUp(newIcon->getNode1y(),50)-newIcon->height()/2);
@@ -464,6 +419,8 @@ void DrawZone::mousePressEvent(QMouseEvent *event)
         QList<component_lb*> list = this->findChildren<component_lb *>();
         foreach(component_lb *w, list) {
             w->setSelected(0);
+            main_Window->getUi()->actionRotate->setEnabled(false);
+            main_Window->getUi()->actionDelete->setEnabled(false);
             removeGray(*w);
         }
         return;
@@ -550,6 +507,8 @@ component_lb *DrawZone::setGray(component_lb &child)
     painter.fillRect(child.pixmap()->rect(), QColor(127, 127, 127, 127));
     painter.end();
     child.setPixmap(tempPixmap);
+    main_Window->getUi()->actionRotate->setEnabled(true);
+    main_Window->getUi()->actionDelete->setEnabled(true);
     return &child;
 }
 void DrawZone::paintEvent(QPaintEvent *event)
@@ -660,9 +619,6 @@ void DrawZone::calc_nodes(){
             if (!list.contains(w))
                 list.append(w);
         }
-        //if(list.isEmpty()){
-        //   break;
-        //}
         overschot=solveNode(list,current,curnode,stack);
     }
 }
@@ -840,6 +796,7 @@ void DrawZone::drawCircuit()
     //Clear drawingfield
     QList<QWidget*> list = this->findChildren<QWidget *>();
     foreach(QWidget *w, list) {
+        w->close();
         delete w;
     }
 
@@ -857,6 +814,13 @@ void DrawZone::drawCircuit()
         int XCoord2;
         int YCoord2;
         int angle = w->getAngle();
+        if(angle == 4){
+            angle = 2;
+        }
+        else if(angle == 2){
+            angle = 4;
+
+        }
         for(int i = 0; i < w->getLength();i++){
             switch(angle){
             case 1:
@@ -872,8 +836,8 @@ void DrawZone::drawCircuit()
                 if(i==0)
                     XCoord -=25;
                 else
-                    YCoord += 50;
-                YCoord2 = YCoord + 50;
+                    YCoord -= 50;
+                YCoord2 = YCoord - 50;
                 XCoord2 = XCoord;
                 break;
             case 3:
@@ -888,8 +852,8 @@ void DrawZone::drawCircuit()
                 if(i==0)
                     XCoord -=25;
                 else
-                    YCoord -=50;
-                YCoord2 = YCoord - 50;
+                    YCoord +=50;
+                YCoord2 = YCoord + 50;
                 XCoord2 = XCoord;
                 break;
             default:
@@ -899,7 +863,7 @@ void DrawZone::drawCircuit()
             component_lb *newIcon = new component_lb(this, w->getValue(), XCoord, YCoord, XCoord2,YCoord2, angle, 2, 0, 0, w->getNode(),w->getNode(),0,0,0,w->getIsGoal());
 
             newIcon->setPixmap(*pixmap);
-            if(angle == 1 || angle == 2)
+            if(angle == 1 || angle == 4)
                 newIcon->move(QPoint(XCoord, YCoord));
             else
                 newIcon->move(QPoint(XCoord2,YCoord2));
@@ -1248,32 +1212,28 @@ void DrawZone::mouseDoubleClickEvent( QMouseEvent * event )
                 //Box for value
                 QLabel * labelValue = new QLabel("Value of component?");
                 QDoubleSpinBox * value = new QDoubleSpinBox();
-                value->setRange(0,200000);
+                value->setRange(0,std::numeric_limits<float>::max());
                 value->setValue(child->getValue());
 
                 //Box for Adjustable
                 QLabel * labelAdjust = new QLabel("Is component adjustable?");
                 QCheckBox * adjust = new QCheckBox();
 
-
-
-
                 //Box for BeginValue
                 QLabel * labelBValue = new QLabel("Beginvalue of component?");
                 QDoubleSpinBox * bValue = new QDoubleSpinBox();
-                bValue->setRange(0,200000);
+                value->setRange(0,std::numeric_limits<float>::max());
                 bValue->setValue(child->getBegin());
                 bValue->setDisabled(true);
 
                 //Box for stepSize
                 QLabel * labelStep = new QLabel("StepSize of component?");
                 QDoubleSpinBox * step = new QDoubleSpinBox();
-                step->setRange(0,200000);
+                value->setRange(0,std::numeric_limits<float>::max());
                 step->setValue(child->getStepSize());
                 step->setDisabled(true);
 
-                QDialogButtonBox * buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok
-                                                                    | QDialogButtonBox::Cancel);
+                QDialogButtonBox * buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
                 QObject::connect(buttonBox, SIGNAL(accepted()), d, SLOT(accept()));
                 QObject::connect(buttonBox, SIGNAL(rejected()), d, SLOT(reject()));
@@ -1306,10 +1266,12 @@ void DrawZone::mouseDoubleClickEvent( QMouseEvent * event )
                     child->setAdjust(adjust->isChecked());
                     child->setBegin(bValue->value());
                     child->setStepSize(step->value());
+                    dynamic_cast<QLabel*>(child->buddy())->setText(QString::number(value->value()));
+
                 }
 
-                //Clean up
-                delete d,vbox,value,bValue,step,adjust,buttonBox,labelAdjust,labelValue,labelBValue,labelStep;
+                //TODO check delete Clean up
+                delete d;
 
                 break;
             }

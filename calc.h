@@ -25,7 +25,7 @@ public:
     static std::shared_ptr<Calc> Instance();
 
     //Main methode for solving a level
-    Q_INVOKABLE void solveLevel();
+    Q_INVOKABLE bool solveLevel();
 
     //Various functions for Nodes, invokable from QML
     Q_INVOKABLE int numberOfNodes(){return sol.size();}
@@ -86,7 +86,7 @@ public:
     void setCurrentsOfResistorsAndSwitches();
     void setCurrentsOfWires();
     void setCurrentsOfSwitchedWires();
-    void setCurrentsOfStrayWires();
+    bool setCurrentsOfStrayWires();
 
     //Methodes for reading and writing file
     Q_INVOKABLE bool readFile();

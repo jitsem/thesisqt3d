@@ -3,7 +3,7 @@
 
 
 Switch::Switch(int np, int nm, int x, int y, int ang):
-    Resistor(0.1,np,nm,x,y,ang),up(false)
+    Resistor(1,np,nm,x,y,ang),up(false)
 {
 
 }
@@ -11,7 +11,7 @@ Switch::Switch(int np, int nm, int x, int y, int ang):
 void Switch::toggleSwitch()
 {
     if(up){
-       value =0.1;
+       value =1;
        up=false;
     }else{
         value = std::numeric_limits<float>::infinity();
