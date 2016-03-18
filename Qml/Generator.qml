@@ -39,7 +39,7 @@ Entity{
 
     function buildLevel(){
 
-        calculator.solveLevel();
+
         o.sourceFactory=Qt.createComponent("qrc:/Qml/Source.qml");
         o.resistorFactory=Qt.createComponent("qrc:/Qml/Resistor.qml");
         o.wireFactory=Qt.createComponent("qrc:/Qml/Wire.qml");

@@ -32,7 +32,7 @@ std::shared_ptr<Calc> Calc::Instance()
 }
 
 
-void Calc::solveLevel()
+bool Calc::solveLevel()
 {
     std::list<int> nodes;
 
@@ -62,6 +62,13 @@ void Calc::solveLevel()
     }
 
     setCurrentsOfWires();
+
+    //Draden die niet aan weerstand of switch liggen
+    if(!(setCurrentsOfStrayWires()))
+        return false;
+
+
+    return true;
 
 }
 bool Calc::addResistor(std::shared_ptr<Resistor> r)
@@ -884,38 +891,36 @@ void Calc::setCurrentsOfWires()
     }
 
 
-    //Draden die niet aan weerstand of switch liggen
-    setCurrentsOfStrayWires();
 
 
 }
 
-void Calc::setCurrentsOfStrayWires(){
+bool Calc::setCurrentsOfStrayWires(){
 
     //TODO testen of nog altijd juist
+    int timeout;
+
+    std::vector<std::shared_ptr<Wire>> strayWires;
+    std::vector<std::shared_ptr<Wire>> toRemove;
+    for(auto wi:wires){
+        if(std::isinf(wi->getCurrent())){
+            strayWires.push_back(wi);
+
+
+        }
+    }
+
 
     //Zolang er er nog een weerstand met oneindigestromen is, in while blijven
-    bool inf = true;
-    std::vector<std::shared_ptr<Wire>> strayWires;
-    while(inf){
-
-        inf = false;
-
-        //TODO dirty workaround
-        strayWires.clear();
-        for(auto wi:wires){
-            if(std::isinf(wi->getCurrent())){
-                strayWires.push_back(wi);
-                if(wi->getAngle() == 2){
-                    wi->setAngle(4);
-                    wi->setYCoord(wi->getYCoord()+1);
-                }
-            }
-        }
+    while(!(strayWires.empty())){
+        timeout++;
         //Check alle draden waar nog geen stroom aan toegekend is
         for(auto w:strayWires){
             if(std::isinf(w->getCurrent())){
                 QPoint pos(w->getXCoord(),w->getYCoord());
+
+
+
                 float curr = 0;
 
                 //Tel de stromen op van alle andere verbonde draden
@@ -974,18 +979,26 @@ void Calc::setCurrentsOfStrayWires(){
 
                 w->setCurrent(-curr);
 
-
-                if(std::isinf(w->getCurrent()))
-                    inf=true; //Blijf in lus
-
+                if(!(std::isinf(w->getCurrent())))
+                    toRemove.push_back(w);
 
             }
-        }
 
+        }
+        for(auto r:toRemove){
+            strayWires.erase( std::remove( strayWires.begin(), strayWires.end(), r), strayWires.end() );
+        }
+        if(timeout>15)
+            return false;
     }
+
+    return true;
+
+
 
 
 }
+
 
 
 std::vector<float> Calc::computeNetwork(int  nrOfNodes)

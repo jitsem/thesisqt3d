@@ -21,7 +21,7 @@
 #include "dragcomponent.h"
 #include "calc.h"
 #include "drawzone.h"
-#include "component_lb.h"
+
 
 
 
@@ -33,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QHBoxLayout *horlayout = new QHBoxLayout();
     ui->widget_container->setLayout(horlayout);
     QWidget *componentsWidget=new DragComponent();
-    drawzoneWidget=new DrawZone(nullptr);
+    drawzoneWidget=new DrawZone(this);
     componentsWidget->setMaximumWidth(100);
     horlayout->addWidget(componentsWidget);
     horlayout->addWidget(drawzoneWidget);
@@ -41,8 +41,6 @@ MainWindow::MainWindow(QWidget *parent) :
     calculator=Calc::Instance();
 
     //Connect signal to different classes
-    QObject::connect (this,SIGNAL(on_actionRotate_triggered()),drawzoneWidget,SLOT(slotTriggeredRotate()));
-    QObject::connect (this,SIGNAL(on_actionDelete_triggered()),drawzoneWidget,SLOT(slotTriggeredDelete()));
     QObject::connect (this,SIGNAL(on_actionSave_triggered()),drawzoneWidget,SLOT(slotTriggeredSave()));
     QObject::connect (this,SIGNAL(on_actionConnect_triggered()),drawzoneWidget,SLOT(slotTriggeredConnect()));
 
@@ -115,14 +113,27 @@ void MainWindow::on_action3D_Preview_triggered()
     else {
 
         drawzoneWidget->writeToVectors();
-        this->hide();
-        view = new QQuickView;
-        view->engine()->rootContext()->setContextProperty(QStringLiteral("_window"), view);
-        view->engine()->rootContext()->setContextProperty(QStringLiteral("mainWindow"),this);
-        view->engine()->rootContext()->setContextProperty(QStringLiteral("calculator"),calculator.get());
-        view->setResizeMode(QQuickView::SizeRootObjectToView);
-        view->setSource(QUrl("qrc:/Qml/CircuitView.qml"));
-        view->showFullScreen();
+        if(calculator->solveLevel()){
+
+            this->hide();
+            view = new QQuickView;
+            view->engine()->rootContext()->setContextProperty(QStringLiteral("_window"), view);
+            view->engine()->rootContext()->setContextProperty(QStringLiteral("mainWindow"),this);
+            view->engine()->rootContext()->setContextProperty(QStringLiteral("calculator"),calculator.get());
+            view->setResizeMode(QQuickView::SizeRootObjectToView);
+            view->setSource(QUrl("qrc:/Qml/CircuitView.qml"));
+            view->showFullScreen();
+        }
+        else{
+            QMessageBox msgBox;
+            msgBox.setText("Sorry, Your application is a bit to complex for our engine");
+            msgBox.setInformativeText("Please refrain from shorting out components");
+            msgBox.setStandardButtons(QMessageBox::Ok);
+            msgBox.setDefaultButton(QMessageBox::Ok);
+            msgBox.exec();
+
+
+        }
     }
 
 }
@@ -190,7 +201,6 @@ void MainWindow::on_actionEdit_Goals_triggered()
     delete d,vbox,label3Star,threeStarValue,label2Star,twoStarValue,buttonBox;
 }
 
-
 void MainWindow::enableIcons(){
 
     //Enable some buttons
@@ -198,8 +208,6 @@ void MainWindow::enableIcons(){
     ui->actionSave_as->setEnabled(true);
     ui->action3D_Preview->setEnabled(true);
     ui->actionConnect->setEnabled(true);
-    ui->actionDelete->setEnabled(true);
-    ui->actionRotate->setEnabled(true);
     ui->actionEdit_Goals->setEnabled(true);
 
     //Enable editor
@@ -208,3 +216,85 @@ void MainWindow::enableIcons(){
 }
 
 
+
+void MainWindow::on_actionRotate_triggered()
+{
+
+    QList<component_lb*> list = drawzoneWidget->findChildren<component_lb *>();
+    foreach(component_lb *w, list) {
+        if(w->getSelected()){
+            auto orig=std::make_shared<QPixmap>(*(w->pixmap()));
+            QTransform transform;
+            transform.rotate(-90);
+            w->setPixmap(orig->transformed(transform));
+            if (w->getAngle()==4){
+                w->setAngle(1);
+            }
+            else
+                w->setAngle((w->getAngle())+1);
+
+        }
+
+    }
+
+}
+
+Ui::MainWindow *MainWindow::getUi() const
+{
+    return ui;
+}
+
+void MainWindow::on_actionDelete_triggered()
+{
+
+    QList<component_lb*> list = drawzoneWidget->findChildren<component_lb *>();
+    foreach(component_lb *w, list) {
+        if(w->getSelected()){
+            if(w->getType()==4){
+                drawzoneWidget->setGroundpresent(0);
+                drawzoneWidget->update();
+            }
+            if(!(w->buddy()==nullptr)){
+                w->buddy()->close();
+                delete w->buddy();
+            }
+            if (w->getValue()==COMPONENT_IS_GROUND)
+                w->setValue(0);
+            w->close();
+            delete w;
+        }
+
+    }
+
+}
+
+
+void MainWindow::on_action_Copy_triggered()
+{
+        copied.clear();
+        QList<component_lb*> list = drawzoneWidget->findChildren<component_lb *>();
+        foreach(component_lb *w, list) {
+            if (w->getSelected())
+                copied.push_back(w);
+        }
+
+}
+
+void MainWindow::on_action_Paste_triggered()
+{
+    if (!copied.isEmpty()){
+        int i=0;
+        foreach(component_lb* w,copied){
+
+            component_lb *newIcon = new component_lb(drawzoneWidget,w->getValue(),0,0,0,0,w->getAngle(),w->getType());
+            newIcon->setPixmap(*(w->pixmap()));
+            newIcon->move(QPoint(600+i*50,50));
+            newIcon->show();
+            newIcon->setAttribute(Qt::WA_DeleteOnClose);
+            newIcon->setFocusPolicy(Qt::StrongFocus);
+            drawzoneWidget->updateNodePositions();
+            i++;
+
+        }
+    }
+}

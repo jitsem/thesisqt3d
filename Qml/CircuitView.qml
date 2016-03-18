@@ -55,7 +55,7 @@ Item {
 
     Button{
         id:nodalInfo
-        width: 50; height: 50
+        width:  _window.height/10; height:  _window.height/10
         anchors.top: rotateCameraLeft.bottom
         anchors.topMargin: 10
         anchors.left:parent.left
@@ -100,7 +100,7 @@ Item {
 
     Button{
         id:rotateCameraRight
-        width: 50; height: 50
+        width:  _window.height/10; height:  _window.height/10
         anchors.top:parent.top
         anchors.right:parent.right
         iconSource: "qrc:/assets/icons/svg/turn-right.svg"
@@ -113,7 +113,7 @@ Item {
 
     Button{
         id:rotateCameraLeft
-        width: 50; height: 50
+        width:  _window.height/10; height:  _window.height/10
         anchors.top:parent.top
         anchors.left:parent.left
         iconSource: "qrc:/assets/icons/svg/turn-left-circle.svg"
@@ -124,7 +124,7 @@ Item {
 
     Button{
         id:zoomIn
-        width: 50; height: 50
+        width:  _window.height/10; height:  _window.height/10
         anchors.right: parent.right
         anchors.top: rotateCameraRight.bottom
         anchors.topMargin: 10
@@ -136,7 +136,7 @@ Item {
 
     Button{
         id:zoomOut
-        width: 50; height: 50
+        width:  _window.height/10; height:  _window.height/10
         anchors.right: parent.right
         anchors.top: zoomIn.bottom
         anchors.topMargin: 5
@@ -185,7 +185,7 @@ Item {
 
     Button{
         id:exitButton
-        width: 50; height: 50
+        width:  _window.height/10; height:  _window.height/10
         anchors.bottom: parent.bottom
         anchors.topMargin: 10
         anchors.right:parent.right
@@ -206,7 +206,7 @@ Item {
     //  Menu for changing Source & Resistor sizes and toggling switches, created after building level for first time
     Button{
         id:sourceEdit
-        width: 50; height: 50
+        width:  _window.height/10; height:  _window.height/10
         anchors.top: nodalInfo.bottom
         anchors.topMargin: 10
         anchors.left:parent.left
@@ -224,7 +224,7 @@ Item {
 
     Button{
         id:resistorEdit
-        width: 50; height: 50
+        width:  _window.height/10; height:  _window.height/10
         anchors.top: sourceEdit.bottom
         anchors.topMargin: 10
         anchors.left:parent.left

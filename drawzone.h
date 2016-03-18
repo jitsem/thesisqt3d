@@ -5,10 +5,11 @@
 #include <QWidget>
 #include <QFrame>
 #include <memory>
+#include <QMainWindow>
 
 #include "component_lb.h"
 #include "component.h"
-
+#include "mainwindow.h"
 
 class DrawZone :public QFrame
 {
@@ -32,8 +33,7 @@ public:
     void setGroundpresent(int value);
 
 public slots:
-    void slotTriggeredRotate();
-    void slotTriggeredDelete();
+
     void slotTriggeredSave();
     void slotTriggeredConnect();
 
@@ -52,7 +52,7 @@ protected:
 
 private:
     int groundpresent=0;
-
+    MainWindow *main_Window;
     int width;
     int height;
     QPoint polypoints[3];

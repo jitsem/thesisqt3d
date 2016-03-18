@@ -7,6 +7,7 @@
 #include <QListWidget>
 
 #include <memory>
+#include "component_lb.h"
 
 class DrawZone;
 class Calc;
@@ -25,9 +26,11 @@ public:
     ~MainWindow();
 
     void enableIcons();
+    Ui::MainWindow *getUi() const;
+
 signals:
-    void on_actionRotate_triggered();
-    void on_actionDelete_triggered();
+    //void on_actionRotate_triggered();
+    //void on_actionDelete_triggered();
     void on_actionSave_triggered();
     void on_actionConnect_triggered();
 
@@ -39,14 +42,19 @@ private slots:
     void on_action3D_Preview_triggered();
     void on_actionNew_triggered();
     void on_actionEdit_Goals_triggered();
+    void on_actionRotate_triggered();
+    void on_actionDelete_triggered();
 
+    void on_action_Copy_triggered();
+
+    void on_action_Paste_triggered();
 
 private:
     Ui::MainWindow *ui;
     QQuickView *view;
     DrawZone *drawzoneWidget;
     std::shared_ptr<Calc> calculator;
-
+    QList<component_lb*> copied;
 };
 
 #endif // MAINWINDOW_H
