@@ -11,9 +11,12 @@ public:
     void setValue(float value);
 
     //virtual methods
+
+    //Return nodes
     virtual int getNodep() const;
     virtual int getNodem() const;
 
+    //Same as above, due to compabilty
     virtual int getNode1() const;
     virtual int getNode2() const;
 
@@ -47,7 +50,7 @@ protected:
     float value,current;
     int angle,xCoord,yCoord;
 
-    // Compabiltiy with other team (game elements)
+    // Define game elements of componet
     int isAdjustable;
     float beginvalue;
     float stepSize;

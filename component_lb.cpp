@@ -1,10 +1,9 @@
 #include "component_lb.h"
 #include <QDebug>
 
-component_lb::component_lb(QWidget *parent, float val, int n1x, int n1y, int n2x, int n2y, int ang, int type,
-                           qint64 nr, int selected, int n1, int n2, int adj, float beg, float ss, int go)
+component_lb::component_lb(QWidget *parent, float val, int n1x, int n1y, int n2x, int n2y, int ang, int type, int selected, int n1, int n2, int adj, float beg, float ss, int go)
     :QLabel(parent),value(val), node1x(n1x),node1y(n1y),node2x(n2x),node2y(n2y),angle(ang),
-      type(type),nr(nr),selected(selected),n1(n1),n2(n2),adjust(adj),begin(beg),stepSize(ss),goal(go)
+      type(type),selected(selected),n1(n1),n2(n2),adjust(adj),begin(beg),stepSize(ss),goal(go)
 {
 
 
@@ -81,15 +80,6 @@ void component_lb::setType(int value)
     type = value;
 }
 
-qint64 component_lb::getNr() const
-{
-    return nr;
-}
-
-void component_lb::setNr(qint64 value)
-{
-    nr = value;
-}
 
 int component_lb::getSelected() const
 {

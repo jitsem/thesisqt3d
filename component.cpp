@@ -10,22 +10,22 @@ Component::Component(float val,int x,int y,int ang,int isAdj,float begValue,floa
 
 int Component::getNodep() const
 {
-    return 0;
+    return -1;
 }
 
 int Component::getNodem() const
 {
-    return 0;
+    return -1;
 }
 
 int Component::getNode1() const
 {
-    return 0;
+    return -1;
 }
 
 int Component::getNode2() const
 {
-    return 0;
+    return -1;
 }
 
 int Component::getAngle() const
@@ -79,7 +79,6 @@ void Component::setValue(float value)
     this->value=value;
 }
 
-//Functions for other teams game elements
 int Component::getIsAdjustable() const
 {
     return isAdjustable;

@@ -1,6 +1,9 @@
 #ifndef DRAWZONE_H
 #define DRAWZONE_H
 
+#ifndef GRIDSIZE
+#define GRIDSIZE 50
+#endif
 
 #include <QWidget>
 #include <QFrame>
@@ -35,7 +38,7 @@ public:
 public slots:
 
     void slotTriggeredSave();
-    void slotTriggeredConnect();
+    void slotTriggeredGround();
 
 protected:
     void mouseDoubleClickEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
@@ -53,8 +56,6 @@ protected:
 private:
     int groundpresent=0;
     MainWindow *main_Window;
-    int width;
-    int height;
     QPoint polypoints[3];
 };
 
