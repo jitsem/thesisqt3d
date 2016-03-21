@@ -103,7 +103,7 @@
    <addaction name="separator"/>
    <addaction name="actionRotate"/>
    <addaction name="actionDelete"/>
-   <addaction name="actionConnect"/>
+   <addaction name="actionGround"/>
    <addaction name="actionEdit_Goals"/>
    <addaction name="separator"/>
    <addaction name="action3D_Preview"/>
@@ -232,7 +232,7 @@
     <string>Ctrl+O</string>
    </property>
   </action>
-  <action name="actionConnect">
+  <action name="actionGround">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -241,13 +241,13 @@
      <normaloff>:/assets/gnd.png</normaloff>:/assets/gnd.png</iconset>
    </property>
    <property name="text">
-    <string>Connect</string>
+    <string>&amp;Ground</string>
    </property>
    <property name="toolTip">
-    <string>select two components to connect them</string>
+    <string>Select a wire and ground it with this button</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+L</string>
+    <string>Ctrl+G</string>
    </property>
   </action>
   <action name="actionEdit_Goals">

@@ -11,7 +11,7 @@ class component_lb : public QLabel
 {
     Q_OBJECT
 public:
-    component_lb(QWidget * parent, float val, int n1x, int n1y, int n2x, int n2y, int ang, int type, qint64 nr=0, int selected=0,
+    component_lb(QWidget * parent, float val, int n1x, int n1y, int n2x, int n2y, int ang, int type, int selected=0,
                  int n1=-1, int n2=-1,int adj=0,float beg=50.0,float ss=5.0,int go = 0);
 
     float getValue() const;
@@ -34,11 +34,6 @@ public:
 
     int getType() const;
     void setType(int value);
-
-    qint64 getNr() const;
-    void setNr(qint64 value);
-
-
 
     int getSelected() const;
     void setSelected(int value);

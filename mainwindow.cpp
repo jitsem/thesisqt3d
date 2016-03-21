@@ -42,7 +42,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Connect signal to different classes
     QObject::connect (this,SIGNAL(on_actionSave_triggered()),drawzoneWidget,SLOT(slotTriggeredSave()));
-    QObject::connect (this,SIGNAL(on_actionConnect_triggered()),drawzoneWidget,SLOT(slotTriggeredConnect()));
+    QObject::connect (this,SIGNAL(on_actionGround_triggered()),drawzoneWidget,SLOT(slotTriggeredGround()));
 
 
 
@@ -207,7 +207,7 @@ void MainWindow::enableIcons(){
     ui->actionSave->setEnabled(true);
     ui->actionSave_as->setEnabled(true);
     ui->action3D_Preview->setEnabled(true);
-    ui->actionConnect->setEnabled(true);
+    ui->actionGround->setEnabled(true);
     ui->actionEdit_Goals->setEnabled(true);
 
     //Enable editor

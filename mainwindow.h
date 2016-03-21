@@ -32,7 +32,7 @@ signals:
     //void on_actionRotate_triggered();
     //void on_actionDelete_triggered();
     void on_actionSave_triggered();
-    void on_actionConnect_triggered();
+    void on_actionGround_triggered();
 
 
 

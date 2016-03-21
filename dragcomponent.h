@@ -1,7 +1,13 @@
 #ifndef DRAGCOMPONENT_H
 #define DRAGCOMPONENT_H
+
+#ifndef GRIDSIZE
+#define GRIDSIZE 50
+#endif
+
 #include <QFrame>
 #include <QWidget>
+
 class DragComponent :public QFrame
 {
     Q_OBJECT
