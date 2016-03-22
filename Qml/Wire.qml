@@ -4,35 +4,41 @@ import Qt3D.Logic 2.0
 import QtQuick 2.2 as QQ2
 
 
-
+//Wire Entity
 Entity{
     id:root
-    //Positie variablen
+    components: [finmesh,fintrans]
+
+    //Positional variables
     property real x: 0
     property real y: 0
     property real z: 0
 
-    property real l: 1 //Lengte van draad
-    property real orientationAngle: 90 //Hoek van draad
+    //Length of wire
+    property real l: 1
 
-    //Variables for spawning electrons
+    //Angle of wire in Z plane
+    property real orientationAngle: 90
+
+    //Variable for electron size
     property real eSize
 
-    //global scale factor
+    //global scale factor, set in Generator
     property real sf:1
 
 
     //list of electrons
     property var electrons: []
-    components: [finmesh,fintrans]
 
+
+    //Wire Entity without correct angle
     Entity{
         id:finmesh
         components: [wismesh,witrans]
 
-
+        //basic wire Entity
         Entity{
-            //basismodel draad
+
             id:wismesh
             components: [mesh, trans,mat]
 
@@ -79,7 +85,7 @@ Entity{
 
 
 
-    //Stuff for spawning electrons
+    //Things for spawning electrons
     QQ2.QtObject{
         id:o
         property var electronFactory
@@ -112,7 +118,7 @@ Entity{
     }
 
 
-    //Animation-functions and objects
+    //Things for animating a change in value
 
     QQ2.NumberAnimation{
         id:animateHeight

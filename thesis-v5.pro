@@ -44,10 +44,9 @@ DISTFILES += \
     Qml/Wire.qml \
     Qml/Electron.qml \
     Qml/CircuitView.qml \
-    Qml/Main.qml \
     Qml/EditMenu.qml \
     Qml/Switch.qml \
-    Qml/SwitchMenu.qml \
+    \
     android/AndroidManifest.xml \
     android/gradle/wrapper/gradle-wrapper.jar \
     android/gradlew \

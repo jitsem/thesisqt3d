@@ -1,26 +1,29 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
-
+//Parent class for all components
 class Component
 {
 public:
-    Component(float val, int x, int y, int ang, int isAdj=0, float begValue=50, float sS=5.0);
+    Component(float val, int x, int y, int ang, int isAdj=0, float begValue=50, float sS=5.0, float cur = 0);
 
-    float getValue() const;
-    void setValue(float value);
 
-    //virtual methods
+    //Getters/setter for electric parameters
+    virtual float getCurrent() const;
+    virtual void setCurrent(float value);
 
-    //Return nodes
+    virtual float getValue() const;
+    virtual void setValue(float value);
+
+    //Getters/setters for source nodes
     virtual int getNodep() const;
     virtual int getNodem() const;
 
-    //Same as above, due to compabilty
+    //Getters/setters for resistor nodes, seperate function due to slight differences
     virtual int getNode1() const;
     virtual int getNode2() const;
 
-
+    //Getters/setters posistional parameters
     virtual int getAngle() const;
     virtual void setAngle(int value);
 
@@ -30,9 +33,7 @@ public:
     virtual int getYCoord() const;
     virtual void setYCoord(int value);
 
-    virtual float getCurrent() const;
-    virtual void setCurrent(float value);
-
+    //Getters/setters for game elements
     virtual int getIsAdjustable() const;
     virtual void setIsAdjustable(int value);
 
@@ -50,7 +51,7 @@ protected:
     float value,current;
     int angle,xCoord,yCoord;
 
-    // Define game elements of componet
+    // Define game elements of component
     int isAdjustable;
     float beginvalue;
     float stepSize;

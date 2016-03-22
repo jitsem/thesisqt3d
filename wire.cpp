@@ -1,7 +1,7 @@
 #include "wire.h"
 
 Wire::Wire(float v, int x, int y, int ang, int length, int node, float current, int isG)
-    :Component(v,x,y,ang),length(length),current(current),node(node),isGoal(isG)
+    :Component(v,x,y,ang,0,0,0,current),length(length),node(node),isGoal(isG)
 {
 
 

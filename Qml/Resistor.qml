@@ -3,31 +3,39 @@ import Qt3D.Render 2.0
 import QtQuick 2.2 as QQ2
 
 
-
+//Resistor Entity
 Entity{
     id:node
-    property real s: 1 //bepaald dikte vd weerstand, afhankelijk van weestandswaarde
-    property real l: 1 //bepaald lengte vd weerstand, afhankelijk van spanning over weerstand
+    components: [finmesh,fintrans]
 
-    //Variablen voor posistie
+    //Thickness of Resistor, depends on resistance
+    property real s: 1
+
+    //Length of Resistor, depends on  voltage difference
+    property real l: 1
+
+    //Positional Variables
     property real x: 0
     property real y: 0
     property real z: 0
 
-    //Variable voor hoek.
-    property real a: 90 //Hoek volgens z as,bepaald door spanning over weerstand
-    property real orientationAngle: 0 //Hoek volgens y as, bepaald door plaatsing weerstand
+    //Angle in Y plane, depends on voltage difference
+    property real a: 90
 
+    //Angle in Z plane, depends on 2D orientation
+    property real orientationAngle: 0
+
+    //Resistor color
     property var resColor: "slateblue"
-    components: [finmesh,fintrans]
 
+    //Entity without proper placement
     Entity{
-        //Weerstand met juiste waardes, zonder plaatsing
         id:finmesh
         components: [resmesh,retrans]
 
+        //Basic model Resistor
         Entity{
-            //Basismodel weestand
+
             id:resmesh
             components: [mesh, trans,mat]
 
@@ -108,8 +116,6 @@ Entity{
         property:"orientationAngle"
         duration: 1000
     }
-
-
 
 
     function changeSize(newValue){

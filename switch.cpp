@@ -10,6 +10,7 @@ Switch::Switch(int np, int nm, int x, int y, int ang):
 
 void Switch::toggleSwitch()
 {
+    //Emulate switch states by switching between very low/very high resistance
     if(up){
        value =1;
        up=false;

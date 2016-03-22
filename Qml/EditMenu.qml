@@ -1,19 +1,27 @@
 import QtQuick 2.5
 import QtQuick.Controls 1.4
 
-//Menu for editing a source or resistor
-
+//Menu for editing a source or resistor value
 Menu{
     id:root
+
+    //Variable for Component Nr
     property real nr
+
+    //Variable for ComponentType
     property string target: ""
+
+    //Menu title
     title: target + nr
+
+    //Signals for highlighting selected component
     onAboutToShow: {
         if(target === "resistor")
             toggleColorResistor(nr);
         else if(target === "source")
             toggleColorSource(nr);
     }
+
     onAboutToHide: {
         if(target === "resistor")
             toggleColorResistor(nr);
@@ -21,7 +29,7 @@ Menu{
             toggleColorSource(nr);
     }
 
-
+    //Menu Items and functions for adjusting components
     MenuItem {
         text: "Increase"
         onTriggered: {

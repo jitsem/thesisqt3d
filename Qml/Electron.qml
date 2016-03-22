@@ -4,16 +4,17 @@ import Qt3D.Logic 2.0
 import QtQuick 2.2 as QQ2
 
 
-
+//Electron Entity
 Entity{
-    id:electron
+    id:electron 
+    components: [mesh,trans,mat]
 
-    //PositieVariablen
+    //Positional Variables
     property real x: 0
     property real y: 0
     property real z: 0
 
-    //size of electron
+    //Size of electron
     property real s: 1
 
 
@@ -29,8 +30,6 @@ Entity{
     //Duration of variable
     property real dur: 1000
 
-
-    components: [mesh,trans,mat]
 
     SphereMesh{
         id:mesh
@@ -51,6 +50,7 @@ Entity{
 
     }
 
+    //Electron Travel-Animation
     QQ2.SequentialAnimation{
 
         id:currentPath
@@ -75,6 +75,7 @@ Entity{
 
     }
 
+    //Animation-functions and objects
     QQ2.NumberAnimation{
         id:animateSize
         target:electron

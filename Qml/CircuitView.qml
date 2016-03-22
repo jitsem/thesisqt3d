@@ -3,12 +3,12 @@ import QtQuick.Scene3D 2.0
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
 
-//Overlay met Qtquick elementen
+//Overlay with ui elements
 Item {
     id:appView
 
 
-
+    //Contains 3D-world
     Scene3D{
         id:scene3D
         anchors.fill: parent
@@ -23,6 +23,7 @@ Item {
 
     }
 
+    //Title text
     Text{
         id:titleText
         text: "3D-Preview"
@@ -33,6 +34,7 @@ Item {
         styleColor: "gold"
     }
 
+    //Default style for buttons
     Component{
         id:butStyle
 
@@ -51,8 +53,8 @@ Item {
         }
     }
 
-    //Show nodal Solution
 
+    //Objects for showing nodal Solution
     Button{
         id:nodalInfo
         width:  _window.height/12; height:  _window.height/12
@@ -96,8 +98,7 @@ Item {
     }
 
 
-    //Functions, timers and buttons for camera Rotation and zoom:
-
+    //Functions, timers and buttons for camera Rotation and zoom
     Button{
         id:rotateCameraRight
         width:  _window.height/12; height:  _window.height/12
@@ -180,9 +181,9 @@ Item {
 
     }
 
+
+
     //Exit Menu
-
-
     Button{
         id:exitButton
         width:  _window.height/12; height:  _window.height/12
@@ -203,7 +204,7 @@ Item {
 
 
 
-    //  Menu for changing Source & Resistor sizes and toggling switches, created after building level for first time
+    //Menu and buttons for changing Source & Resistor sizes
     Button{
         id:sourceEdit
         width:  _window.height/12; height:  _window.height/12
@@ -215,9 +216,6 @@ Item {
         style: butStyle
 
     }
-
-
-
     Menu{
         id:sourceMenu
     }
@@ -239,12 +237,13 @@ Item {
     }
 
 
-
+    //Constructor for editMenus
     function makeEditMenu() {
 
 
         var menuFactory = Qt.createComponent("qrc:/Qml/EditMenu.qml");
-        var switchMenuFactory = Qt.createComponent("qrc:/Qml/SwitchMenu.qml")
+        var switchMenuFactory = Qt.createComponent("qrc:/Qml/SwitchMenu.qml");
+
         for (var i = 0; i < world3D.generator.sources.length; i++) {
             var menu = menuFactory.createObject(appView,{"target":"source", "nr":i});
             sourceMenu.insertItem(i,menu);
@@ -259,7 +258,7 @@ Item {
     }
 
 
-    //Toggle Source color
+    //Toggle Source color, called in menus
     function toggleColorSource(i){
         if(world3D.generator.sources[i].sourceColor === "firebrick")
             world3D.generator.sources[i].sourceColor = "yellow";

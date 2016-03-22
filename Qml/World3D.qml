@@ -4,12 +4,15 @@ import Qt3D.Render 2.0
 import Qt3D.Input 2.0
 import Qt3D.Logic 2.0
 
-
+//Main 3D class
 Entity {
     id: world3D
+    components: [forward_renderer,inputController]
+
+    //Angle of camera
     property real cameraAngle:1
 
-    //CiruitMiddle
+    //ViewPoint of camera
     property real x: 0
     property real y: 0
     property real z: 0
@@ -18,7 +21,7 @@ Entity {
     property real zoomlevel: 50
 
 
-    //Cameraword3D.
+    //Camera
     Camera {
         id: mainCamera
         projectionType: CameraLens.PerspectiveProjection
@@ -53,19 +56,17 @@ Entity {
     }
 
 
-
-    components: [forward_renderer,inputController]
-
     //World generation
     property Entity generator: Generator{
         id:generator
     }
 
+    //Groundplane for visisbility
     GroundPlane{
 
     }
 
-
+    //Controller for zoom, rotate and other input
     property Entity inputController: InputController{
         id:inputController
     }
@@ -75,7 +76,6 @@ Entity {
     function setCam(camx,camy){
         x = camx/generator.sf;
         z = camy/generator.sf;
-        console.log("cam",x,z);
         mainCamera.viewCenter =  Qt.vector3d(camx, 0.0, -camy);
 
     }
