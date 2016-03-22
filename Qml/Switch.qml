@@ -3,19 +3,24 @@ import Qt3D.Render 2.0
 import QtQuick 2.2 as QQ2
 
 
-
+//Switch Entity
 Entity{
     id:node
-    property real s: 1 //bepaald dikte vd weerstand, afhankelijk van weestandswaarde
-    property real l: 1 //bepaald lengte vd weerstand, afhankelijk van spanning over weerstand
+    components: [finmesh,fintrans]
 
-    //Variablen voor posistie
+    //Thickness of switch
+    property real s: 1
+
+    //Lenght of switch
+    property real l: 1
+
+    //Positional variables
     property real x: 0
     property real y: 0
     property real z: 0
 
-    //Variable voor hoek.
-    property real orientationAngle: 0 //Hoek volgens y as, bepaald door plaatsing weerstand
+    //Angle in Z plane
+    property real orientationAngle: 0
 
     //Ambient color for highlighting
     property var switchColor: "orange"
@@ -23,15 +28,14 @@ Entity{
     //Nr for switching
     property real switchNr
 
-    components: [finmesh,fintrans]
 
+    //Switch without correct posistion
     Entity{
-        //Weerstand met juiste waardes, zonder plaatsing
         id:finmesh
         components: [resmesh,retrans]
 
+        //Basic model Switch
         Entity{
-            //Basismodel weestand
             id:resmesh
             components: [mesh, trans,mat, picker]
 
@@ -56,6 +60,7 @@ Entity{
                 shininess: 0.2
             }
 
+            //Picker for toggling switch
             ObjectPicker{
                 id:picker
                 onClicked: {

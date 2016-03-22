@@ -9,16 +9,16 @@ Entity{
 
     //size of each coordinate step
     property real sf:5
+
     //arrays for components
     property var sources:[]
     property var resistors :[]
     property var wires: []
     property var switches: []
 
+    //Stuff for making components
     QQ2.QtObject{
-
         id:o
-
 
         //Variables for spawning objects
         property var sourceFactory
@@ -31,52 +31,51 @@ Entity{
     QQ2.Component.onCompleted: {
 
 
-        buildLevel(); //Bouw Ciruict
-        makeEditMenu();
+        buildLevel(); //Build circuit
+        makeEditMenu(); //Build Edit menu
 
 
     }
 
     function buildLevel(){
 
-
+        //Assing Qml files to factoris
         o.sourceFactory=Qt.createComponent("qrc:/Qml/Source.qml");
         o.resistorFactory=Qt.createComponent("qrc:/Qml/Resistor.qml");
         o.wireFactory=Qt.createComponent("qrc:/Qml/Wire.qml");
         o.switchFactory=Qt.createComponent("qrc:/Qml/Switch.qml");
 
+        //For each type of component, build all of that type
 
+        //Build Sources
         for(var i=0;i<calculator.getNumberOfSources();i++){
 
+            //Negative node
             var negNode = calculator.nodeMAtSource(i);
+
+            //Assign correct params and make
             var source = o.sourceFactory.createObject(null,{"s":calculator.getVoltageAtSource(i),
                                                           "x":calculator.getXCoordOfSource(i)*root.sf,
                                                           "z":-calculator.getYCoordOfSource(i)*root.sf,
                                                           "y":calculator.voltageAtNode(negNode)});
             source.parent=root.parent;
             root.sources[i]=source;
-
-            console.log("Current trough source: ", i , calculator.getCurrentofSource(i));
-
-
         }
 
+        //Build Resistors
         for(i=0;i<calculator.getNumberOfResistors();i++){
 
 
             var minVolt = Math.min(calculator.voltageAtNode(calculator.node1AtResistor(i)),calculator.voltageAtNode(calculator.node2AtResistor(i)));
             var maxVolt = Math.max(calculator.voltageAtNode(calculator.node1AtResistor(i)),calculator.voltageAtNode(calculator.node2AtResistor(i)));
 
-
-            //Hoek van de weerstand
+            //Angle in Y plane
             var angle = Math.atan2(root.sf,(minVolt-maxVolt));
 
-
-            //Lengte van de weerstand
+            //Length depending on above angle
             var length = Math.abs(((maxVolt-minVolt))/Math.cos(angle));
 
-
-
+            //Assign correct params and make
             var resistor = o.resistorFactory.createObject(null,{"a":(angle*180/Math.PI),
                                                               "l":length,
                                                               "s":calculator.resistanceAtResistor(i),
@@ -87,16 +86,14 @@ Entity{
 
             resistor.parent=root.parent;
             root.resistors[i]=resistor;
-            console.log("Current trough resistor: ", i ,calculator.getCurrentofResistor(i));
-
         }
 
 
-
+        //Build wires
         for(i=0;i<calculator.getNumberOfWires();i++){
 
 
-
+            //Assign correct params and make
             var wire = o.wireFactory.createObject(null,{"x":calculator.getXCoordOfWire(i)*root.sf,
                                                       "z":-calculator.getYCoordOfWire(i)*root.sf,
                                                       "y":calculator.voltageAtNode(calculator.getNodeOfWire(i)),
@@ -106,14 +103,15 @@ Entity{
                                                       "sf":root.sf});
             wire.parent=root.parent;
             root.wires[i]=wire;
-            console.log("Current trough Wire at pos : ", calculator.getXCoordOfWire(i),calculator.getYCoordOfWire(i),calculator.getCurrentofWire(i));
-
         }
 
+        //Build switches
         for(i=0;i<calculator.getNumberOfSwitches();i++){
 
+            //Lowest voltage
             var minVolt = Math.min(calculator.voltageAtNode(calculator.node1AtSwitch(i)),calculator.voltageAtNode(calculator.node2AtSwitch(i)));
 
+            //Assign correct params and make
             var swi = o.switchFactory.createObject(null,{"switchNr":i,
                                                        "s":70,
                                                        "l": 1*root.sf,
@@ -123,18 +121,14 @@ Entity{
                                                        "orientationAngle":90*(calculator.getAngleOfSwitch(i)-1)});
             swi.parent=root.parent;
             root.switches[i]=swi;
-            console.log("Switch: ", calculator.getXCoordOfSwitch(i),calculator.getYCoordOfSwitch(i));
-
         }
-
-        console.log("number of sources, resistors", root.sources.length, root.resistors.length);
 
         setSol();    //show nodal solution on screen, for debugging
         setMiddle(); //set camera position
 
     }
 
-
+    //Recalculate some values and adjust some components, similar to above
     function redrawLevel(){
         calculator.solveLevel();
 
@@ -142,8 +136,6 @@ Entity{
 
             sources[i].changeSize(calculator.getVoltageAtSource(i));
             sources[i].changeHeight(calculator.voltageAtNode(calculator.nodeMAtSource(i)));
-
-            //TODO tijdelijk
             sources[i].sourceColor = "firebrick"
 
         }
@@ -152,13 +144,7 @@ Entity{
 
             var minVolt = Math.min(calculator.voltageAtNode(calculator.node1AtResistor(i)),calculator.voltageAtNode(calculator.node2AtResistor(i)));
             var maxVolt = Math.max(calculator.voltageAtNode(calculator.node1AtResistor(i)),calculator.voltageAtNode(calculator.node2AtResistor(i)));
-
-
-            //Hoek van de weerstand
             var angle = Math.atan2(root.sf,(minVolt-maxVolt));
-
-
-            //Lengte van de weerstand
             var length = Math.abs(((maxVolt-minVolt))/Math.cos(angle));
 
             resistors[i].changeAngle(angle*180/Math.PI);
@@ -168,8 +154,6 @@ Entity{
             resistors[i].changeOrientationAngle(90*(calculator.getAngleOfResistor(i)-1));
             resistors[i].x=calculator.getXCoordOfResistor(i)*root.sf;
             resistors[i].z=-calculator.getYCoordOfResistor(i)*root.sf;
-
-            //TODO tijdelijk
             resistors[i].resColor = "slateblue"
 
         }
@@ -181,8 +165,10 @@ Entity{
             wires[i].adjustElectrons();
 
         }
+
         for(var i=0;i<switches.length;i++){
             var minVolt = Math.min(calculator.voltageAtNode(calculator.node1AtSwitch(i)),calculator.voltageAtNode(calculator.node2AtSwitch(i)));
+
             if(calculator.isSwitchUp(i)){
                 switches[i].changeLength(0.1*root.sf);
                 switches[i].changeHeight(minVolt)
@@ -191,44 +177,37 @@ Entity{
                 switches[i].changeLength(1*root.sf);
                 switches[i].changeHeight(minVolt)
             }
-
-            //TODO tijdelijk
             switches[i].switchColor = "orange"
 
         }
-
-
         setSol();
     }
 
     //Function for getting middle of circuit
     function setMiddle(){
 
-    var MaxX = 1;
-    var MinX= 100000;
+        var MaxX = 1;
+        var MinX= 100000;
 
-    for(var i=0;i<wires.length;i++){
-        MaxX= Math.max(MaxX,wires[i].x);
-        MinX=Math.min(MinX,wires[i].x);
+        for(var i=0;i<wires.length;i++){
+            MaxX= Math.max(MaxX,wires[i].x);
+            MinX=Math.min(MinX,wires[i].x);
 
-    }
+        }
 
+        var MaxY = 1;
+        var MinY= 100000;
 
+        for(var i=0;i<wires.length;i++){
+            MaxY= Math.max(MaxY,-wires[i].z);
+            MinY=Math.min(MinY,-wires[i].z);
 
+        }
 
-    var MaxY = 1;
-    var MinY= 100000;
-
-    for(var i=0;i<wires.length;i++){
-        MaxY= Math.max(MaxY,-wires[i].z);
-        MinY=Math.min(MinY,-wires[i].z);
-
-    }
-
-        setCam( (((MaxX-MinX)/2)+MinX), (((MaxY-MinY)/2)+MinY));
+        setCam((((MaxX-MinX)/2)+MinX), (((MaxY-MinY)/2)+MinY));
 
     }
-    }
+}
 
 
 

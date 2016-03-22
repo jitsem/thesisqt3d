@@ -519,10 +519,10 @@ Correct:
 
 void Calc::setCurrentsOfResistorsAndSwitches()
 {
-    for(auto r : resistors){
+    for(auto& r : resistors){
         r->setCurrent(std::abs(voltageAtNode(r->getNode1())-voltageAtNode(r->getNode2()))/r->getValue());
     }
-    for(auto sw : switches){
+    for(auto& sw : switches){
         if(!sw->getUp())
             sw->setCurrent(std::abs(voltageAtNode(sw->getNode1())-voltageAtNode(sw->getNode2()))/sw->getValue());
         else
@@ -879,20 +879,23 @@ bool Calc::setCurrentsOfStrayWires(){
 
 std::vector<float> Calc::computeNetwork(int  nrOfNodes)
 {
-    //Compute voltages at each node, TODO commenten
+    //Compute voltages for each node, done by matrix calculations. See report for more details
 
     const int m =sources.size();
-    MatrixXf g(nrOfNodes,nrOfNodes);
-    MatrixXf b(nrOfNodes,m);
-    MatrixXf c(m,nrOfNodes);
-    MatrixXf d(m,m);          //dependant sources
-    MatrixXf a((nrOfNodes+m),(nrOfNodes+m));
+    MatrixXf a((nrOfNodes+m),(nrOfNodes+m)); //Matrix with all parameters
 
-    MatrixXf z(nrOfNodes+m,1);
-    MatrixXf i(nrOfNodes,1);
-    MatrixXf e(m,1);
+    MatrixXf g(nrOfNodes,nrOfNodes); //Part of A Matrix, describes all connected passive elements
+    MatrixXf b(nrOfNodes,m);    //Part of A Matrix, describes connections of all sources
+    MatrixXf c(m,nrOfNodes);    //Part of A Matrix, transpose of B
+    MatrixXf d(m,m);          //All zeros, can be used for dependant sources
 
-    //init matrices
+    MatrixXf z(nrOfNodes+m,1); // Holds values of independant current and voltage sources
+    MatrixXf i(nrOfNodes,1);   //Part of Z matrix, holds values of current sources
+    MatrixXf e(m,1); //Part of Z matrix, holds values of voltage sources
+
+    VectorXf x; //Hold unknowm quantities. Voltages at nodes and currents trough source
+
+    //initialize matrices
     g<<MatrixXf::Zero(nrOfNodes,nrOfNodes);
     b<<MatrixXf::Zero(nrOfNodes,m);
     c<<MatrixXf::Zero(m,nrOfNodes);
@@ -901,10 +904,15 @@ std::vector<float> Calc::computeNetwork(int  nrOfNodes)
     z<<MatrixXf::Zero(nrOfNodes+m,1);
     i<<MatrixXf::Zero(nrOfNodes,1);
     e<<MatrixXf::Zero(m,1);
-    //Fill matrix for G
 
-    //Resistors
-    for(auto& res:resistors){
+
+    //Joined vector with resistors and switches
+    std::vector<std::shared_ptr<Component>> swAndR;
+    swAndR.insert( swAndR.end(), resistors.begin(), resistors.end());
+    swAndR.insert( swAndR.end(), switches.begin(), switches.end());
+
+    //Fill matrix for g with Resistors and switches
+    for(auto& res:swAndR){
 
         for (int i=1;i<=nrOfNodes;i++){
             if(res->getNode1()==i||res->getNode2()==i){
@@ -917,21 +925,6 @@ std::vector<float> Calc::computeNetwork(int  nrOfNodes)
         }
 
     }
-    //Switches
-    for(auto& sw:switches){
-
-        for (int i=1;i<=nrOfNodes;i++){
-            if(sw->getNode1()==i||sw->getNode2()==i){
-                g(i-1,i-1)+=(1/(sw->getValue()));
-            }
-        }
-        if(sw->getNode1()!=0&&sw->getNode2()!=0){
-            g(sw->getNode1()-1,sw->getNode2()-1)+= (-1/sw->getValue());
-            g(sw->getNode2()-1,sw->getNode1()-1)+= (-1/sw->getValue());
-        }
-
-    }
-
 
     //Fill matrix b
     for(int i=0;i<m;i++){
@@ -958,24 +951,28 @@ std::vector<float> Calc::computeNetwork(int  nrOfNodes)
         }
     }
 
+    //Build A Matrix
     a.resize(g.rows()+c.rows(),b.cols()+g.cols());
     a<<g,b,
-            c,d       ;
+            c,d ;
 
 
 
 
-    //fill e matrix
+    //Fill e matrix
     for(int i=0;i<m;i++){
         e(i,0)=sources.at(i)->getValue();
     }
 
-
+    //Build z Matrix
     z<<i,
             e;
 
-    VectorXf x = a.colPivHouseholderQr().solve(z);
+    //Solve for X
+    x = a.colPivHouseholderQr().solve(z);
 
+
+    //Save solutions
     std::vector<float> solu;
     solu.push_back(0);   //Add value of ground node, always 0
     for (int i=0;i<nrOfNodes-1;i++){

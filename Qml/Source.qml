@@ -6,28 +6,24 @@ import QtQuick 2.2 as QQ2
 
 
 
-
+//Source Entity
 Entity{
     id:source
+    components: [somesh,sotrans]
 
-    property real s: 1 //Grote van bron, bepaald door spanning
+    //Size of source, depends on voltage
+    property real s: 1
 
-
-    //Positie variablen
+    //Positional variables
     property real x: 0
     property real y: 0
     property real z: 0
 
-    //AnimatieVariablen
-    property real s_new:1 //Nieuwe waarde voor animatie
-    property bool animationRunning: false // Animatie in overgang
-
     //Ambient color, changed on highlight
     property var sourceColor: "firebrick"
-    components: [somesh,sotrans]
 
+    //Basic model SourceS
     Entity{
-        //Basismodel bron
         id:somesh
         components: [mesh,trans,mat]
 

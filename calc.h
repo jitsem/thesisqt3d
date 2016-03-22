@@ -14,7 +14,7 @@
 #include "goal.h"
 
 
-
+//Class where all major calculations and I/O happen
 class Calc: public QObject
 {
 Q_OBJECT
@@ -94,11 +94,11 @@ public:
 
     //Read line of levelfile when a component is declared
     bool process_wire_line(QString& lijn);
-    bool process_resistor_line(QString &lijn);
-    bool process_source_line(QString &lijn);
-    bool process_switch_line(QString &lijn);
-    bool process_goal_line(QString &lijn); //For other team
-    bool process_click_line(QString &lijn); //For other team
+    bool process_resistor_line(QString& lijn);
+    bool process_source_line(QString& lijn);
+    bool process_switch_line(QString& lijn);
+    bool process_goal_line(QString& lijn); //For other team
+    bool process_click_line(QString& lijn); //For other team
 
     //Set file path
     void setFileName(const QString &value);
@@ -129,6 +129,8 @@ private:
 
     Calc();
     static std::shared_ptr<Calc> instance;
+
+    //Internal solving method
     std::vector<float> computeNetwork(int nrOfNodes);
 
 

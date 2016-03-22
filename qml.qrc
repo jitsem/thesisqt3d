@@ -9,10 +9,7 @@
         <file>Qml/GroundPlane.qml</file>
         <file>Qml/Wire.qml</file>
         <file>Qml/Electron.qml</file>
-        <file>Qml/Main.qml</file>
         <file>Qml/EditMenu.qml</file>
         <file>Qml/Switch.qml</file>
-	<file>Qml/SwitchMenu.qml</file>
-
     </qresource>
 </RCC>

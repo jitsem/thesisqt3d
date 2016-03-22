@@ -26,27 +26,23 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
+    QApplication app(argc, argv);
 
-
-    //Dingen voor netwerkcalculation
+    //Init calculations class
     std::shared_ptr<Calc> c=Calc::Instance();
 
-
-
-    //Dingen voor 3D
-    QApplication app(argc, argv);
+    //Set some OpenGl parameters
     QSurfaceFormat format;
     if(QOpenGLContext::openGLModuleType() == QOpenGLContext::LibGL){
         format.setVersion(4,1);
         format.setProfile((QSurfaceFormat::CoreProfile));
     }
-
     format.setDepthBufferSize(24);
     format.setSamples(4);
     format.setStencilBufferSize(8);
     QSurfaceFormat::setDefaultFormat(format);
 
-
+    //Launch the MainWindow
     MainWindow w;
     w.show();
 

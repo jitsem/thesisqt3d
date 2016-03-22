@@ -2,7 +2,7 @@
 #define GOAL_H
 #include <QPoint>
 
-//Class to define a goal: For compability with other team
+//Class to define a goal: For usage in the other teams game
 class Goal
 {
 public:

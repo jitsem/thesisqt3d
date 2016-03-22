@@ -2,9 +2,14 @@ import Qt3D.Core 2.0
 import Qt3D.Render 2.0
 
 
-//Grondvlak om 3D-zicht te verbeteren
+//GroundPlane for better "3D-feel"
 Entity {
     id: root
+    components: [
+        groundMesh,
+        groundTransform,
+        groundMaterial
+    ]
 
 
     PlaneMesh {
@@ -30,11 +35,6 @@ Entity {
 
     }
 
-    components: [
-        groundMesh,
-        groundTransform,
-        groundMaterial
-    ]
 }
 
 
