@@ -39,7 +39,9 @@
 
 
 //TODO dynamically connect 2 components with drag select
+//TODO make function showBox(QString) instead of repeating the messagebox code all the time
 
+//needed to determine move or click
 QPoint  dragStartPosition;
 
 
@@ -59,6 +61,11 @@ DrawZone::DrawZone(QWidget *parent)
 
 }
 
+//check if circuit is closed,
+//determine node numbers
+//convert from pixels to grid coordinates
+//convert to other model for 3d (to the vectors) We know we have to merge the models ;)
+//write to file
 
 void DrawZone::slotTriggeredSave()
 {
@@ -95,10 +102,10 @@ void DrawZone::slotTriggeredSave()
     }
 
 }
-
+// add ground symbol to wire that is selected
 
 void DrawZone::slotTriggeredGround()
-{   
+{
     //DONE make sure the input is tested!
     if(groundpresent)
     {
@@ -171,6 +178,7 @@ void DrawZone::slotTriggeredGround()
         return;
     }
 }
+//nothing really happens, but needed to accept drops from our program
 void DrawZone::dragEnterEvent(QDragEnterEvent *event)
 {
     if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
@@ -184,27 +192,33 @@ void DrawZone::dragEnterEvent(QDragEnterEvent *event)
         event->ignore();
     }
 }
+//for now only update polypoints to draw correct path when moving ground
+//will be updated for more components
 void DrawZone::dragMoveEvent(QDragMoveEvent *event)
 {
     component_lb *child = dynamic_cast<component_lb*>(childAt(dragStartPosition));
-    if(event->source()==this){
-        if (child->getType()==4){
-            polypoints[1]=event->pos();
-            polypoints[2]=event->pos();
-            update();
+    if(child){
+        if(event->source()==this){
+            if (child->getType()==4){
+                polypoints[1]=event->pos();
+                polypoints[2]=event->pos();
+                update();
+            }
         }
-    }
-    if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
-        if (event->source() == this) {
-            event->setDropAction(Qt::MoveAction);
-            event->accept();
+        if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
+            if (event->source() == this) {
+                event->setDropAction(Qt::MoveAction);
+                event->accept();
+            } else {
+                event->acceptProposedAction();
+            }
         } else {
-            event->acceptProposedAction();
+            event->ignore();
         }
-    } else {
-        event->ignore();
     }
 }
+//determine drag or select
+//execute dragging by creating QDrag obj
 void DrawZone::mouseMoveEvent(QMouseEvent *event)
 {
     if (!(event->buttons() & Qt::LeftButton))
@@ -257,6 +271,8 @@ void DrawZone::mouseMoveEvent(QMouseEvent *event)
         child->setPixmap(pixmap);
     }
 }
+//add new component to circuit when it is dropped
+//taking into account every sort of angle/grid size component_type,..
 void DrawZone::dropEvent(QDropEvent *event)
 {
     setCursor(Qt::OpenHandCursor);
@@ -366,7 +382,8 @@ void DrawZone::dropEvent(QDropEvent *event)
         if(child!=nullptr){
             //TODO check if direction is oposite!
             //TODO make sure label is placed correctly if resistor/source is placed on top of another
-            if((newIcon->getNode1x()==child->getNode1x())&&(newIcon->getNode1y()==child->getNode1y())&&(newIcon->getNode2x()==child->getNode2x())&&(newIcon->getNode2y()==child->getNode2y())){
+            if((newIcon->getNode1x()==child->getNode1x())&&(newIcon->getNode1y()==child->getNode1y())
+                    &&(newIcon->getNode2x()==child->getNode2x())&&(newIcon->getNode2y()==child->getNode2y())){
                 qDebug()<<"Placed component on top of other component";
                 if(newIcon->buddy())
                     delete newIcon->buddy();
@@ -391,6 +408,8 @@ void DrawZone::dropEvent(QDropEvent *event)
     }
 
 }
+//keep dragstartposition
+//make sure everything is deselected when user clicks on empty space
 void DrawZone::mousePressEvent(QMouseEvent *event)
 {
     setCursor(Qt::ClosedHandCursor);
@@ -410,6 +429,7 @@ void DrawZone::mousePressEvent(QMouseEvent *event)
         dragStartPosition = event->pos();
     }
 }
+//select component if releaseevent is near pressevent
 void DrawZone::mouseReleaseEvent(QMouseEvent *event)
 {
     setCursor(Qt::OpenHandCursor);
@@ -430,6 +450,7 @@ void DrawZone::mouseReleaseEvent(QMouseEvent *event)
     return;
 
 }
+//see header
 component_lb *DrawZone::removeGray(component_lb &child){
 
     switch (child.getType()){
@@ -493,6 +514,8 @@ component_lb *DrawZone::setGray(component_lb &child)
 
     return &child;
 }
+//drawing a rectangle every gridsize pixels
+//also needs to draw connections between components if
 void DrawZone::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
@@ -514,16 +537,17 @@ void DrawZone::paintEvent(QPaintEvent *event)
     painter.end();
     return;
 }
-
+//getter
 int DrawZone::getGroundpresent() const
 {
     return groundpresent;
 }
-
+//setter
 void DrawZone::setGroundpresent(int value)
 {
     groundpresent = value;
 }
+//check circuit is closed counting connected points (node1&2,x&y)
 bool DrawZone::checkClosedCircuit(){
 
     updateNodePositions();
@@ -560,6 +584,8 @@ bool DrawZone::checkClosedCircuit(){
 
     }
 }
+//main method that solves the node numbers in the circuit, calls solvenode for every node until all nodes are finished
+//backtracking algorithm that keeps a stack of visited components
 void DrawZone::calc_nodes(){
 
 
@@ -604,8 +630,9 @@ void DrawZone::calc_nodes(){
         overschot=solveNode(list,current,curnode,stack);
     }
 }
-
-QList<component_lb *> DrawZone::solveNode(QList<component_lb *> &l, component_lb *current, int & curnode, QList<component_lb *> & stack){
+//method for solving (filling out) one node
+QList<component_lb *> DrawZone::solveNode(QList<component_lb *> &l,
+                                          component_lb *current, int & curnode, QList<component_lb *> & stack){
 
     QList<component_lb*> halfaf;
     QList<component_lb*> neighbours;
@@ -686,6 +713,7 @@ QList<component_lb *> DrawZone::solveNode(QList<component_lb *> &l, component_lb
     return halfaf;
 
 }
+//get neighbouring components based on their nodes positions
 QList<component_lb *> DrawZone::getNeighbours(QList<component_lb *> &l, component_lb & current){
 
     QList<component_lb *> neighbours;
@@ -707,6 +735,7 @@ QList<component_lb *> DrawZone::getNeighbours(QList<component_lb *> &l, componen
     }
     return neighbours;
 }
+//converts from component_lb objects to vectorlists in 3d model
 void DrawZone::writeToVectors()
 {
     calc_nodes();
@@ -728,7 +757,9 @@ void DrawZone::writeToVectors()
 
         case 0:
         {
-            auto s = std::make_shared<Source>(w->getValue(),w->getN1(),w->getN2(),w->getNode1x()/GRIDSIZE,w->getNode1y()/GRIDSIZE,angle,w->getAdjust(),w->getBegin(),w->getStepSize());
+            auto s = std::make_shared<Source>(w->getValue(),w->getN1(),w->getN2(),
+                                              w->getNode1x()/GRIDSIZE,w->getNode1y()/GRIDSIZE,angle,w->getAdjust(),w->getBegin(),
+                                              w->getStepSize());
             auto wir = std::make_shared<Wire>(0.0,w->getNode1x()/GRIDSIZE,w->getNode1y()/GRIDSIZE,angle,1,w->getN2());
             c->addSource(s);
             c->addWire(wir);
@@ -736,13 +767,15 @@ void DrawZone::writeToVectors()
         }
         case 1:
         {
-            auto r = std::make_shared<Resistor>(w->getValue(),w->getN1(),w->getN2(),w->getNode1x()/GRIDSIZE,w->getNode1y()/GRIDSIZE,angle,w->getAdjust(),w->getBegin(),w->getStepSize());
+            auto r = std::make_shared<Resistor>(w->getValue(),w->getN1(),w->getN2(),w->getNode1x()/GRIDSIZE,w->getNode1y()/GRIDSIZE,
+                                                angle,w->getAdjust(),w->getBegin(),w->getStepSize());
             c->addResistor(r);
             break;
         }
         case 2:
         {
-            auto wir = std::make_shared<Wire>(w->getValue(),w->getNode1x()/GRIDSIZE,w->getNode1y()/GRIDSIZE,angle,1,w->getN2(),0,w->getGoal());
+            auto wir = std::make_shared<Wire>(w->getValue(),w->getNode1x()/GRIDSIZE,w->getNode1y()/GRIDSIZE,angle,1,
+                                              w->getN2(),0,w->getGoal());
             wir->setValue(w->getValue());
             c->addWire(wir);
             break;
@@ -759,6 +792,7 @@ void DrawZone::writeToVectors()
         }
     }
 }
+//circuit is drawn directly from file, from 3d vectors.. so conversion to component_lb objects is done here
 void DrawZone::drawCircuit()
 {
     //DONE vorige tekening clearen
@@ -831,7 +865,8 @@ void DrawZone::drawCircuit()
                 break;
             }
 
-            component_lb *newIcon = new component_lb(this, w->getValue(), XCoord, YCoord, XCoord2,YCoord2, angle, 2,0, w->getNode(),w->getNode(),0,0,0,w->getIsGoal());
+            component_lb *newIcon = new component_lb(this, w->getValue(), XCoord, YCoord, XCoord2,YCoord2,
+                                                     angle, 2,0, w->getNode(),w->getNode(),0,0,0,w->getIsGoal());
             newIcon->setFixedSize(GRIDSIZE,GRIDSIZE);
             newIcon->setScaledContents(true);
             newIcon->setPixmap(*pixmap);
@@ -925,7 +960,9 @@ void DrawZone::drawCircuit()
             break;
         }
         //TODO check if nodem en p are correct with node1 en node2
-        component_lb *newIcon = new component_lb(this, s->getValue(), XCoord, YCoord, XCoord2,YCoord2, angle,0,0, s->getNodep(),s->getNodem(),s->getIsAdjustable(),s->getBeginValue(),s->getStepSize());
+        component_lb *newIcon = new component_lb(this, s->getValue(), XCoord, YCoord, XCoord2,
+                                                 YCoord2, angle,0,0, s->getNodep(),s->getNodem(),s->getIsAdjustable(),
+                                                 s->getBeginValue(),s->getStepSize());
         newIcon->setFixedSize(GRIDSIZE,GRIDSIZE);
         newIcon->setScaledContents(true);
         newIcon->setPixmap(*pixmap);
@@ -987,7 +1024,8 @@ void DrawZone::drawCircuit()
             break;
         }
 
-        component_lb *newIcon = new component_lb(this, r->getValue(), XCoord, YCoord, XCoord2,YCoord2, angle, 1, 0, r->getNode1(),r->getNode2(),r->getIsAdjustable(),r->getBeginValue(),r->getStepSize());
+        component_lb *newIcon = new component_lb(this, r->getValue(), XCoord, YCoord, XCoord2,YCoord2, angle, 1, 0, r->getNode1(),
+                                                 r->getNode2(),r->getIsAdjustable(),r->getBeginValue(),r->getStepSize());
         newIcon->setFixedSize(GRIDSIZE,GRIDSIZE);
         newIcon->setScaledContents(true);
         newIcon->setPixmap(*pixmap);
@@ -1052,7 +1090,8 @@ void DrawZone::drawCircuit()
             break;
         }
 
-        component_lb *newIcon = new component_lb(this, s->getValue(), XCoord, YCoord, XCoord2,YCoord2, angle, 3, 0, s->getNode1(),s->getNode2());
+        component_lb *newIcon = new component_lb(this, s->getValue(), XCoord, YCoord, XCoord2,YCoord2, angle, 3, 0,
+                                                 s->getNode1(),s->getNode2());
         newIcon->setFixedSize(GRIDSIZE,GRIDSIZE);
         newIcon->setScaledContents(true);
         newIcon->setPixmap(*pixmap);
@@ -1076,6 +1115,7 @@ void DrawZone::drawCircuit()
 
 
 }
+//create valuelabel that resizes to 1/4th of the gridsize
 void DrawZone::addValueToComponent(component_lb * &newIcon){
     if(newIcon->getType()==0 || newIcon->getType()==1){
         QLabel    *valueLabel = new QLabel(QString::number(newIcon->getValue()), this);
@@ -1100,7 +1140,7 @@ void DrawZone::addValueToComponent(component_lb * &newIcon){
         valueLabel->show();
     }
 }
-
+//see header
 void DrawZone::rotateToAngle(component_lb &child){
 
     int curangle=child.getAngle();
@@ -1109,6 +1149,7 @@ void DrawZone::rotateToAngle(component_lb &child){
     transform.rotate((-90*(curangle-1)));
     child.setPixmap(orig->transformed(transform));
 }
+//take into account the angle of the components and fill out there nodal positions correctly
 void DrawZone::updateNodePositions(){
 
     QList<component_lb*> list = this->findChildren<component_lb *>();
@@ -1141,6 +1182,7 @@ void DrawZone::updateNodePositions(){
         }
     }
 }
+//self explanatory, to snap to grid
 int DrawZone::roundUp(int numToRound, int multiple)
 {
     if(multiple == 0)
@@ -1153,6 +1195,7 @@ int DrawZone::roundUp(int numToRound, int multiple)
     return result;
 
 }
+// create interaction widgets/dialogs to edit components
 void DrawZone::mouseDoubleClickEvent( QMouseEvent * event )
 {
     if ( event->button() == Qt::LeftButton )
@@ -1251,4 +1294,3 @@ void DrawZone::mouseDoubleClickEvent( QMouseEvent * event )
         }
     }
 }
-
