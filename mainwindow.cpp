@@ -87,11 +87,11 @@ void MainWindow::on_actionOpen_File_triggered()
         else{
             calculator->setFileName(temp);
             QMessageBox msgBox;
-            msgBox.setText("Error!");
+            msgBox.setText("<b>Error!</b>");
             msgBox.setInformativeText("Invalid File!");
             msgBox.setStandardButtons(QMessageBox::Ok);
             msgBox.setDefaultButton(QMessageBox::Ok);
-            int ret = msgBox.exec();
+            msgBox.exec();
         }
     }
 }
@@ -102,9 +102,9 @@ void MainWindow::on_action3D_Preview_triggered()
     if (!drawzoneWidget->checkClosedCircuit()||!drawzoneWidget->getGroundpresent()){
         QMessageBox msgBox;
         if(!drawzoneWidget->checkClosedCircuit())
-            msgBox.setText("Circuit not closed!");
+            msgBox.setText("<b>Circuit not closed!</b>");
         else
-            msgBox.setText("You have to ground a wire to complete the circuit");
+            msgBox.setText("<b>You have to ground a wire to complete the circuit</b>");
         msgBox.setInformativeText("3D preview is not possible");
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setDefaultButton(QMessageBox::Ok);
@@ -126,7 +126,7 @@ void MainWindow::on_action3D_Preview_triggered()
         }
         else{
             QMessageBox msgBox;
-            msgBox.setText("Sorry, Your application is a bit to complex for our engine");
+            msgBox.setText("<b>Sorry, Your application is a bit to complex for our engine</b>");
             msgBox.setInformativeText("Please refrain from shorting out components");
             msgBox.setStandardButtons(QMessageBox::Ok);
             msgBox.setDefaultButton(QMessageBox::Ok);
@@ -198,7 +198,7 @@ void MainWindow::on_actionEdit_Goals_triggered()
     }
 
     //Clean up
-    delete d,vbox,label3Star,threeStarValue,label2Star,twoStarValue,buttonBox;
+    delete d;
 }
 
 void MainWindow::enableIcons(){
@@ -297,4 +297,15 @@ void MainWindow::on_action_Paste_triggered()
 
         }
     }
+}
+
+
+void MainWindow::on_actionAbout_triggered()
+{
+    QMessageBox msgBox;
+    msgBox.setText("<b>Hello thanks for trying our app</b>");
+    msgBox.setInformativeText("We apprieciate it!");
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    msgBox.setDefaultButton(QMessageBox::Ok);
+    msgBox.exec();
 }

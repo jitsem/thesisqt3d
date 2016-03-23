@@ -48,6 +48,8 @@ private slots:
     void on_action_Copy_triggered();
 
     void on_action_Paste_triggered();
+    //Show an about message
+    void on_actionAbout_triggered();
 
 private:
     Ui::MainWindow *ui;

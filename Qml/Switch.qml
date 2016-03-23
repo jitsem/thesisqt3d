@@ -64,13 +64,15 @@ Entity{
             ObjectPicker{
                 id:picker
                 onClicked: {
+                    if(!node.parent.generator.clickPrevent()){
+                        calculator.toggleSwitch(switchNr);
+                        world3D.generator.redrawLevel();
 
-                    calculator.toggleSwitch(switchNr);
-                    world3D.generator.redrawLevel();
+                    }
                 }
 
-
             }
+
         }
         Transform{
             id:retrans
@@ -89,7 +91,6 @@ Entity{
         rotation: fromAxisAndAngle(Qt.vector3d(0,1,0),orientationAngle)
         translation: (Qt.vector3d(x, y, z))
     }
-
 
 
     //Animation-functions and objects
@@ -145,6 +146,5 @@ Entity{
         animateOrientationAngle.to = newValue;
         animateOrientationAngle.start();
     }
-
 }
 
