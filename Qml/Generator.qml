@@ -112,7 +112,7 @@ Entity{
             var minVolt = Math.min(calculator.voltageAtNode(calculator.node1AtSwitch(i)),calculator.voltageAtNode(calculator.node2AtSwitch(i)));
 
             //Assign correct params and make
-            var swi = o.switchFactory.createObject(null,{"switchNr":i,
+            var swi = o.switchFactory.createObject(root,{"switchNr":i,
                                                        "s":70,
                                                        "l": 1*root.sf,
                                                        "x":calculator.getXCoordOfSwitch(i)*root.sf,
@@ -181,6 +181,24 @@ Entity{
 
         }
         setSol();
+    }
+
+
+    //Timer and function for preventing more than one switch transition at once
+    QQ2.Timer {
+        id:clickPrev
+        interval: 1200
+        running: false;
+        repeat: false
+    }
+
+    function clickPrevent(){
+        if(!clickPrev.running){
+            clickPrev.start();
+            return false;
+        }
+
+        return true;
     }
 
     //Function for getting middle of circuit
