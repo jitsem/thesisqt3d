@@ -15,8 +15,7 @@ SOURCES += main.cpp \
     component_lb.cpp \
     dragcomponent.cpp \
     drawzone.cpp \
-    mainwindow.cpp \
-    goal.cpp
+    mainwindow.cpp
 
 HEADERS += \
     calc.h \
@@ -28,8 +27,7 @@ HEADERS += \
     component_lb.h \
     dragcomponent.h \
     drawzone.h \
-    mainwindow.h \
-    goal.h
+    mainwindow.h
 
 
 

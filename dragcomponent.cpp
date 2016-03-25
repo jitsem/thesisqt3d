@@ -10,6 +10,7 @@
 #include <QGraphicsItem>
 #include <QDebug>
 #include "component_lb.h"
+#include "mainwindow.h"
 
 
 DragComponent::DragComponent(QWidget *parent)
@@ -27,7 +28,7 @@ DragComponent::DragComponent(QWidget *parent)
     component_lb *sourceIcon = new component_lb(this,15,0,0,0,0,1,0);
     QPixmap source=QPixmap(":/assets/source_small.png");
     sourceIcon->setPixmap(source);
-    sourceIcon->setFixedSize(GRIDSIZE,GRIDSIZE);
+    sourceIcon->setFixedSize(MainWindow::Instance()->getGridSize(),MainWindow::Instance()->getGridSize());
     sourceIcon->setScaledContents(true);
     sourceIcon->setAttribute(Qt::WA_DeleteOnClose);
     sourceIcon->show();
@@ -37,7 +38,7 @@ DragComponent::DragComponent(QWidget *parent)
     QPixmap res2=QPixmap(":/assets/res_small.png");
     res1->setPixmap(res2);
     res1->move(0,10);
-    res1->setFixedSize(GRIDSIZE,GRIDSIZE);
+    res1->setFixedSize(MainWindow::Instance()->getGridSize(),MainWindow::Instance()->getGridSize());
     res1->setScaledContents(true);
     res1->setAttribute(Qt::WA_DeleteOnClose);
     res1->show();
@@ -45,7 +46,7 @@ DragComponent::DragComponent(QWidget *parent)
     component_lb *wire1 = new component_lb(this,0,3,4,20,4,1,2);
     QPixmap wir=QPixmap(":/assets/wire_small.png");
     wire1->setPixmap(wir);
-    wire1->setFixedSize(GRIDSIZE,GRIDSIZE);
+    wire1->setFixedSize(MainWindow::Instance()->getGridSize(),MainWindow::Instance()->getGridSize());
     wire1->setScaledContents(true);
     wire1->setAttribute(Qt::WA_DeleteOnClose);
     wire1->show();
@@ -54,7 +55,7 @@ DragComponent::DragComponent(QWidget *parent)
     component_lb *sw_op = new component_lb(this,0,0,0,0,0,1,3);
     QPixmap switch_open=QPixmap(":/assets/sw_open.png");
     sw_op->setPixmap(switch_open);
-    sw_op->setFixedSize(GRIDSIZE,GRIDSIZE);
+    sw_op->setFixedSize(MainWindow::Instance()->getGridSize(),MainWindow::Instance()->getGridSize());
     sw_op->setScaledContents(true);
     sw_op->setAttribute(Qt::WA_DeleteOnClose);
     sw_op->show();
@@ -113,7 +114,7 @@ void DragComponent::mousePressEvent(QMouseEvent *event)
 
     QDrag *drag = new QDrag(this);
     drag->setMimeData(mimeData);
-    drag->setPixmap(pixmap.scaledToHeight(GRIDSIZE));
+    drag->setPixmap(pixmap.scaledToHeight(MainWindow::Instance()->getGridSize()));
     drag->setHotSpot(event->pos() - child->pos());
 
 

@@ -16,6 +16,7 @@
 #include <QDialog>
 #include <QSpinBox>
 #include <QDialogButtonBox>
+#include <QScreen>
 
 
 #include "dragcomponent.h"
@@ -23,34 +24,70 @@
 #include "drawzone.h"
 
 
-
+std::shared_ptr<MainWindow> MainWindow::instance=nullptr;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
-
-    QHBoxLayout *horlayout = new QHBoxLayout();
-    ui->widget_container->setLayout(horlayout);
-    QWidget *componentsWidget=new DragComponent();
-    drawzoneWidget=new DrawZone(this);
-    componentsWidget->setMaximumWidth(100);
-    horlayout->addWidget(componentsWidget);
-    horlayout->addWidget(drawzoneWidget);
 
     calculator=Calc::Instance();
-
-    //Connect signal to different classes
-    QObject::connect (this,SIGNAL(on_actionSave_triggered()),drawzoneWidget,SLOT(slotTriggeredSave()));
-    QObject::connect (this,SIGNAL(on_actionGround_triggered()),drawzoneWidget,SLOT(slotTriggeredGround()));
 
 
 
 }
 
+void MainWindow::setUpUi()
+{
+    //Build basic ui
+    ui->setupUi(this);
+
+    //Calculate GridSize
+    gridSize = QApplication::screens().at(0)->logicalDotsPerInch()/1.5;
+
+    QHBoxLayout *horlayout = new QHBoxLayout();
+    QWidget *componentsWidget=new DragComponent();
+    drawzoneWidget=new DrawZone(this);
+
+    ui->widget_container->setLayout(horlayout);
+    horlayout->addWidget(componentsWidget);
+    horlayout->addWidget(drawzoneWidget);
+
+
+    componentsWidget->setMaximumWidth(gridSize*1.5);
+
+    //Connect signal to different classes
+    QObject::connect (this,SIGNAL(on_actionSave_triggered()),drawzoneWidget,SLOT(slotTriggeredSave()));
+    QObject::connect (this,SIGNAL(on_actionGround_triggered()),drawzoneWidget,SLOT(slotTriggeredGround()));
+}
+
+int MainWindow::getGridSize() const
+{
+    return gridSize;
+}
+
+void MainWindow::setGridSize(int value)
+{
+    gridSize = value;
+}
+
+std::shared_ptr<MainWindow> MainWindow::Instance()
+{
+    //Return instance pointer; if it not exists, make it
+    if(!instance){
+        instance = std::shared_ptr<MainWindow>(new MainWindow());
+        instance->setUpUi();
+    }
+
+    return instance;
+}
+
+
 void MainWindow::delete3D()
 {
+    //Close 3d
     view->close();
+
+    //Redraw circuit
     drawzoneWidget->drawCircuit();
     this->show();
 
@@ -71,6 +108,7 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::on_actionOpen_File_triggered()
 {
+    //Select a file open, if its a correct file: Use it to draw Circuit. Else display an error
     QString fileName = QFileDialog::getOpenFileName(this,
                                                     tr("Open Level"), QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation), tr("Levels (*.sj)"),0,QFileDialog::ReadOnly);
 
@@ -98,7 +136,7 @@ void MainWindow::on_actionOpen_File_triggered()
 
 void MainWindow::on_action3D_Preview_triggered()
 {
-
+    //Check is circuit is valid, else launch an error
     if (!drawzoneWidget->checkClosedCircuit()||!drawzoneWidget->getGroundpresent()){
         QMessageBox msgBox;
         if(!drawzoneWidget->checkClosedCircuit())
@@ -110,19 +148,22 @@ void MainWindow::on_action3D_Preview_triggered()
         msgBox.setDefaultButton(QMessageBox::Ok);
         msgBox.exec();
     }
-    else {
 
+    //If circuit is valid, try to solve id. If it succeeds, launch 3D
+    else {
         drawzoneWidget->writeToVectors();
         if(calculator->solveLevel()){
 
             this->hide();
             view = new QQuickView;
+
+            //Pass some classes to the engine
             view->engine()->rootContext()->setContextProperty(QStringLiteral("_window"), view);
             view->engine()->rootContext()->setContextProperty(QStringLiteral("mainWindow"),this);
             view->engine()->rootContext()->setContextProperty(QStringLiteral("calculator"),calculator.get());
             view->setResizeMode(QQuickView::SizeRootObjectToView);
             view->setSource(QUrl("qrc:/Qml/CircuitView.qml"));
-            view->showFullScreen();
+            view->show();
         }
         else{
             QMessageBox msgBox;
@@ -140,6 +181,7 @@ void MainWindow::on_action3D_Preview_triggered()
 
 void MainWindow::on_actionNew_triggered()
 {
+
     QString fileName = QFileDialog::getSaveFileName(this,
                                                     tr("Name new Level"), QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation), tr("Levels (*.sj)"));
 
@@ -147,7 +189,7 @@ void MainWindow::on_actionNew_triggered()
 
         calculator->emptyVectors();
         calculator->setFileName(fileName);
-        calculator->writeBackToFile();  //Write to create file. TODO check of nodig
+        calculator->writeBackToFile();
         drawzoneWidget->drawCircuit();
         enableIcons();
 
@@ -176,7 +218,7 @@ void MainWindow::on_actionEdit_Goals_triggered()
 
 
 
-
+    //Signal/Slot for enabling boxes
     QObject::connect(buttonBox, SIGNAL(accepted()), d, SLOT(accept()));
     QObject::connect(buttonBox, SIGNAL(rejected()), d, SLOT(reject()));
 
@@ -221,7 +263,7 @@ void MainWindow::on_actionRotate_triggered()
 {
 
     QList<component_lb*> list = drawzoneWidget->findChildren<component_lb *>();
-    foreach(component_lb *w, list) {
+    for(auto w: list) {
         if(w->getSelected()){
             auto orig=std::make_shared<QPixmap>(*(w->pixmap()));
             QTransform transform;
@@ -246,9 +288,9 @@ Ui::MainWindow *MainWindow::getUi() const
 
 void MainWindow::on_actionDelete_triggered()
 {
-
+    //Delete component(s), for some scenarios, delete some extra stuff
     QList<component_lb*> list = drawzoneWidget->findChildren<component_lb *>();
-    foreach(component_lb *w, list) {
+    for(auto w: list) {
         if(w->getSelected()){
             if(w->getType()==4){
                 drawzoneWidget->setGroundpresent(0);
@@ -271,20 +313,22 @@ void MainWindow::on_actionDelete_triggered()
 
 void MainWindow::on_action_Copy_triggered()
 {
-        copied.clear();
-        QList<component_lb*> list = drawzoneWidget->findChildren<component_lb *>();
-        foreach(component_lb *w, list) {
-            if (w->getSelected())
-                copied.push_back(w);
-        }
+    //Clear the clipboard, and put the selected components in
+    copied.clear();
+    QList<component_lb*> list = drawzoneWidget->findChildren<component_lb *>();
+    for(auto w: list) {
+        if (w->getSelected())
+            copied.push_back(w);
+    }
 
 }
 
 void MainWindow::on_action_Paste_triggered()
 {
+    //Put components if the clipboard on the drawzone
     if (!copied.isEmpty()){
         int i=0;
-        foreach(component_lb* w,copied){
+        for(auto w:copied){
 
             component_lb *newIcon = new component_lb(drawzoneWidget,w->getValue(),0,0,0,0,w->getAngle(),w->getType());
             newIcon->setPixmap(*(w->pixmap()));
@@ -304,7 +348,25 @@ void MainWindow::on_actionAbout_triggered()
 {
     QMessageBox msgBox;
     msgBox.setText("<b>Hello thanks for trying our app</b>");
-    msgBox.setInformativeText("We apprieciate it!");
+    msgBox.setInformativeText("We made this application for our master thesis: 'Exploring the possibilities of Qt3D' \n\nFor more info on this topic, feel free to contact us!\n\n"
+                              "Sander & Jitse");
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    msgBox.setDefaultButton(QMessageBox::Ok);
+    msgBox.exec();
+}
+
+void MainWindow::on_actionInfo_triggered()
+{
+    QMessageBox msgBox;
+    msgBox.setText("<b>Welcome to our app</b>");
+    msgBox.setInformativeText("This levelBuilder is meant to be used in conjunction with the Squid Mayhem game of the other team.\n\n"
+                              "To begin you will make a normal electronic circuit as is common with all electronics simulation programs. "
+                              "At the moment, you can use the following components: Source, Resistor and Switch.\n"
+                              "After you have chosen your components, connect them via wires and choose your ground. You can also chance some values by double-clicking the components.\n"
+                              "Finally preview your work in 3D!\n\n"
+                              "In our 3D world, voltage is represented by height, current is reprsesented by the size of the electrons and resistance by the size of the resistor.\n\n"
+                              "Always remember to keep it simple: Will someone please think of the children!\n\n"
+                              "Have fun playing with our app!");
     msgBox.setStandardButtons(QMessageBox::Ok);
     msgBox.setDefaultButton(QMessageBox::Ok);
     msgBox.exec();

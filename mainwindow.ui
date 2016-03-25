@@ -64,6 +64,7 @@
     <property name="title">
      <string>Help</string>
     </property>
+    <addaction name="actionInfo"/>
     <addaction name="actionAbout"/>
    </widget>
    <addaction name="menuFile"/>
@@ -88,8 +89,8 @@
    </property>
    <property name="iconSize">
     <size>
-     <width>44</width>
-     <height>44</height>
+     <width>30</width>
+     <height>30</height>
     </size>
    </property>
    <property name="toolButtonStyle">
@@ -297,6 +298,11 @@
   <action name="actionAbout">
    <property name="text">
     <string>About</string>
+   </property>
+  </action>
+  <action name="actionInfo">
+   <property name="text">
+    <string>Info</string>
    </property>
   </action>
  </widget>

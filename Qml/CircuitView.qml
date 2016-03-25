@@ -57,7 +57,7 @@ Item {
     //Objects for showing nodal Solution
     Button{
         id:nodalInfo
-        width:  _window.height/12; height:  _window.height/12
+        width:  mainWindow.getGridSize(); height:  mainWindow.getGridSize()
         anchors.top: rotateCameraLeft.bottom
         anchors.topMargin: 10
         anchors.left:parent.left
@@ -69,11 +69,12 @@ Item {
 
     Rectangle{
         id:solRect
-        width:320
-        height: 100
+        width:mainWindow.getGridSize()*5
+        height: calculator.numberOfNodes()*mainWindow.getGridSize()/3.7
         color: "steelblue"
         visible:false
         anchors.bottom: parent.bottom
+        anchors.bottomMargin: 5
         anchors.left: parent.left
         Text{
             id:solText
@@ -92,7 +93,7 @@ Item {
         solText.text+= calculator.numberOfNodes();
         solText.text+= " nodes: \n";
         for (var i=0;i<calculator.numberOfNodes();i++){
-            solText.text += "voltage at node nr " +i +" " +(calculator.voltageAtNode(i)) +" volt.\n";
+            solText.text += "Voltage @ node " +i +" " +(calculator.voltageAtNode(i).toFixed(2)) +" Volt.\n";
         }
 
     }
@@ -101,7 +102,7 @@ Item {
     //Functions, timers and buttons for camera Rotation and zoom
     Button{
         id:rotateCameraRight
-        width:  _window.height/12; height:  _window.height/12
+        width:  mainWindow.getGridSize(); height:  mainWindow.getGridSize()
         anchors.top:parent.top
         anchors.right:parent.right
         iconSource: "qrc:/assets/icons/svg/turn-right.svg"
@@ -114,7 +115,7 @@ Item {
 
     Button{
         id:rotateCameraLeft
-        width:  _window.height/12; height:  _window.height/12
+        width:  mainWindow.getGridSize(); height:  mainWindow.getGridSize()
         anchors.top:parent.top
         anchors.left:parent.left
         iconSource: "qrc:/assets/icons/svg/turn-left-circle.svg"
@@ -125,7 +126,7 @@ Item {
 
     Button{
         id:zoomIn
-        width:  _window.height/12; height:  _window.height/12
+        width:  mainWindow.getGridSize(); height:  mainWindow.getGridSize()
         anchors.right: parent.right
         anchors.top: rotateCameraRight.bottom
         anchors.topMargin: 10
@@ -137,7 +138,7 @@ Item {
 
     Button{
         id:zoomOut
-        width:  _window.height/12; height:  _window.height/12
+        width:  mainWindow.getGridSize(); height:  mainWindow.getGridSize()
         anchors.right: parent.right
         anchors.top: zoomIn.bottom
         anchors.topMargin: 5
@@ -186,7 +187,7 @@ Item {
     //Exit Menu
     Button{
         id:exitButton
-        width:  _window.height/12; height:  _window.height/12
+        width:  mainWindow.getGridSize(); height:  mainWindow.getGridSize()
         anchors.bottom: parent.bottom
         anchors.topMargin: 10
         anchors.right:parent.right
@@ -207,7 +208,7 @@ Item {
     //Menu and buttons for changing Source & Resistor sizes
     Button{
         id:sourceEdit
-        width:  _window.height/12; height:  _window.height/12
+        width:  mainWindow.getGridSize(); height:  mainWindow.getGridSize()
         anchors.top: nodalInfo.bottom
         anchors.topMargin: 10
         anchors.left:parent.left
@@ -222,7 +223,7 @@ Item {
 
     Button{
         id:resistorEdit
-        width:  _window.height/12; height:  _window.height/12
+        width:  mainWindow.getGridSize(); height:  mainWindow.getGridSize()
         anchors.top: sourceEdit.bottom
         anchors.topMargin: 10
         anchors.left:parent.left
