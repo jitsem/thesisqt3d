@@ -11,6 +11,7 @@
 #include <QSurfaceFormat>
 
 
+
 #include <iostream>
 #include <vector>
 #include <list>
@@ -43,8 +44,8 @@ int main(int argc, char *argv[])
     QSurfaceFormat::setDefaultFormat(format);
 
     //Launch the MainWindow
-    MainWindow w;
-    w.show();
+    std::shared_ptr<MainWindow> w = MainWindow::Instance();
+    w->show();
 
 
 

@@ -11,7 +11,6 @@
 #include "source.h"
 #include "wire.h"
 #include "switch.h"
-#include "goal.h"
 
 
 //Class where all major calculations and I/O happen
@@ -97,7 +96,6 @@ public:
     bool process_resistor_line(QString& lijn);
     bool process_source_line(QString& lijn);
     bool process_switch_line(QString& lijn);
-    bool process_goal_line(QString& lijn); //For other team
     bool process_click_line(QString& lijn); //For other team
 
     //Set file path
@@ -122,8 +120,7 @@ public:
 
     int getThreeStar() const;
     void setThreeStar(int value);
-    std::vector<std::shared_ptr<Goal> > getGoals() const;
-    bool addGoal(std::shared_ptr<Goal> g);
+
 
 private:
 
@@ -146,7 +143,6 @@ private:
     //Things for compability with other team (game elements)
     int twoStar;
     int threeStar;
-    std::vector<std::shared_ptr<Goal>> goals;
 };
 
 #endif // CALC_H

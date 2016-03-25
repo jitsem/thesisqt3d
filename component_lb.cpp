@@ -5,6 +5,7 @@ component_lb::component_lb(QWidget *parent, float val, int n1x, int n1y, int n2x
     :QLabel(parent),value(val), node1x(n1x),node1y(n1y),node2x(n2x),node2y(n2y),angle(ang),
       type(type),selected(selected),n1(n1),n2(n2),adjust(adj),begin(beg),stepSize(ss),goal(go)
 {
+    this->setAttribute(Qt::WA_TranslucentBackground, true);
 
 
 }

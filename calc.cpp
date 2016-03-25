@@ -102,7 +102,6 @@ void Calc::emptyVectors(){
     sources.clear();
     switches.clear();
     wires.clear();
-    goals.clear();
 }
 bool Calc::readFile()
 {
@@ -111,7 +110,6 @@ bool Calc::readFile()
     sources.clear();
     resistors.clear();
     switches.clear();
-    goals.clear();
 
     //TODO Checken of een file volledig juist is
     //DONE
@@ -147,9 +145,7 @@ bool Calc::readFile()
                         break;
 
                     case 'g':
-                        //Read in main goal
-                        if(!process_goal_line(line))
-                            return false;
+                        //Not used anymore, compability with old files
                         break;
 
                     case 'w':
@@ -326,29 +322,6 @@ bool Calc::process_source_line(QString &lijn)
         return false;
     }
 }
-bool Calc::process_goal_line(QString &lijn)
-{
-
-    lijn.replace("*","",Qt::CaseSensitivity::CaseInsensitive); //remove *
-    lijn.replace("g","",Qt::CaseSensitivity::CaseInsensitive); //remove g
-    QStringList list=lijn.split(" ");
-
-    if(list.size()==2){ //Check for right amount of parameters
-
-        int x = list.at(0).toInt();
-        int y = list.at(1).toInt();
-        int node = list.at(2).toInt();
-
-        auto g = std::make_shared<Goal>(x,y,node);
-        goals.push_back(g);
-        return true;
-    }
-    else{
-        qDebug()<<"Bad Goal";
-        return false;
-
-    }
-}
 bool Calc::process_click_line(QString &lijn)
 {
 
@@ -379,11 +352,7 @@ void Calc::writeBackToFile()
     QTextStream out(&file);
     out << "*sj\n";
 
-    //Main goals
-    for (auto& goal:goals){
-        out << "*g"<< goal->getGoalCoords().x() << " " << goal->getGoalCoords().y() << " " << goal->getGoalNode()<< "\n";
 
-    }
     //Click goals
     out<<"*c"<<twoStar << " " << threeStar <<"\n";
 
@@ -552,8 +521,6 @@ void Calc::setCurrentsOfWires()
         bool cross = false;
         int node;
         int corFactor = 1;
-
-        //TODO weg als overerving beter is
 
         //Pointer used for checking if component is a source. Becauce sources behave a bit different
         std::shared_ptr<Source> s = std::dynamic_pointer_cast<Source>(c);
@@ -989,18 +956,6 @@ std::vector<float> Calc::computeNetwork(int  nrOfNodes)
 
 
 
-}
-
-std::vector<std::shared_ptr<Goal> > Calc::getGoals() const
-{
-    return goals;
-}
-
-bool Calc::addGoal(std::shared_ptr<Goal> g)
-{
-    auto size=goals.size();
-    goals.push_back(g);
-    return(size>goals.size());
 }
 
 int Calc::getThreeStar() const
