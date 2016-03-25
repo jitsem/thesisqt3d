@@ -1,9 +1,0 @@
-var struct_eigen_1_1internal_1_1traits_3_01permut__sparsematrix__product__retval_3_01_permutation_ty5403b266b9e22646d31272a5ad0e64b6 =
-[
-    [ "Index", "struct_eigen_1_1internal_1_1traits_3_01permut__sparsematrix__product__retval_3_01_permutation_ty5403b266b9e22646d31272a5ad0e64b6.html#ada5865e5006efaa40ddbba97eba9f1af", null ],
-    [ "MatrixTypeNestedCleaned", "struct_eigen_1_1internal_1_1traits_3_01permut__sparsematrix__product__retval_3_01_permutation_ty5403b266b9e22646d31272a5ad0e64b6.html#a3ee32deac123c88bb9d25c1d68d5b32e", null ],
-    [ "ReturnType", "struct_eigen_1_1internal_1_1traits_3_01permut__sparsematrix__product__retval_3_01_permutation_ty5403b266b9e22646d31272a5ad0e64b6.html#a34afe1ef0258550aa80d8e59a9eb26aa", null ],
-    [ "Scalar", "struct_eigen_1_1internal_1_1traits_3_01permut__sparsematrix__product__retval_3_01_permutation_ty5403b266b9e22646d31272a5ad0e64b6.html#a3286a697ef2972d8df8230d176d731d5", null ],
-    [ "SrcStorageOrder", "struct_eigen_1_1internal_1_1traits_3_01permut__sparsematrix__product__retval_3_01_permutation_ty5403b266b9e22646d31272a5ad0e64b6.html#afc400038e3e5279907db51ce06bf97acafd32ffa635839eb8859b63f7e3f60964", null ],
-    [ "MoveOuter", "struct_eigen_1_1internal_1_1traits_3_01permut__sparsematrix__product__retval_3_01_permutation_ty5403b266b9e22646d31272a5ad0e64b6.html#afc400038e3e5279907db51ce06bf97acafbc19b490927dd3e55f7afcb67605676", null ]
-];

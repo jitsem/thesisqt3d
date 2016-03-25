@@ -1,4 +1,0 @@
-var struct_eigen_1_1internal_1_1assign__impl_3_01_derived1_00_01_derived2_00_01_default_traversal_00ba4afcac2c0aca9f2e29b13f34d362a8 =
-[
-    [ "Index", "struct_eigen_1_1internal_1_1assign__impl_3_01_derived1_00_01_derived2_00_01_default_traversal_00ba4afcac2c0aca9f2e29b13f34d362a8.html#a0524e653bc25bd53a022f93a30824843", null ]
-];

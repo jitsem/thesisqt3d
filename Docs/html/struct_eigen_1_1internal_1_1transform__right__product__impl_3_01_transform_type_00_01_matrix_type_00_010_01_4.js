@@ -1,4 +1,0 @@
-var struct_eigen_1_1internal_1_1transform__right__product__impl_3_01_transform_type_00_01_matrix_type_00_010_01_4 =
-[
-    [ "ResultType", "struct_eigen_1_1internal_1_1transform__right__product__impl_3_01_transform_type_00_01_matrix_type_00_010_01_4.html#ad527e1ff09cf57181434197920752c43", null ]
-];

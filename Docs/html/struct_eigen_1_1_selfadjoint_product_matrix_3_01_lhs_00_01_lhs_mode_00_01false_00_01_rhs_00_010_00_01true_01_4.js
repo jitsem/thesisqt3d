@@ -1,6 +1,0 @@
-var struct_eigen_1_1_selfadjoint_product_matrix_3_01_lhs_00_01_lhs_mode_00_01false_00_01_rhs_00_010_00_01true_01_4 =
-[
-    [ "LhsUpLo", "struct_eigen_1_1_selfadjoint_product_matrix_3_01_lhs_00_01_lhs_mode_00_01false_00_01_rhs_00_010_00_01true_01_4.html#a55c3499ac9a13ee6d645af842d2791d3a56e09e1cd802b8bbb7eed4eb3dec7cb1", null ],
-    [ "SelfadjointProductMatrix", "struct_eigen_1_1_selfadjoint_product_matrix_3_01_lhs_00_01_lhs_mode_00_01false_00_01_rhs_00_010_00_01true_01_4.html#af9dc977f8d90a5626418b65e6220df8d", null ],
-    [ "scaleAndAddTo", "struct_eigen_1_1_selfadjoint_product_matrix_3_01_lhs_00_01_lhs_mode_00_01false_00_01_rhs_00_010_00_01true_01_4.html#a650a6e75db27829de7e9807708949a9a", null ]
-];

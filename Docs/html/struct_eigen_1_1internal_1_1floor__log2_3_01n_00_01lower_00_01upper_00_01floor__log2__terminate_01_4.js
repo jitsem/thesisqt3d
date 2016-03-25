@@ -1,4 +1,0 @@
-var struct_eigen_1_1internal_1_1floor__log2_3_01n_00_01lower_00_01upper_00_01floor__log2__terminate_01_4 =
-[
-    [ "value", "struct_eigen_1_1internal_1_1floor__log2_3_01n_00_01lower_00_01upper_00_01floor__log2__terminate_01_4.html#a2c484bd39eac448b3d83a0c42ea75919a0bc588fd1caa3e69cbc08c4c6effea93", null ]
-];

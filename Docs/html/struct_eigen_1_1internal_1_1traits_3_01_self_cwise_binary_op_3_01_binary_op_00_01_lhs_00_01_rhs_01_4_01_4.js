@@ -1,6 +1,0 @@
-var struct_eigen_1_1internal_1_1traits_3_01_self_cwise_binary_op_3_01_binary_op_00_01_lhs_00_01_rhs_01_4_01_4 =
-[
-    [ "Flags", "struct_eigen_1_1internal_1_1traits_3_01_self_cwise_binary_op_3_01_binary_op_00_01_lhs_00_01_rhs_01_4_01_4.html#a6625044c8d0333dfb15aa40638ba7bd6a8091a154f794bd1dae73330d81821ad5", null ],
-    [ "OuterStrideAtCompileTime", "struct_eigen_1_1internal_1_1traits_3_01_self_cwise_binary_op_3_01_binary_op_00_01_lhs_00_01_rhs_01_4_01_4.html#a6625044c8d0333dfb15aa40638ba7bd6adf024da737f422061ed31ab51d957b22", null ],
-    [ "InnerStrideAtCompileTime", "struct_eigen_1_1internal_1_1traits_3_01_self_cwise_binary_op_3_01_binary_op_00_01_lhs_00_01_rhs_01_4_01_4.html#a6625044c8d0333dfb15aa40638ba7bd6a40b1b24a2dee7a2604956860c8b0902e", null ]
-];

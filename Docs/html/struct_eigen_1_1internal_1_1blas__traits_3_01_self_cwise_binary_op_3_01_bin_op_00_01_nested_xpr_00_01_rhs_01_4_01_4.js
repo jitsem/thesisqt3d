@@ -1,4 +1,0 @@
-var struct_eigen_1_1internal_1_1blas__traits_3_01_self_cwise_binary_op_3_01_bin_op_00_01_nested_xpr_00_01_rhs_01_4_01_4 =
-[
-    [ "XprType", "struct_eigen_1_1internal_1_1blas__traits_3_01_self_cwise_binary_op_3_01_bin_op_00_01_nested_xpr_00_01_rhs_01_4_01_4.html#aa1dc3760fa4f973d13bfcf1d8399ebc7", null ]
-];

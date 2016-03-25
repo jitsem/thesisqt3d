@@ -1,7 +1,0 @@
-var class_eigen_1_1_block_impl_3_01_xpr_type_00_01_block_rows_00_01_block_cols_00_01true_00_01_sparse_01_4_1_1_inner_iterator =
-[
-    [ "InnerIterator", "class_eigen_1_1_block_impl_3_01_xpr_type_00_01_block_rows_00_01_block_cols_00_01true_00_01_sparse_01_4_1_1_inner_iterator.html#a5bb41f6715cc0091e721231b72348fbb", null ],
-    [ "col", "class_eigen_1_1_block_impl_3_01_xpr_type_00_01_block_rows_00_01_block_cols_00_01true_00_01_sparse_01_4_1_1_inner_iterator.html#a712e66bf03803753842b98cab48f92db", null ],
-    [ "row", "class_eigen_1_1_block_impl_3_01_xpr_type_00_01_block_rows_00_01_block_cols_00_01true_00_01_sparse_01_4_1_1_inner_iterator.html#a555ea25302d6e63d9cfc8e655bc085ba", null ],
-    [ "m_outer", "class_eigen_1_1_block_impl_3_01_xpr_type_00_01_block_rows_00_01_block_cols_00_01true_00_01_sparse_01_4_1_1_inner_iterator.html#a4f661268a844850b5903e8f2d3cde109", null ]
-];

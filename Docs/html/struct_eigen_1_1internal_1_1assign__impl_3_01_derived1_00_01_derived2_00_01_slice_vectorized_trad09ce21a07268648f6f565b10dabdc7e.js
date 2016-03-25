@@ -1,4 +1,0 @@
-var struct_eigen_1_1internal_1_1assign__impl_3_01_derived1_00_01_derived2_00_01_slice_vectorized_trad09ce21a07268648f6f565b10dabdc7e =
-[
-    [ "Index", "struct_eigen_1_1internal_1_1assign__impl_3_01_derived1_00_01_derived2_00_01_slice_vectorized_trad09ce21a07268648f6f565b10dabdc7e.html#a378f49d72bf759822e3f702ba0769294", null ]
-];

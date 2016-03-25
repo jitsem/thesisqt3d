@@ -1,5 +1,0 @@
-var struct_eigen_1_1internal_1_1traits_3_01_permutation_matrix_3_01_size_at_compile_time_00_01_max_s907408b5b713a2ad0dec62b54ff0a24b =
-[
-    [ "Index", "struct_eigen_1_1internal_1_1traits_3_01_permutation_matrix_3_01_size_at_compile_time_00_01_max_s907408b5b713a2ad0dec62b54ff0a24b.html#a37b24815c6abd841ef0abb48ce6ebe3f", null ],
-    [ "IndicesType", "struct_eigen_1_1internal_1_1traits_3_01_permutation_matrix_3_01_size_at_compile_time_00_01_max_s907408b5b713a2ad0dec62b54ff0a24b.html#abe968584087584854ab443b96f4b5a4b", null ]
-];

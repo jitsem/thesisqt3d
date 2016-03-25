@@ -1,5 +1,0 @@
-var struct_eigen_1_1internal_1_1sparse__solve__retval_3_01_simplicial_cholesky_base_3_01_derived_01_4_00_01_rhs_01_4 =
-[
-    [ "Dec", "struct_eigen_1_1internal_1_1sparse__solve__retval_3_01_simplicial_cholesky_base_3_01_derived_01_4_00_01_rhs_01_4.html#afc8fd087ba1dc3f41bc9b7d2854d63c1", null ],
-    [ "evalTo", "struct_eigen_1_1internal_1_1sparse__solve__retval_3_01_simplicial_cholesky_base_3_01_derived_01_4_00_01_rhs_01_4.html#ae822ab95c3c55b1ff0f6a27853e26450", null ]
-];

@@ -1,5 +1,0 @@
-var struct_eigen_1_1internal_1_1triangular__assignment__selector_3_01_derived1_00_01_derived2_00_01_fe022ba687fa68e9788ee2a2d038e6ee =
-[
-    [ "Index", "struct_eigen_1_1internal_1_1triangular__assignment__selector_3_01_derived1_00_01_derived2_00_01_fe022ba687fa68e9788ee2a2d038e6ee.html#ad2143bcf27b2b1b10aeabfa14bfe1a6b", null ],
-    [ "Scalar", "struct_eigen_1_1internal_1_1triangular__assignment__selector_3_01_derived1_00_01_derived2_00_01_fe022ba687fa68e9788ee2a2d038e6ee.html#a3aef701f97d908d63a25540f70a48ae7", null ]
-];

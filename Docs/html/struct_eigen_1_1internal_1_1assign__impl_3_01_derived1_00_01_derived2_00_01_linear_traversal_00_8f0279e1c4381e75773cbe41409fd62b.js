@@ -1,4 +1,0 @@
-var struct_eigen_1_1internal_1_1assign__impl_3_01_derived1_00_01_derived2_00_01_linear_traversal_00_8f0279e1c4381e75773cbe41409fd62b =
-[
-    [ "Index", "struct_eigen_1_1internal_1_1assign__impl_3_01_derived1_00_01_derived2_00_01_linear_traversal_00_8f0279e1c4381e75773cbe41409fd62b.html#a50049bfc9270c800504191b3af4f34d2", null ]
-];

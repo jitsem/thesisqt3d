@@ -1,5 +1,0 @@
-var struct_eigen_1_1internal_1_1solve__retval_3_01_bi_c_g_s_t_a_b_3_01___matrix_type_00_01___preconditioner_01_4_00_01_rhs_01_4 =
-[
-    [ "Dec", "struct_eigen_1_1internal_1_1solve__retval_3_01_bi_c_g_s_t_a_b_3_01___matrix_type_00_01___preconditioner_01_4_00_01_rhs_01_4.html#a86966c41486dfa9d3fdac0ff4ec6e2fc", null ],
-    [ "evalTo", "struct_eigen_1_1internal_1_1solve__retval_3_01_bi_c_g_s_t_a_b_3_01___matrix_type_00_01___preconditioner_01_4_00_01_rhs_01_4.html#ab0d748fa3ee0e8501ad152d3714ac4bd", null ]
-];

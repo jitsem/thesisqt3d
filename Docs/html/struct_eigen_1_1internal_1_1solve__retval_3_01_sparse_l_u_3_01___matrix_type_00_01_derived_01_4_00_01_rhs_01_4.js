@@ -1,5 +1,0 @@
-var struct_eigen_1_1internal_1_1solve__retval_3_01_sparse_l_u_3_01___matrix_type_00_01_derived_01_4_00_01_rhs_01_4 =
-[
-    [ "Dec", "struct_eigen_1_1internal_1_1solve__retval_3_01_sparse_l_u_3_01___matrix_type_00_01_derived_01_4_00_01_rhs_01_4.html#a5482195ba3c1b09932a05ab3ed95c806", null ],
-    [ "evalTo", "struct_eigen_1_1internal_1_1solve__retval_3_01_sparse_l_u_3_01___matrix_type_00_01_derived_01_4_00_01_rhs_01_4.html#a6ca4f65ff07db9ba62a9a6f9724ff76a", null ]
-];

@@ -1,4 +1,0 @@
-var struct_eigen_1_1internal_1_1traits_3_01permut__matrix__product__retval_3_01_permutation_type_00_794517eaafbe302343c301862e9a34b8 =
-[
-    [ "ReturnType", "struct_eigen_1_1internal_1_1traits_3_01permut__matrix__product__retval_3_01_permutation_type_00_794517eaafbe302343c301862e9a34b8.html#add00c7b5c3aa2477e423c3744496c371", null ]
-];

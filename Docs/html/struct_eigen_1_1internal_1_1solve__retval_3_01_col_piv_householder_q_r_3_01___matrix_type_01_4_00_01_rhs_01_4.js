@@ -1,4 +1,0 @@
-var struct_eigen_1_1internal_1_1solve__retval_3_01_col_piv_householder_q_r_3_01___matrix_type_01_4_00_01_rhs_01_4 =
-[
-    [ "evalTo", "struct_eigen_1_1internal_1_1solve__retval_3_01_col_piv_householder_q_r_3_01___matrix_type_01_4_00_01_rhs_01_4.html#ab5886de3d98e2de29db82f4b493bf3b0", null ]
-];

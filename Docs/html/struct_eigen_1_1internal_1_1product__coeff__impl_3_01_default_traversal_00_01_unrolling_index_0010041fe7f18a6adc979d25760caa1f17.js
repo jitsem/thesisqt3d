@@ -1,4 +1,0 @@
-var struct_eigen_1_1internal_1_1product__coeff__impl_3_01_default_traversal_00_01_unrolling_index_0010041fe7f18a6adc979d25760caa1f17 =
-[
-    [ "Index", "struct_eigen_1_1internal_1_1product__coeff__impl_3_01_default_traversal_00_01_unrolling_index_0010041fe7f18a6adc979d25760caa1f17.html#a402935182ebdde2c571082df116996f0", null ]
-];

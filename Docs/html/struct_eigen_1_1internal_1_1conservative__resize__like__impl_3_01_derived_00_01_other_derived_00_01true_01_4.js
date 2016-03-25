@@ -1,4 +1,0 @@
-var struct_eigen_1_1internal_1_1conservative__resize__like__impl_3_01_derived_00_01_other_derived_00_01true_01_4 =
-[
-    [ "Index", "struct_eigen_1_1internal_1_1conservative__resize__like__impl_3_01_derived_00_01_other_derived_00_01true_01_4.html#a8ae31ba784540811ac8d9c400a42c85f", null ]
-];

@@ -1,7 +1,0 @@
-var class_eigen_1_1_block_impl_3_01_sparse_matrix_3_01___scalar_00_01___options_00_01___index_01_4_08611e29518f61c93f1f5d5c21135566f =
-[
-    [ "ReverseInnerIterator", "class_eigen_1_1_block_impl_3_01_sparse_matrix_3_01___scalar_00_01___options_00_01___index_01_4_08611e29518f61c93f1f5d5c21135566f.html#a6f008a933140ba40ca7415b4ff65db86", null ],
-    [ "col", "class_eigen_1_1_block_impl_3_01_sparse_matrix_3_01___scalar_00_01___options_00_01___index_01_4_08611e29518f61c93f1f5d5c21135566f.html#ad91df07b566da68ca3ffba9e75394131", null ],
-    [ "row", "class_eigen_1_1_block_impl_3_01_sparse_matrix_3_01___scalar_00_01___options_00_01___index_01_4_08611e29518f61c93f1f5d5c21135566f.html#a55d4417909187193da608f9de0c57a3c", null ],
-    [ "m_outer", "class_eigen_1_1_block_impl_3_01_sparse_matrix_3_01___scalar_00_01___options_00_01___index_01_4_08611e29518f61c93f1f5d5c21135566f.html#ad9d1a7df08d2303d4a54c8548acd7487", null ]
-];

@@ -1,6 +1,0 @@
-var struct_eigen_1_1internal_1_1conj__helper_3_01_real_scalar_00_01std_1_1complex_3_01_real_scalar_01_4_00_01false_00_01_conj_01_4 =
-[
-    [ "Scalar", "struct_eigen_1_1internal_1_1conj__helper_3_01_real_scalar_00_01std_1_1complex_3_01_real_scalar_01_4_00_01false_00_01_conj_01_4.html#a439125d3e845768d3698076787d179c4", null ],
-    [ "pmadd", "struct_eigen_1_1internal_1_1conj__helper_3_01_real_scalar_00_01std_1_1complex_3_01_real_scalar_01_4_00_01false_00_01_conj_01_4.html#a1cbd52d3f8f9d2d056d0e18fb696071d", null ],
-    [ "pmul", "struct_eigen_1_1internal_1_1conj__helper_3_01_real_scalar_00_01std_1_1complex_3_01_real_scalar_01_4_00_01false_00_01_conj_01_4.html#a923d3e32bebbbf936c30c28d8130e881", null ]
-];

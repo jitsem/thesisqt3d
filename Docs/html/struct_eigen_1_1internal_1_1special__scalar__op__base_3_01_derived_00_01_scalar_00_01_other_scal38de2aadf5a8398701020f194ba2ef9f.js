@@ -1,5 +1,0 @@
-var struct_eigen_1_1internal_1_1special__scalar__op__base_3_01_derived_00_01_scalar_00_01_other_scal38de2aadf5a8398701020f194ba2ef9f =
-[
-    [ "operator*", "struct_eigen_1_1internal_1_1special__scalar__op__base_3_01_derived_00_01_scalar_00_01_other_scal38de2aadf5a8398701020f194ba2ef9f.html#a586608edea5ed0559b6d26f1d2647ed5", null ],
-    [ "operator*", "struct_eigen_1_1internal_1_1special__scalar__op__base_3_01_derived_00_01_scalar_00_01_other_scal38de2aadf5a8398701020f194ba2ef9f.html#a13907a97652bd22ffb76a37f6cb87814", null ]
-];

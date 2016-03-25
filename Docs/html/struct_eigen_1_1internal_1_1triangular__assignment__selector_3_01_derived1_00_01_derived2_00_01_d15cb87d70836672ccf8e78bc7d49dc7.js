@@ -1,4 +1,0 @@
-var struct_eigen_1_1internal_1_1triangular__assignment__selector_3_01_derived1_00_01_derived2_00_01_d15cb87d70836672ccf8e78bc7d49dc7 =
-[
-    [ "Index", "struct_eigen_1_1internal_1_1triangular__assignment__selector_3_01_derived1_00_01_derived2_00_01_d15cb87d70836672ccf8e78bc7d49dc7.html#a0a57a90e4c1322943184381317cc9893", null ]
-];

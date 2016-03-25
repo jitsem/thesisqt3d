@@ -1,4 +1,0 @@
-var struct_eigen_1_1internal_1_1product__coeff__vectorized__unroller_3_010_00_01_lhs_00_01_rhs_00_01_packet_01_4 =
-[
-    [ "Index", "struct_eigen_1_1internal_1_1product__coeff__vectorized__unroller_3_010_00_01_lhs_00_01_rhs_00_01_packet_01_4.html#acbf6a512328a6938b1d7876587c27868", null ]
-];
