@@ -1,0 +1,4 @@
+var struct_eigen_1_1internal_1_1nested_3_01_return_by_value_3_01_derived_01_4_00_01n_00_01_plain_object_01_4 =
+[
+    [ "type", "struct_eigen_1_1internal_1_1nested_3_01_return_by_value_3_01_derived_01_4_00_01n_00_01_plain_object_01_4.html#a9128fbe31217ca7e99a6ef4bb1eeb60a", null ]
+];

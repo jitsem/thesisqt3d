@@ -1,22 +1,18 @@
+#include <iostream>
+#include <vector>
+#include <list>
+#include <sstream>
+#include <typeinfo>
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QObject>
 #include <QQuickItem>
 #include <QVariant>
 #include <QDebug>
-
 #include <QQmlContext>
 #include <QQmlEngine>
 #include <QOpenGLContext>
 #include <QSurfaceFormat>
-
-
-
-#include <iostream>
-#include <vector>
-#include <list>
-#include <sstream>
-#include <typeinfo>
 
 #include "source.h"
 #include "resistor.h"

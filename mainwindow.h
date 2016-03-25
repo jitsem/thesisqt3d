@@ -1,14 +1,13 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include <QWidget>
-#include <QQuickView>
-#include <QListWidget>
-
 #include <memory>
-#include "component_lb.h"
+#include <QMainWindow>
 
+
+class QWidget;
+class QQuickView;
+class Component_lb;
 class DrawZone;
 class Calc;
 
@@ -94,13 +93,13 @@ private:
     //Ui
     Ui::MainWindow *ui;
     //3D view
-    QQuickView *view;
+    QQuickView * view;
     //Drawzone for circuit drawing
     DrawZone *drawzoneWidget;
     //Calculator class for calculations and i/o
     std::shared_ptr<Calc> calculator;
     //Clipboard
-    QList<component_lb*> copied;
+    QList<Component_lb*> copied;
     //Global Size Value
     int gridSize;
 };

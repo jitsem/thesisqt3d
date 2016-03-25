@@ -1,14 +1,18 @@
 #include "dragcomponent.h"
+
+
+#include <memory>
 #include <QLayout>
 #include <QLabel>
 #include <QMouseEvent>
 #include <QMimeData>
 #include <QDrag>
 #include <QPainter>
-#include <memory>
 #include <QPixmap>
 #include <QGraphicsItem>
 #include <QDebug>
+#include <QWidget>
+
 #include "component_lb.h"
 #include "mainwindow.h"
 
@@ -25,7 +29,7 @@ DragComponent::DragComponent(QWidget *parent)
     mainLayout->setAlignment(Qt::AlignTop);
     QWidgetList components;
 
-    component_lb *sourceIcon = new component_lb(this,15,0,0,0,0,1,0);
+    Component_lb *sourceIcon = new Component_lb(this,15,0,0,0,0,1,0);
     QPixmap source=QPixmap(":/assets/source_small.png");
     sourceIcon->setPixmap(source);
     sourceIcon->setFixedSize(MainWindow::Instance()->getGridSize(),MainWindow::Instance()->getGridSize());
@@ -34,7 +38,7 @@ DragComponent::DragComponent(QWidget *parent)
     sourceIcon->show();
 
 
-    component_lb *res1 = new component_lb(this,100,3,4,20,4,1,1);
+    Component_lb *res1 = new Component_lb(this,100,3,4,20,4,1,1);
     QPixmap res2=QPixmap(":/assets/res_small.png");
     res1->setPixmap(res2);
     res1->move(0,10);
@@ -43,7 +47,7 @@ DragComponent::DragComponent(QWidget *parent)
     res1->setAttribute(Qt::WA_DeleteOnClose);
     res1->show();
 
-    component_lb *wire1 = new component_lb(this,0,3,4,20,4,1,2);
+    Component_lb *wire1 = new Component_lb(this,0,3,4,20,4,1,2);
     QPixmap wir=QPixmap(":/assets/wire_small.png");
     wire1->setPixmap(wir);
     wire1->setFixedSize(MainWindow::Instance()->getGridSize(),MainWindow::Instance()->getGridSize());
@@ -52,7 +56,7 @@ DragComponent::DragComponent(QWidget *parent)
     wire1->show();
 
 
-    component_lb *sw_op = new component_lb(this,0,0,0,0,0,1,3);
+    Component_lb *sw_op = new Component_lb(this,0,0,0,0,0,1,3);
     QPixmap switch_open=QPixmap(":/assets/sw_open.png");
     sw_op->setPixmap(switch_open);
     sw_op->setFixedSize(MainWindow::Instance()->getGridSize(),MainWindow::Instance()->getGridSize());
@@ -61,9 +65,7 @@ DragComponent::DragComponent(QWidget *parent)
     sw_op->show();
 
 
-
     //foreach component
-    //components.append(resistorIcon);
     components.append(sourceIcon);
     components.append(res1);
     components.append(wire1);
@@ -95,7 +97,7 @@ return;
 
 void DragComponent::mousePressEvent(QMouseEvent *event)
 {
-    component_lb *child = static_cast<component_lb*>(childAt(event->pos()));
+    Component_lb *child = static_cast<Component_lb*>(childAt(event->pos()));
     if (!child)
         return;
 

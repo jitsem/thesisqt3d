@@ -1,0 +1,4 @@
+<map id="Switch" name="Switch">
+<area shape="rect" id="node2" href="$class_resistor.html" title="{Resistor\n|# node1\l# node2\l|+ Resistor()\l+ getNode1()\l+ setNode1()\l+ getNode2()\l+ setNode2()\l}" alt="" coords="15,380,121,531"/>
+<area shape="rect" id="node3" href="$class_component.html" title="{Component\n|# value\l# current\l# angle\l# xCoord\l# yCoord\l# isAdjustable\l# beginvalue\l# stepSize\l|+ Component()\l+ getCurrent()\l+ setCurrent()\l+ getValue()\l+ setValue()\l+ getNodep()\l+ getNodem()\l+ getNode1()\l+ getNode2()\l+ getAngle()\land 12 more...\l}" alt="" coords="9,5,127,332"/>
+</map>

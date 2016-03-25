@@ -1,0 +1,4 @@
+var struct_eigen_1_1internal_1_1functor__traits_3_01max__coeff__visitor_3_01_scalar_01_4_01_4 =
+[
+    [ "Cost", "struct_eigen_1_1internal_1_1functor__traits_3_01max__coeff__visitor_3_01_scalar_01_4_01_4.html#a839da0bbe1108b6d6e688e02ea68505da01eb7b9c441724747227799f8fcb67c3", null ]
+];

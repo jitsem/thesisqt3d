@@ -1,0 +1,5 @@
+var struct_eigen_1_1internal_1_1traits_3_01sparse__solve__retval__base_3_01_decomposition_type_00_01_rhs_01_4_01_4 =
+[
+    [ "MatrixType", "struct_eigen_1_1internal_1_1traits_3_01sparse__solve__retval__base_3_01_decomposition_type_00_01_rhs_01_4_01_4.html#a0bf976fac6bf6556c14f4ec2007a44c0", null ],
+    [ "ReturnType", "struct_eigen_1_1internal_1_1traits_3_01sparse__solve__retval__base_3_01_decomposition_type_00_01_rhs_01_4_01_4.html#a9bb9efca2eb20078d1d9918db2dcda13", null ]
+];

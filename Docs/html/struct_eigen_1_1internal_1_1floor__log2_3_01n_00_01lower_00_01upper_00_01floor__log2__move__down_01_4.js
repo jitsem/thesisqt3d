@@ -1,0 +1,4 @@
+var struct_eigen_1_1internal_1_1floor__log2_3_01n_00_01lower_00_01upper_00_01floor__log2__move__down_01_4 =
+[
+    [ "value", "struct_eigen_1_1internal_1_1floor__log2_3_01n_00_01lower_00_01upper_00_01floor__log2__move__down_01_4.html#aa77b14496265092ea849a697a7c39936a7ad0dc2c69afc3a9cf197b25ad441e15", null ]
+];

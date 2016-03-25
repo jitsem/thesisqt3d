@@ -2,7 +2,9 @@
 #define DRAGCOMPONENT_H
 
 #include <QFrame>
-#include <QWidget>
+
+
+class QWidget;
 
 class DragComponent :public QFrame
 {

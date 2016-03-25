@@ -1,0 +1,4 @@
+var struct_eigen_1_1internal_1_1traits_3_01transposition__matrix__product__retval_3_01_transposition0cf656eb56518a280f7b8c96afe9a24c =
+[
+    [ "ReturnType", "struct_eigen_1_1internal_1_1traits_3_01transposition__matrix__product__retval_3_01_transposition0cf656eb56518a280f7b8c96afe9a24c.html#aa8174996e422cf048c1041c4a3820d1d", null ]
+];

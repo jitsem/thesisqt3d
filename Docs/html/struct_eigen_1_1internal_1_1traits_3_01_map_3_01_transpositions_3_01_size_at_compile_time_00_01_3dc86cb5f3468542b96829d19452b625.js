@@ -1,0 +1,5 @@
+var struct_eigen_1_1internal_1_1traits_3_01_map_3_01_transpositions_3_01_size_at_compile_time_00_01_3dc86cb5f3468542b96829d19452b625 =
+[
+    [ "Index", "struct_eigen_1_1internal_1_1traits_3_01_map_3_01_transpositions_3_01_size_at_compile_time_00_01_3dc86cb5f3468542b96829d19452b625.html#a012c98b54794ff335eca880b1c281d28", null ],
+    [ "IndicesType", "struct_eigen_1_1internal_1_1traits_3_01_map_3_01_transpositions_3_01_size_at_compile_time_00_01_3dc86cb5f3468542b96829d19452b625.html#aca4da409cef84f0b750d4e6424b45ecc", null ]
+];

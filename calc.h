@@ -3,14 +3,14 @@
 
 #include <vector>
 #include <memory>
-
 #include <QObject>
-#include <QString>
 
 #include "resistor.h"
 #include "source.h"
 #include "wire.h"
 #include "switch.h"
+
+class Qstring;
 
 
 //Class where all major calculations and I/O happen
@@ -20,41 +20,63 @@ Q_OBJECT
 
 public:
 
-    //Make sure there is only one instance of the Calc
+    /**Make sure there is only one instance of the Calc*/
     static std::shared_ptr<Calc> Instance();
 
-    //Main methode for solving a level
+    /**Main methode for solving a level, invokable from QML*/
     Q_INVOKABLE bool solveLevel();
 
-    //Various functions for Nodes, invokable from QML
+    /**Get number of Nodes in circuit, invokable from QML*/
     Q_INVOKABLE int numberOfNodes(){return sol.size();}
+
+    /**Get voltage at a certain Node*/
     Q_INVOKABLE float voltageAtNode(int nodeNr){return sol.at(nodeNr);}
 
-    //Various functions for Resistors, invokable from QML
+    /**Get number of Resistors, invokable from QML*/
     Q_INVOKABLE int getNumberOfResistors(){return resistors.size();}
+    /**Get resistance at Resistor at resNr, invokable from QML*/
     Q_INVOKABLE float resistanceAtResistor(int resNr){return resistors.at(resNr)->getValue();}
+    /**Increase resistance for Resistor at resNr by 25 Ohm, invokable from QML*/
     Q_INVOKABLE void increaseResistanceAtResistor(int resNr){resistors.at(resNr)->setValue(resistors.at(resNr)->getValue()+25);}
+    /**Decrease resistance for Resistor at resNr by 25 Ohm, invokable from QML*/
     Q_INVOKABLE void decreaseResistanceAtResistor(int resNr){if(resistors.at(resNr)->getValue()>25){resistors.at(resNr)->setValue(resistors.at(resNr)->getValue()-25);}}
+    /**Get current trough Resistor at resNr, invokable from QML*/
     Q_INVOKABLE float getCurrentofResistor(int resNr){return resistors.at(resNr)->getCurrent();}
+    /**Get angle of Resistor at resNr, invokable from QML*/
     Q_INVOKABLE int getAngleOfResistor(int resNr){return resistors.at(resNr)->getAngle();}
+    /**Get XCoord of Resistor at resNr, invokable from QML*/
     Q_INVOKABLE int getXCoordOfResistor(int resNr){return resistors.at(resNr)->getXCoord();}
+    /**Get YCoord Resistor at resNr, invokable from QML*/
     Q_INVOKABLE int getYCoordOfResistor(int resNr){return resistors.at(resNr)->getYCoord();}
+    /**Get Node 1 of Resistor at resNr, invokable from QML*/
     Q_INVOKABLE int node1AtResistor(int resNr){return resistors.at(resNr)->getNode1();}
+    /**Get Node 2 of Resistor at resNr, invokable from QML*/
     Q_INVOKABLE int node2AtResistor(int resNr){return resistors.at(resNr)->getNode2();}
-    bool addResistor(std::shared_ptr<Resistor> &r);
+    /**Add Resistor to resistors*/
+    bool addResistor(std::shared_ptr<Resistor>& r);
 
-    //Various functions for Sources, invokable from QML
+    /**Get number of Sources, invokable from QML*/
     Q_INVOKABLE int getNumberOfSources(){return sources.size();}
+    /**Get voltage at Source at sourceNr, invokable from QML*/
     Q_INVOKABLE float getVoltageAtSource(int sourceNr){return sources.at(sourceNr)->getValue();}
+    /**Increase voltage at Source at sourceNr by 5 volt, invokable from QML*/
     Q_INVOKABLE void increaseVoltageAtSource(int sourceNr){sources.at(sourceNr)->setValue(sources.at(sourceNr)->getValue()+5);}
+    /**Decrease voltage at Source at sourceNr by 5 volt, invokable from QML*/
     Q_INVOKABLE void decreaseVoltageAtSource(int sourceNr){if(sources.at(sourceNr)->getValue()>5){sources.at(sourceNr)->setValue(sources.at(sourceNr)->getValue()-5);}}
+    /**Get current trough Source at sourceNr, invokable from QML*/
     Q_INVOKABLE float getCurrentofSource(int sourceNr){return sources.at(sourceNr)->getCurrent();}
+    /**Get angle of Source at sourceNr, invokable from QML*/
     Q_INVOKABLE int getAngleOfSource(int soNr){return sources.at(soNr)->getAngle();}
+    /**Get Xcoord of Source at sourceNr, invokable from QML*/
     Q_INVOKABLE int getXCoordOfSource(int soNr){return sources.at(soNr)->getXCoord();}
+    /**Get Ycoord of Source at sourceNr, invokable from QML*/
     Q_INVOKABLE int getYCoordOfSource(int soNr){return sources.at(soNr)->getYCoord();}
+    /**Get plusNode of Source at sourceNr, invokable from QML*/
     Q_INVOKABLE int nodePAtSource(int sourceNr){return sources.at(sourceNr)->getNodep();}
+    /**Get minNode of Source at sourceNr, invokable from QML*/
     Q_INVOKABLE int nodeMAtSource(int sourceNr){return sources.at(sourceNr)->getNodem();}
-    bool addSource(std::shared_ptr<Source> &s);
+    /**Add Source to sources*/
+    bool addSource(std::shared_ptr<Source>& s);
 
     //Various functions for Wires, invokable from QML
     Q_INVOKABLE int getNumberOfWires(){return wires.size();}

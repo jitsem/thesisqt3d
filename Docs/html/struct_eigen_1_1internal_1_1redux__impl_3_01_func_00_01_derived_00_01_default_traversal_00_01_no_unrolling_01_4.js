@@ -1,0 +1,5 @@
+var struct_eigen_1_1internal_1_1redux__impl_3_01_func_00_01_derived_00_01_default_traversal_00_01_no_unrolling_01_4 =
+[
+    [ "Index", "struct_eigen_1_1internal_1_1redux__impl_3_01_func_00_01_derived_00_01_default_traversal_00_01_no_unrolling_01_4.html#acc06a0160c27149591692238e5e96206", null ],
+    [ "Scalar", "struct_eigen_1_1internal_1_1redux__impl_3_01_func_00_01_derived_00_01_default_traversal_00_01_no_unrolling_01_4.html#afaa145437cd5078e52e269b05271619e", null ]
+];

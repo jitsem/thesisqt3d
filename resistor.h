@@ -1,5 +1,6 @@
 #ifndef RESISTOR_H
 #define RESISTOR_H
+
 #include "component.h"
 
 //Class for resistor

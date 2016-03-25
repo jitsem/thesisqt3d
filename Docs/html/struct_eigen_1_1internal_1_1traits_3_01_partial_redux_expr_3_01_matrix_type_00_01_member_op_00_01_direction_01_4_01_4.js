@@ -1,0 +1,18 @@
+var struct_eigen_1_1internal_1_1traits_3_01_partial_redux_expr_3_01_matrix_type_00_01_member_op_00_01_direction_01_4_01_4 =
+[
+    [ "_MatrixTypeNested", "struct_eigen_1_1internal_1_1traits_3_01_partial_redux_expr_3_01_matrix_type_00_01_member_op_00_01_direction_01_4_01_4.html#a780872dcf28c6777e8b72ba55c098f5a", null ],
+    [ "CostOpType", "struct_eigen_1_1internal_1_1traits_3_01_partial_redux_expr_3_01_matrix_type_00_01_member_op_00_01_direction_01_4_01_4.html#a2dff08c21f32d7bb74f45503d7fb02f0", null ],
+    [ "InputScalar", "struct_eigen_1_1internal_1_1traits_3_01_partial_redux_expr_3_01_matrix_type_00_01_member_op_00_01_direction_01_4_01_4.html#a9d3b60f0417ed934e2540d7e77464223", null ],
+    [ "MatrixTypeNested", "struct_eigen_1_1internal_1_1traits_3_01_partial_redux_expr_3_01_matrix_type_00_01_member_op_00_01_direction_01_4_01_4.html#a346a6166a96b998baf9276ccef3bb89a", null ],
+    [ "Scalar", "struct_eigen_1_1internal_1_1traits_3_01_partial_redux_expr_3_01_matrix_type_00_01_member_op_00_01_direction_01_4_01_4.html#a556790333f27009112a1bb9e3ba1b9e7", null ],
+    [ "StorageKind", "struct_eigen_1_1internal_1_1traits_3_01_partial_redux_expr_3_01_matrix_type_00_01_member_op_00_01_direction_01_4_01_4.html#ac45b99c042ca4ebf9195532aed5d9875", null ],
+    [ "XprKind", "struct_eigen_1_1internal_1_1traits_3_01_partial_redux_expr_3_01_matrix_type_00_01_member_op_00_01_direction_01_4_01_4.html#ab185c3fff37e5e5253fdfc037c1abc16", null ],
+    [ "RowsAtCompileTime", "struct_eigen_1_1internal_1_1traits_3_01_partial_redux_expr_3_01_matrix_type_00_01_member_op_00_01_direction_01_4_01_4.html#a7717a89e445b1a6cb0aa68c30511531ba527a79f34ffccc1966e39e79a6403590", null ],
+    [ "ColsAtCompileTime", "struct_eigen_1_1internal_1_1traits_3_01_partial_redux_expr_3_01_matrix_type_00_01_member_op_00_01_direction_01_4_01_4.html#a7717a89e445b1a6cb0aa68c30511531ba876a7d766851fb9509c02c2184f6c019", null ],
+    [ "MaxRowsAtCompileTime", "struct_eigen_1_1internal_1_1traits_3_01_partial_redux_expr_3_01_matrix_type_00_01_member_op_00_01_direction_01_4_01_4.html#a7717a89e445b1a6cb0aa68c30511531ba0971c603bdc6e7cb21d205647c827693", null ],
+    [ "MaxColsAtCompileTime", "struct_eigen_1_1internal_1_1traits_3_01_partial_redux_expr_3_01_matrix_type_00_01_member_op_00_01_direction_01_4_01_4.html#a7717a89e445b1a6cb0aa68c30511531baa6ab3105bbdc2fe399e411ff71a8668e", null ],
+    [ "Flags0", "struct_eigen_1_1internal_1_1traits_3_01_partial_redux_expr_3_01_matrix_type_00_01_member_op_00_01_direction_01_4_01_4.html#a7717a89e445b1a6cb0aa68c30511531ba70bd65bde462883f833912d4601924e5", null ],
+    [ "Flags", "struct_eigen_1_1internal_1_1traits_3_01_partial_redux_expr_3_01_matrix_type_00_01_member_op_00_01_direction_01_4_01_4.html#a7717a89e445b1a6cb0aa68c30511531bae119342a7eaf7242e79e332193ceb59f", null ],
+    [ "TraversalSize", "struct_eigen_1_1internal_1_1traits_3_01_partial_redux_expr_3_01_matrix_type_00_01_member_op_00_01_direction_01_4_01_4.html#a7717a89e445b1a6cb0aa68c30511531ba7cc45bb6408a95de6ea3cae78a2bb60a", null ],
+    [ "CoeffReadCost", "struct_eigen_1_1internal_1_1traits_3_01_partial_redux_expr_3_01_matrix_type_00_01_member_op_00_01_direction_01_4_01_4.html#a14fe2ea6363a9dc97af6c0579083e1b5a0ff7a2fd84057d036cfc6e437571dca0", null ]
+];

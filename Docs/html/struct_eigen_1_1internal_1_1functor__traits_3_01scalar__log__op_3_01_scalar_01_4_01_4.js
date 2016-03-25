@@ -1,0 +1,5 @@
+var struct_eigen_1_1internal_1_1functor__traits_3_01scalar__log__op_3_01_scalar_01_4_01_4 =
+[
+    [ "Cost", "struct_eigen_1_1internal_1_1functor__traits_3_01scalar__log__op_3_01_scalar_01_4_01_4.html#ac4c590e56060d3192163789d8ea067e3a55f151f384c225b28374fd99c7376edd", null ],
+    [ "PacketAccess", "struct_eigen_1_1internal_1_1functor__traits_3_01scalar__log__op_3_01_scalar_01_4_01_4.html#ac4c590e56060d3192163789d8ea067e3a82507cfe87945da7f7932752b6f5630b", null ]
+];

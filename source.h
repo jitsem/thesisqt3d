@@ -1,5 +1,6 @@
 #ifndef SOURCE_H
 #define SOURCE_H
+
 #include "component.h"
 
 //Class for source

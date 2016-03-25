@@ -17,11 +17,15 @@
 #include <QSpinBox>
 #include <QDialogButtonBox>
 #include <QScreen>
+#include <QWidget>
+#include <QQuickView>
 
 
 #include "dragcomponent.h"
 #include "calc.h"
 #include "drawzone.h"
+#include "component_lb.h"
+
 
 
 std::shared_ptr<MainWindow> MainWindow::instance=nullptr;
@@ -74,7 +78,7 @@ std::shared_ptr<MainWindow> MainWindow::Instance()
 {
     //Return instance pointer; if it not exists, make it
     if(!instance){
-        instance = std::shared_ptr<MainWindow>(new MainWindow());
+        instance = std::shared_ptr<MainWindow>(new MainWindow()); //Like this because constructor is private
         instance->setUpUi();
     }
 
@@ -96,7 +100,9 @@ void MainWindow::delete3D()
 
 MainWindow::~MainWindow()
 {
+
     delete ui;
+    exit(0);
 
 }
 
@@ -155,7 +161,7 @@ void MainWindow::on_action3D_Preview_triggered()
         if(calculator->solveLevel()){
 
             this->hide();
-            view = new QQuickView;
+            view = new QQuickView();
 
             //Pass some classes to the engine
             view->engine()->rootContext()->setContextProperty(QStringLiteral("_window"), view);
@@ -186,10 +192,13 @@ void MainWindow::on_actionNew_triggered()
                                                     tr("Name new Level"), QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation), tr("Levels (*.sj)"));
 
     if(!fileName.isEmpty()){
+        if(!fileName.endsWith(".sj"))
+            fileName.append(".sj");
 
         calculator->emptyVectors();
         calculator->setFileName(fileName);
         calculator->writeBackToFile();
+        drawzoneWidget->setGroundpresent(0);
         drawzoneWidget->drawCircuit();
         enableIcons();
 
@@ -262,7 +271,7 @@ void MainWindow::enableIcons(){
 void MainWindow::on_actionRotate_triggered()
 {
 
-    QList<component_lb*> list = drawzoneWidget->findChildren<component_lb *>();
+    QList<Component_lb*> list = drawzoneWidget->findChildren<Component_lb *>();
     for(auto w: list) {
         if(w->getSelected()){
             auto orig=std::make_shared<QPixmap>(*(w->pixmap()));
@@ -289,19 +298,21 @@ Ui::MainWindow *MainWindow::getUi() const
 void MainWindow::on_actionDelete_triggered()
 {
     //Delete component(s), for some scenarios, delete some extra stuff
-    QList<component_lb*> list = drawzoneWidget->findChildren<component_lb *>();
+    QList<Component_lb*> list = drawzoneWidget->findChildren<Component_lb *>();
     for(auto w: list) {
         if(w->getSelected()){
             if(w->getType()==4){
                 drawzoneWidget->setGroundpresent(0);
                 drawzoneWidget->update();
+                for(auto w2:list){
+                    if(w2->getType()==2)
+                        w2->setValue(0);
+                }
             }
             if(!(w->buddy()==nullptr)){
                 w->buddy()->close();
                 delete w->buddy();
             }
-            if (w->getValue()==COMPONENT_IS_GROUND)
-                w->setValue(0);
             w->close();
             delete w;
         }
@@ -315,7 +326,7 @@ void MainWindow::on_action_Copy_triggered()
 {
     //Clear the clipboard, and put the selected components in
     copied.clear();
-    QList<component_lb*> list = drawzoneWidget->findChildren<component_lb *>();
+    QList<Component_lb*> list = drawzoneWidget->findChildren<Component_lb *>();
     for(auto w: list) {
         if (w->getSelected())
             copied.push_back(w);
@@ -330,7 +341,7 @@ void MainWindow::on_action_Paste_triggered()
         int i=0;
         for(auto w:copied){
 
-            component_lb *newIcon = new component_lb(drawzoneWidget,w->getValue(),0,0,0,0,w->getAngle(),w->getType());
+            Component_lb *newIcon = new Component_lb(drawzoneWidget,w->getValue(),0,0,0,0,w->getAngle(),w->getType());
             newIcon->setPixmap(*(w->pixmap()));
             newIcon->move(QPoint(600+i*50,50));
             newIcon->show();

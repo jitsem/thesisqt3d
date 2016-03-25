@@ -1,5 +1,6 @@
 #ifndef SWITCH_H
 #define SWITCH_H
+
 #include "resistor.h"
 
 //Class for switch

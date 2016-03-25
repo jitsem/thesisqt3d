@@ -2,16 +2,16 @@
 #define COMPONENT_LB_H
 #define COMPONENT_IS_GROUND 666
 
-#include <QWidget>
 #include <QLabel>
-#include <QPoint>
-#include <QMouseEvent>
 
-class component_lb : public QLabel
+
+class QWidget;
+
+class Component_lb : public QLabel
 {
     Q_OBJECT
 public:
-    component_lb(QWidget * parent, float val, int n1x, int n1y, int n2x, int n2y, int ang, int type, int selected=0,
+    Component_lb(QWidget * parent, float val, int n1x, int n1y, int n2x, int n2y, int ang, int type, int selected=0,
                  int n1=-1, int n2=-1,int adj=0,float beg=50.0,float ss=5.0,int go = 0);
 
     float getValue() const;
@@ -63,13 +63,12 @@ private:
     //Variables for specifying parameters other team;
     int adjust,goal;
     float begin,stepSize;
-    qint64 nr;
     //type 0 = source
     //1=resistor
     //2=wire
     //3=switch open
     //4=ground
-    //TODO probably delete node2x and y because we've got 1 node and the angle
+    //
     //angle : 1 naar rechts
     //2: naar boven
     //3:naar links

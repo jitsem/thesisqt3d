@@ -1,0 +1,14 @@
+var struct_eigen_1_1internal_1_1traits_3_01_sparse_matrix_3_01___scalar_00_01___options_00_01___index_01_4_01_4 =
+[
+    [ "Index", "struct_eigen_1_1internal_1_1traits_3_01_sparse_matrix_3_01___scalar_00_01___options_00_01___index_01_4_01_4.html#a3cf34525de4a8538cefa2b0f7dee0a64", null ],
+    [ "Scalar", "struct_eigen_1_1internal_1_1traits_3_01_sparse_matrix_3_01___scalar_00_01___options_00_01___index_01_4_01_4.html#a4c7588df574f4098acf82f6c3df21899", null ],
+    [ "StorageKind", "struct_eigen_1_1internal_1_1traits_3_01_sparse_matrix_3_01___scalar_00_01___options_00_01___index_01_4_01_4.html#aa9e06212ee40acfa6830a322ebc3da44", null ],
+    [ "XprKind", "struct_eigen_1_1internal_1_1traits_3_01_sparse_matrix_3_01___scalar_00_01___options_00_01___index_01_4_01_4.html#adeafede9f875218a81e09db72019acaf", null ],
+    [ "RowsAtCompileTime", "struct_eigen_1_1internal_1_1traits_3_01_sparse_matrix_3_01___scalar_00_01___options_00_01___index_01_4_01_4.html#ac063323c8bd67db79892dfd62bf3a8d2a4296b477962bfc06d03e407d353fbe16", null ],
+    [ "ColsAtCompileTime", "struct_eigen_1_1internal_1_1traits_3_01_sparse_matrix_3_01___scalar_00_01___options_00_01___index_01_4_01_4.html#ac063323c8bd67db79892dfd62bf3a8d2a7b71bf697eb9d11d35ed1ae15deaa1af", null ],
+    [ "MaxRowsAtCompileTime", "struct_eigen_1_1internal_1_1traits_3_01_sparse_matrix_3_01___scalar_00_01___options_00_01___index_01_4_01_4.html#ac063323c8bd67db79892dfd62bf3a8d2a2ccd6c405f7e617d65a7008fbb85633d", null ],
+    [ "MaxColsAtCompileTime", "struct_eigen_1_1internal_1_1traits_3_01_sparse_matrix_3_01___scalar_00_01___options_00_01___index_01_4_01_4.html#ac063323c8bd67db79892dfd62bf3a8d2a652299da5480c72ebcbd5d8d54883f99", null ],
+    [ "Flags", "struct_eigen_1_1internal_1_1traits_3_01_sparse_matrix_3_01___scalar_00_01___options_00_01___index_01_4_01_4.html#ac063323c8bd67db79892dfd62bf3a8d2a6c72fe861d415ff04dab76944017f38a", null ],
+    [ "CoeffReadCost", "struct_eigen_1_1internal_1_1traits_3_01_sparse_matrix_3_01___scalar_00_01___options_00_01___index_01_4_01_4.html#ac063323c8bd67db79892dfd62bf3a8d2a1c38d46d3b90cea4bb2c6c2fcbc44d20", null ],
+    [ "SupportedAccessPatterns", "struct_eigen_1_1internal_1_1traits_3_01_sparse_matrix_3_01___scalar_00_01___options_00_01___index_01_4_01_4.html#ac063323c8bd67db79892dfd62bf3a8d2a0a53fe1c021497a905b3459d9c6396b5", null ]
+];

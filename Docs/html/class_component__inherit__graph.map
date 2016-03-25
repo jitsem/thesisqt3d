@@ -1,0 +1,6 @@
+<map id="Component" name="Component">
+<area shape="rect" id="node2" href="$class_resistor.html" title="{Resistor\n|# node1\l# node2\l|+ Resistor()\l+ getNode1()\l+ setNode1()\l+ getNode2()\l+ setNode2()\l}" alt="" coords="15,402,121,553"/>
+<area shape="rect" id="node4" href="$class_source.html" title="{Source\n||+ Source()\l+ getNodep()\l+ setNodep()\l+ getNodem()\l+ setNodem()\l}" alt="" coords="146,409,257,545"/>
+<area shape="rect" id="node5" href="$class_wire.html" title="{Wire\n||+ Wire()\l+ getLength()\l+ setLength()\l+ getNode()\l+ setNode()\l+ getNode1()\l+ getNode2()\l+ getIsGoal()\l+ setIsGoal()\l}" alt="" coords="281,380,391,575"/>
+<area shape="rect" id="node3" href="$class_switch.html" title="{Switch\n||+ Switch()\l+ toggleSwitch()\l+ getUp()\l}" alt="" coords="5,623,131,729"/>
+</map>

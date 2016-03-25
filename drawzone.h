@@ -1,14 +1,13 @@
 #ifndef DRAWZONE_H
 #define DRAWZONE_H
 
-#include <QWidget>
-#include <QFrame>
 #include <memory>
-#include <QMainWindow>
+#include <QFrame>
 
-#include "component_lb.h"
-#include "component.h"
-#include "mainwindow.h"
+
+class Component_lb;
+class QWidget;
+class QMainWindow;
 
 //Class for the right hand side of the application where the electric circuit is shown. inherits from QWidget
 class DrawZone :public QFrame
@@ -18,7 +17,7 @@ public:
     DrawZone(QWidget *parent);
     
     //Rotates the child widget's pixmap to the angle set in it's properties
-    void rotateToAngle(component_lb &child);
+    void rotateToAngle(Component_lb &child);
     
     //Make sure node 1 and node 2 have correct x&y coordinates
     void updateNodePositions();
@@ -33,10 +32,10 @@ public:
     void drawCircuit();
     
     //Get neighbouring components of current component that are present in list l ->key function in solving the node numbers
-    QList<component_lb *> getNeighbours(QList<component_lb *> &l, component_lb &current);
+    QList<Component_lb *> getNeighbours(QList<Component_lb *> &l, Component_lb &current);
     
     //Solve 1 node and return components (!=wires) that are semi filled out (1 node number is correct)
-    QList<component_lb *> solveNode(QList<component_lb *> &l, component_lb *current, int &curnode, QList<component_lb *> &stack);
+    QList<Component_lb *> solveNode(QList<Component_lb *> &l, Component_lb *current, int &curnode, QList<Component_lb *> &stack);
     
     //Function that fills out node numbers in component_lb objects, uses getneighbours and solvenode intensively
     void calc_nodes();
@@ -45,15 +44,15 @@ public:
     void writeToVectors();
     
     //Add valuelabel to the component so that the user sees the value
-    void addValueToComponent(component_lb *&newIcon);
+    void addValueToComponent(Component_lb *&newIcon);
     
     //Getter and setter of global bool var groundpresent
     int getGroundpresent() const;
     void setGroundpresent(int value);
     
     //Set and remove gray background to pixmap when selecting, deselecting component
-    component_lb * removeGray(component_lb & child);
-    component_lb * setGray(component_lb & child);
+    Component_lb * removeGray(Component_lb & child);
+    Component_lb * setGray(Component_lb & child);
 
 public slots:
     
@@ -81,7 +80,6 @@ protected:
 private:
 
     int groundpresent=0;
-    
     
     //VOORLOPIG The points that make up the connection between ground and wire for drawing
     QPoint polypoints[3];

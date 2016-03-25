@@ -1,0 +1,5 @@
+var struct_eigen_1_1internal_1_1traits_3_01_map_3_01_permutation_matrix_3_01_size_at_compile_time_007fd908507be45fae70e4a2e012ff536a =
+[
+    [ "Index", "struct_eigen_1_1internal_1_1traits_3_01_map_3_01_permutation_matrix_3_01_size_at_compile_time_007fd908507be45fae70e4a2e012ff536a.html#ad34d17661df92a9643ed8613f828c090", null ],
+    [ "IndicesType", "struct_eigen_1_1internal_1_1traits_3_01_map_3_01_permutation_matrix_3_01_size_at_compile_time_007fd908507be45fae70e4a2e012ff536a.html#a68ff66c15182cb894663982dfbce78c8", null ]
+];
