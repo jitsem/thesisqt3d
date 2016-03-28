@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['xcoord',['xCoord',['../class_component.html#a9d88dfb711adef94575b4dea02406b34',1,'Component']]]
+  ['value',['value',['../class_component.html#aa2111d9574c3ffdac8290cb1e0c346eb',1,'Component::value()'],['../class_component__lb.html#a9f61e770435d130c9112b8d5c551d37b',1,'Component_lb::value()']]],
+  ['view',['view',['../class_main_window.html#a09e50db034782e36614281854c7cd02b',1,'MainWindow']]],
+  ['voltageatnode',['voltageAtNode',['../class_calc.html#a0f6e9d1a487a0e025e166011ad81cdef',1,'Calc']]]
 ];

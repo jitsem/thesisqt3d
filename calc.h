@@ -13,7 +13,7 @@
 class Qstring;
 
 
-//Class where all major calculations and I/O happen
+/**Class where all major calculations and I/O happen*/
 class Calc: public QObject
 {
 Q_OBJECT
@@ -32,7 +32,7 @@ public:
     /**Get voltage at a certain Node*/
     Q_INVOKABLE float voltageAtNode(int nodeNr){return sol.at(nodeNr);}
 
-    /**Get number of Resistors, invokable from QML*/
+    /**Get number of resistors, invokable from QML*/
     Q_INVOKABLE int getNumberOfResistors(){return resistors.size();}
     /**Get resistance at Resistor at resNr, invokable from QML*/
     Q_INVOKABLE float resistanceAtResistor(int resNr){return resistors.at(resNr)->getValue();}
@@ -55,7 +55,7 @@ public:
     /**Add Resistor to resistors*/
     bool addResistor(std::shared_ptr<Resistor>& r);
 
-    /**Get number of Sources, invokable from QML*/
+    /**Get number of sources, invokable from QML*/
     Q_INVOKABLE int getNumberOfSources(){return sources.size();}
     /**Get voltage at Source at sourceNr, invokable from QML*/
     Q_INVOKABLE float getVoltageAtSource(int sourceNr){return sources.at(sourceNr)->getValue();}
@@ -78,92 +78,120 @@ public:
     /**Add Source to sources*/
     bool addSource(std::shared_ptr<Source>& s);
 
-    //Various functions for Wires, invokable from QML
+    /**Get number of wires, invokable from QML*/
     Q_INVOKABLE int getNumberOfWires(){return wires.size();}
+    /**Get current trough Wire at wiNr, invokable from QML*/
     Q_INVOKABLE float getCurrentofWire(int wiNr){return wires.at(wiNr)->getCurrent();}
+    /**Get angle of Wire at wiNr, invokable from QML*/
     Q_INVOKABLE int getAngleOfWire(int wiNr){return wires.at(wiNr)->getAngle();}
+    /**Get XCoord of Wire at wiNr, invokable from QML*/
     Q_INVOKABLE int getXCoordOfWire(int wiNr){return wires.at(wiNr)->getXCoord();}
+    /**Get YCoord of Wire at wiNr, invokable from QML*/
     Q_INVOKABLE int getYCoordOfWire(int wiNr){return wires.at(wiNr)->getYCoord();}
+    /**Get Node of Wire at wiNr, invokable from QML*/
     Q_INVOKABLE int getNodeOfWire(int wiNr){return wires.at(wiNr)->getNode();}
+    /**Get length of Wire at wiNr, invokable from QML*/
     Q_INVOKABLE int getLengthOfWire(int wiNr){return wires.at(wiNr)->getLength();}
+    /**Add Wire to wires*/
     bool addWire(std::shared_ptr<Wire> &w);
 
-    //Various functions for Switches, invokable from QML
+    /**Get number of wires, invokable from QML*/
     Q_INVOKABLE int getNumberOfSwitches(){return switches.size();}
+    /**Get state of Switch at swNr, invokable from QML*/
     Q_INVOKABLE bool isSwitchUp(int swNr){return (switches.at(swNr)->getUp());}
+    /**Get angle of Switch at swNr, invokable from QML*/
     Q_INVOKABLE int getAngleOfSwitch(int swNr){return switches.at(swNr)->getAngle();}
+    /**Get XCoord of Switch at swNr, invokable from QML*/
     Q_INVOKABLE int getXCoordOfSwitch(int swNr){return switches.at(swNr)->getXCoord();}
+    /**Get YCoord of Switch at swNr, invokable from QML*/
     Q_INVOKABLE int getYCoordOfSwitch(int swNr){return switches.at(swNr)->getYCoord();}
+    /**Get Node 1 of Switch at swNr, invokable from QML*/
     Q_INVOKABLE int node1AtSwitch(int swNr){return switches.at(swNr)->getNode1();}
+    /**Get Node 2 of Switch at swNr, invokable from QML*/
     Q_INVOKABLE int node2AtSwitch(int swNr){return switches.at(swNr)->getNode2();}
+    /**Toggle Switch at swNr, invokable from QML*/
     Q_INVOKABLE void toggleSwitch(int swNr){switches.at(swNr)->toggleSwitch();}
+    /**Add Switch to switches*/
     bool addSwitch(std::shared_ptr<Switch> &s);
 
 
-    //Change the angle of resistors and switches, makes further calculations much easier
+    /**Standardize the angles of resistors and switches, makes current-calculations much easier*/
     void correctAngles();
-
-    //Methodes for setting currents trough resistors, switches and wires
+    /**Set currents trough resistors, switches and wires*/
     void setCurrentsOfResistorsAndSwitches();
+    /**Set currents trough wires, based on other components*/
     void setCurrentsOfWires();
-    void setCurrentsOfSwitchedWires();
+    /**Set currents of wires, which are not directly connected to other components*/
     bool setCurrentsOfStrayWires();
 
-    //Methodes for reading and writing file
-    Q_INVOKABLE bool readFile();
-    Q_INVOKABLE void writeBackToFile();
+    /**Read in file*/
+    bool readFile();
+    /**Write changes to file*/
+    void writeBackToFile();
 
-    //Read line of levelfile when a component is declared
+    /**Read line of levelfile for a Wire component*/
     bool process_wire_line(QString& lijn);
+    /**Read line of levelfile for a Resistor component*/
     bool process_resistor_line(QString& lijn);
+    /**Read line of levelfile for a Source component*/
     bool process_source_line(QString& lijn);
+    /**Read line of levelfile for a Switch component*/
     bool process_switch_line(QString& lijn);
+    /**Read line of levelfile for the click Goal*/
     bool process_click_line(QString& lijn); //For other team
 
-    //Set file path
+    /**Setter for file path*/
     void setFileName(const QString &value);
+    /**Getter for file path*/
     QString getFileName() const;
 
 
-    //Getters and settters for vectors
+    /**Get wires*/
     std::vector<std::shared_ptr<Wire>> getWires() const;
+    /**Get resistors*/
     std::vector<std::shared_ptr<Resistor> > getResistors() const;
+    /**Get sources*/
     std::vector<std::shared_ptr<Source> > getSources() const;
+    /**Get switches*/
     std::vector<std::shared_ptr<Switch> > getSwitches() const;
 
-    //Empty all vectors
+    /**Empty all vectors*/
     void emptyVectors();
 
 
-
-    //Getters and setters for level Goals
+    /**Getter for twoStarGoal*/
     int getTwoStar() const;
+    /**Getter for twoStarGoal*/
     void setTwoStar(int value);
-
+    /**Getter for threeStarGoal*/
     int getThreeStar() const;
+    /**Getter for threeStarGoal*/
     void setThreeStar(int value);
 
 
 private:
 
+    /**Constructor for Calc*/
     Calc();
+    /**Instance pointer for Calc, makes sure there is only one instance of this class*/
     static std::shared_ptr<Calc> instance;
-
-    //Internal solving method
+    /**Calculates voltage of each nodes, based on components in circuit*/
     std::vector<float> computeNetwork(int nrOfNodes);
-
-
-    //variables for circuit
+    /**Vector with nodeVoltage*/
     std::vector<float> sol;
+    /**Vector with all objects of type Source*/
     std::vector<std::shared_ptr<Source>> sources;
+    /**Vector with all objects of type Resistors*/
     std::vector<std::shared_ptr<Resistor>> resistors;
+    /**Vector with all objects of type Wire*/
     std::vector<std::shared_ptr<Wire>> wires;
+    /**Vector with all objects of type Switch*/
     std::vector<std::shared_ptr<Switch>> switches;
+    /**File path*/
     QString fileName;
-
-
-    //Things for compability with other team (game elements)
+    /**Two star goal*/
     int twoStar;
+    /**Three star goal*/
     int threeStar;
 };
 

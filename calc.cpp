@@ -487,7 +487,6 @@ Correct:
 
     }
 }
-
 void Calc::setCurrentsOfResistorsAndSwitches()
 {
     for(auto& r : resistors){

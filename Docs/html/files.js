@@ -14,7 +14,7 @@ var files =
     [ "dragcomponent.h", "dragcomponent_8h.html", [
       [ "DragComponent", "class_drag_component.html", "class_drag_component" ]
     ] ],
-    [ "drawzone.cpp", "drawzone_8cpp.html", "drawzone_8cpp" ],
+    [ "drawzone.cpp", "drawzone_8cpp.html", null ],
     [ "drawzone.h", "drawzone_8h.html", [
       [ "DrawZone", "class_draw_zone.html", "class_draw_zone" ]
     ] ],

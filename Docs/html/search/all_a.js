@@ -1,9 +1,21 @@
 var searchData=
 [
-  ['paintevent',['paintEvent',['../class_draw_zone.html#a8d7faaf0c3823a9daeb14590d74e052c',1,'DrawZone']]],
-  ['process_5fclick_5fline',['process_click_line',['../class_calc.html#a0662db3d60799bbc8c65d0ddc23d6f03',1,'Calc']]],
-  ['process_5fresistor_5fline',['process_resistor_line',['../class_calc.html#a0550d75627615b79995926363b2fd7b1',1,'Calc']]],
-  ['process_5fsource_5fline',['process_source_line',['../class_calc.html#a99d3007019df7cdc3f86806e5e0d8908',1,'Calc']]],
-  ['process_5fswitch_5fline',['process_switch_line',['../class_calc.html#a50baad439dc127f05656c8f6ec70719f',1,'Calc']]],
-  ['process_5fwire_5fline',['process_wire_line',['../class_calc.html#a1e094cad6bec9569054c1d760c9cf764',1,'Calc']]]
+  ['n1',['n1',['../class_component__lb.html#a3ee9a57f9b3e0d5e8ee75634ca61cc5c',1,'Component_lb']]],
+  ['n2',['n2',['../class_component__lb.html#a5b0cd9404b83a3847714cc571879cf0c',1,'Component_lb']]],
+  ['node',['node',['../class_wire.html#a3c51d29a81c5fba3d362ba8ab8b7387e',1,'Wire']]],
+  ['node1',['node1',['../class_resistor.html#aabadf8c45f0bf0ae5c155aa265fa9eda',1,'Resistor']]],
+  ['node1atresistor',['node1AtResistor',['../class_calc.html#a8adcd4bda69231b4b108152d566ed0ee',1,'Calc']]],
+  ['node1atswitch',['node1AtSwitch',['../class_calc.html#a8aef093d27dc5c4fcd901cc741fc25f5',1,'Calc']]],
+  ['node1x',['node1x',['../class_component__lb.html#a8d81b33a0888618a1ced0e6bb52d758e',1,'Component_lb']]],
+  ['node1y',['node1y',['../class_component__lb.html#a0f315d51ea181c8fe26d3ab0cbc8c876',1,'Component_lb']]],
+  ['node2',['node2',['../class_resistor.html#ac2c6112e569fc68e5f8804fef5fcd9d3',1,'Resistor']]],
+  ['node2atresistor',['node2AtResistor',['../class_calc.html#ad8768b1b48fbd729c1fb85f9348c3438',1,'Calc']]],
+  ['node2atswitch',['node2AtSwitch',['../class_calc.html#a4b28a890aade5c48d1380c217bd80cf6',1,'Calc']]],
+  ['node2x',['node2x',['../class_component__lb.html#a8d0fa7f3a6caef12547fa7a12fc8f644',1,'Component_lb']]],
+  ['node2y',['node2y',['../class_component__lb.html#a9d648b323a45a5d6485bcfa8f5fceac5',1,'Component_lb']]],
+  ['nodem',['nodem',['../class_source.html#addae3d7038a0ec854b44ebaa80ddc08e',1,'Source']]],
+  ['nodematsource',['nodeMAtSource',['../class_calc.html#a815355afdf0d4aefe30b8aa57af6ee39',1,'Calc']]],
+  ['nodep',['nodep',['../class_source.html#a9292ad5c35a92ff53810e7467903bce1',1,'Source']]],
+  ['nodepatsource',['nodePAtSource',['../class_calc.html#a09de5952ed66e36b747fcda4e4cb928b',1,'Calc']]],
+  ['numberofnodes',['numberOfNodes',['../class_calc.html#a0f874fc75313cbccb85966a410ebd840',1,'Calc']]]
 ];

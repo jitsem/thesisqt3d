@@ -1,9 +1,10 @@
 var searchData=
 [
-  ['calc',['Calc',['../class_calc.html',1,'']]],
+  ['calc',['Calc',['../class_calc.html',1,'Calc'],['../class_calc.html#aab8419a8e94b9d61dee93d0813a9b83e',1,'Calc::Calc()']]],
   ['calc_2ecpp',['calc.cpp',['../calc_8cpp.html',1,'']]],
   ['calc_2eh',['calc.h',['../calc_8h.html',1,'']]],
   ['calc_5fnodes',['calc_nodes',['../class_draw_zone.html#a8d732d604c8e96ea5dcf53d1d0ab1e9a',1,'DrawZone']]],
+  ['calculator',['calculator',['../class_main_window.html#ab16830884cde2ea96b381bc8388e8462',1,'MainWindow']]],
   ['checkclosedcircuit',['checkClosedCircuit',['../class_draw_zone.html#a59eeee637600fab29e0b4a5049eb6198',1,'DrawZone']]],
   ['component',['Component',['../class_component.html',1,'Component'],['../class_component.html#ac1317f67540bd8b7050c252d3add6970',1,'Component::Component()']]],
   ['component_2ecpp',['component.cpp',['../component_8cpp.html',1,'']]],
@@ -12,6 +13,8 @@ var searchData=
   ['component_5flb',['Component_lb',['../class_component__lb.html',1,'Component_lb'],['../class_component__lb.html#ac9b66b2f3e224dde0b4dfdeb4848507d',1,'Component_lb::Component_lb()']]],
   ['component_5flb_2ecpp',['component_lb.cpp',['../component__lb_8cpp.html',1,'']]],
   ['component_5flb_2eh',['component_lb.h',['../component__lb_8h.html',1,'']]],
+  ['computenetwork',['computeNetwork',['../class_calc.html#ab2e4467f57e33271d6eed2d81b4e96e2',1,'Calc']]],
+  ['copied',['copied',['../class_main_window.html#af1cc8231a3d9def139817aa379e41fef',1,'MainWindow']]],
   ['correctangles',['correctAngles',['../class_calc.html#a043e0bab78ea9a08a33e9cb7a083c221',1,'Calc']]],
   ['current',['current',['../class_component.html#a5313b0a04f29b03efce01a56b7d320b0',1,'Component']]]
 ];

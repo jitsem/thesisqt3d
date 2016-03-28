@@ -119,8 +119,8 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionNew">
    <property name="icon">
-    <iconset resource="levelbuilder.qrc">
-     <normaloff>:/assets/icons/png/pen.png</normaloff>:/assets/icons/png/pen.png</iconset>
+    <iconset resource="resource.qrc">
+     <normaloff>:/assets/icons/new-file.png</normaloff>:/assets/icons/new-file.png</iconset>
    </property>
    <property name="text">
     <string>&amp;New</string>
@@ -134,8 +134,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="levelbuilder.qrc">
-     <normaloff>:/assets/icons/png/diskette.png</normaloff>:/assets/icons/png/diskette.png</iconset>
+    <iconset resource="resource.qrc">
+     <normaloff>:/assets/icons/save.png</normaloff>:/assets/icons/save.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Save</string>
@@ -146,7 +146,7 @@
   </action>
   <action name="actionExit">
    <property name="icon">
-    <iconset resource="levelbuilder.qrc">
+    <iconset>
      <normaloff>:/assets/icons/png/direction.png</normaloff>:/assets/icons/png/direction.png</iconset>
    </property>
    <property name="text">
@@ -161,7 +161,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="levelbuilder.qrc">
+    <iconset>
      <normaloff>:/assets/icons/png/technology.png</normaloff>:/assets/icons/png/technology.png</iconset>
    </property>
    <property name="text">
@@ -176,8 +176,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="levelbuilder.qrc">
-     <normaloff>:/assets/icons/png/reload-webpage.png</normaloff>:/assets/icons/png/reload-webpage.png</iconset>
+    <iconset resource="resource.qrc">
+     <normaloff>:/assets/icons/rotate-left.png</normaloff>:/assets/icons/rotate-left.png</iconset>
    </property>
    <property name="text">
     <string>rotate</string>
@@ -194,8 +194,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="levelbuilder.qrc">
-     <normaloff>:/assets/icons/png/cross-sign.png</normaloff>:/assets/icons/png/cross-sign.png</iconset>
+    <iconset resource="resource.qrc">
+     <normaloff>:/assets/icons/trash.png</normaloff>:/assets/icons/trash.png</iconset>
    </property>
    <property name="text">
     <string>Delete</string>
@@ -212,8 +212,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="levelbuilder.qrc">
-     <normaloff>:/assets/icons/png/direction.png</normaloff>:/assets/icons/png/direction.png</iconset>
+    <iconset resource="resource.qrc">
+     <normaloff>:/assets/icons/exit.png</normaloff>:/assets/icons/exit.png</iconset>
    </property>
    <property name="text">
     <string>3D-Preview</string>
@@ -227,8 +227,8 @@
   </action>
   <action name="actionOpen_File">
    <property name="icon">
-    <iconset resource="levelbuilder.qrc">
-     <normaloff>:/assets/icons/png/closed-folder.png</normaloff>:/assets/icons/png/closed-folder.png</iconset>
+    <iconset resource="resource.qrc">
+     <normaloff>:/assets/icons/folder-open.png</normaloff>:/assets/icons/folder-open.png</iconset>
    </property>
    <property name="text">
     <string>Open File</string>
@@ -245,8 +245,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="levelbuilder.qrc">
-     <normaloff>:/assets/gnd.png</normaloff>:/assets/gnd.png</iconset>
+    <iconset resource="resource.qrc">
+     <normaloff>:/assets/icons/gnd.png</normaloff>:/assets/icons/gnd.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Ground</string>
@@ -263,8 +263,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="levelbuilder.qrc">
-     <normaloff>:/assets/icons/png/flag-waving.png</normaloff>:/assets/icons/png/flag-waving.png</iconset>
+    <iconset resource="resource.qrc">
+     <normaloff>:/assets/icons/star.png</normaloff>:/assets/icons/star.png</iconset>
    </property>
    <property name="text">
     <string>Edit Level Goals</string>
@@ -308,7 +308,7 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="levelbuilder.qrc"/>
+  <include location="resource.qrc"/>
  </resources>
  <connections/>
 </ui>

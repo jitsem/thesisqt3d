@@ -112,6 +112,7 @@ $(document).ready(function(){initNavTree('class_draw_zone.html','');});
 <a href="#pub-slots">Public Slots</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_draw_zone-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">DrawZone Class Reference</div>  </div>
@@ -123,16 +124,12 @@ $(document).ready(function(){initNavTree('class_draw_zone.html','');});
 Inheritance diagram for DrawZone:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_draw_zone__inherit__graph.png" border="0" usemap="#_draw_zone_inherit__map" alt="Inheritance graph"/></div>
-<map name="_draw_zone_inherit__map" id="_draw_zone_inherit__map">
-</map>
-</div>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
 Collaboration diagram for DrawZone:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_draw_zone__coll__graph.png" border="0" usemap="#_draw_zone_coll__map" alt="Collaboration graph"/></div>
-<map name="_draw_zone_coll__map" id="_draw_zone_coll__map">
-</map>
-</div>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-slots"></a>
 Public Slots</h2></td></tr>
@@ -192,8 +189,19 @@ Protected Member Functions</h2></td></tr>
 <tr class="separator:a03867ed8f0b6a38c3cfbe7b29e929ee3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d7faaf0c3823a9daeb14590d74e052c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_draw_zone.html#a8d7faaf0c3823a9daeb14590d74e052c">paintEvent</a> (QPaintEvent *event) Q_DECL_OVERRIDE</td></tr>
 <tr class="separator:a8d7faaf0c3823a9daeb14590d74e052c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a59f43237ff4e404b4a2bba006d3ae8a3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_draw_zone.html#a59f43237ff4e404b4a2bba006d3ae8a3">groundpresent</a> =0</td></tr>
+<tr class="separator:a59f43237ff4e404b4a2bba006d3ae8a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a800565b1b25c282160b5d38e693853f0"><td class="memItemLeft" align="right" valign="top">QPoint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_draw_zone.html#a800565b1b25c282160b5d38e693853f0">polypoints</a> [3]</td></tr>
+<tr class="separator:a800565b1b25c282160b5d38e693853f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae454e5de9b62ddf6e563db54d61bdafd"><td class="memItemLeft" align="right" valign="top">QPoint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_draw_zone.html#ae454e5de9b62ddf6e563db54d61bdafd">dragStartPosition</a></td></tr>
+<tr class="separator:ae454e5de9b62ddf6e563db54d61bdafd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Class for the right hand side of the application where the electric circuit is shown. inherits from QFrame </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="ab7d1a07beef503d64db8426ee6fc6ce2"></a>
 <div class="memitem">
 <div class="memproto">
@@ -207,6 +215,7 @@ Protected Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Constructor van Drawzone </p>
 
 </div>
 </div>
@@ -224,6 +233,7 @@ Protected Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Add valuelabel to the component so that the user sees the value </p>
 
 </div>
 </div>
@@ -239,6 +249,7 @@ Protected Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Function that fills out node numbers in component_lb objects, uses <a class="el" href="class_draw_zone.html#a630631b592e5e8da26739f586937f859">getNeighbours()</a> and solvenode() intensively </p>
 
 </div>
 </div>
@@ -254,6 +265,7 @@ Protected Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Check if electric circuit is closed </p>
 
 </div>
 </div>
@@ -278,6 +290,7 @@ Protected Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Catches dragEnterEvent </p>
 
 </div>
 </div>
@@ -302,6 +315,7 @@ Protected Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Catches dragMoveEvent </p>
 
 </div>
 </div>
@@ -317,6 +331,7 @@ Protected Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Draw circuit from file </p>
 
 </div>
 </div>
@@ -341,6 +356,7 @@ Protected Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Catches dropEvent </p>
 
 </div>
 </div>
@@ -356,6 +372,7 @@ Protected Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Getter of global bool var groundpresent </p>
 
 </div>
 </div>
@@ -382,6 +399,7 @@ Protected Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Get neighbouring components of current component that are present in list l -&gt;key function in solving the node numbers </p>
 
 </div>
 </div>
@@ -406,6 +424,7 @@ Protected Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Catches doubleClickEvent </p>
 
 </div>
 </div>
@@ -430,6 +449,7 @@ Protected Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Catches doubleClickEvent </p>
 
 </div>
 </div>
@@ -454,6 +474,7 @@ Protected Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Catches dmousePressEvent </p>
 
 </div>
 </div>
@@ -478,6 +499,7 @@ Protected Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Catches mouseReleaseEvent </p>
 
 </div>
 </div>
@@ -502,6 +524,7 @@ Protected Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Override to make sure the grid is drawn and the component connections (In the Future) are drawn </p>
 
 </div>
 </div>
@@ -518,6 +541,7 @@ Protected Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Remove gray background to pixmap when deselecting component </p>
 
 </div>
 </div>
@@ -534,6 +558,7 @@ Protected Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Rotates the child widget's pixmap to the angle set in it's properties </p>
 
 </div>
 </div>
@@ -560,6 +585,7 @@ Protected Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Function to snap components to nearest multiple of the grid </p>
 
 </div>
 </div>
@@ -576,6 +602,7 @@ Protected Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Set gray background to pixmap when selecting component </p>
 
 </div>
 </div>
@@ -592,6 +619,7 @@ Protected Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Setter of global bool var groundpresent </p>
 
 </div>
 </div>
@@ -615,6 +643,7 @@ Protected Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Round selected wire with this slot </p>
 
 </div>
 </div>
@@ -638,6 +667,7 @@ Protected Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Slot for executing save to file method </p>
 
 </div>
 </div>
@@ -676,6 +706,7 @@ Protected Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Solve 1 node and return components (!=wires) that are semi filled out (1 node number is correct) </p>
 
 </div>
 </div>
@@ -691,6 +722,7 @@ Protected Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Make sure node 1 and node 2 have correct x&amp;y coordinates </p>
 
 </div>
 </div>
@@ -706,6 +738,71 @@ Protected Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Write current circuit to vectorlists for model of 3d representation </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="ae454e5de9b62ddf6e563db54d61bdafd"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QPoint DrawZone::dragStartPosition</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Needed to determine move or click </p>
+
+</div>
+</div>
+<a class="anchor" id="a59f43237ff4e404b4a2bba006d3ae8a3"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int DrawZone::groundpresent =0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Variable to check for Ground </p>
+
+</div>
+</div>
+<a class="anchor" id="a800565b1b25c282160b5d38e693853f0"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QPoint DrawZone::polypoints[3]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The points that make up the connection between ground and wire for drawing &ndash; TEMPORARY </p>
 
 </div>
 </div>

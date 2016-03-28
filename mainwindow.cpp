@@ -169,7 +169,7 @@ void MainWindow::on_action3D_Preview_triggered()
             view->engine()->rootContext()->setContextProperty(QStringLiteral("calculator"),calculator.get());
             view->setResizeMode(QQuickView::SizeRootObjectToView);
             view->setSource(QUrl("qrc:/Qml/CircuitView.qml"));
-            view->show();
+            view->showMaximized();
         }
         else{
             QMessageBox msgBox;

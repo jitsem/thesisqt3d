@@ -42,9 +42,6 @@
 //TODO dynamically connect 2 components with drag select
 //TODO make function showBox(QString) instead of repeating the messagebox code all the time
 
-//Needed to determine move or click
-QPoint  dragStartPosition;
-
 
 DrawZone::DrawZone(QWidget *parent)
     :QFrame(parent)
@@ -465,35 +462,35 @@ Component_lb *DrawZone::removeGray(Component_lb &child){
 
     case 0:
     {
-        auto tempPixmap = std::make_shared<QPixmap>(":/assets/source_small.png");
+        auto tempPixmap = std::make_shared<QPixmap>(":/assets/icons/source_small.png");
         child.setPixmap((*tempPixmap));
         rotateToAngle(child);
     }
         break;
     case 1:
     {
-        auto tempPixmap = std::make_shared<QPixmap>(":/assets/res_small.png");
+        auto tempPixmap = std::make_shared<QPixmap>(":/assets/icons/res_small.png");
         child.setPixmap((*tempPixmap));
         rotateToAngle(child);
     }
         break;
     case 2:
     {
-        auto tempPixmap = std::make_shared<QPixmap>(":/assets/wire_small.png");
+        auto tempPixmap = std::make_shared<QPixmap>(":/assets/icons/wire_small.png");
         child.setPixmap((*tempPixmap));
         rotateToAngle(child);
         break;
     }
     case 3:
     {
-        auto tempPixmap = std::make_shared<QPixmap>(":/assets/sw_open.png");
+        auto tempPixmap = std::make_shared<QPixmap>(":/assets/icons/sw_open.png");
         child.setPixmap((*tempPixmap));
         rotateToAngle(child);
         break;
     }
     case 4:
     {
-        auto tempPixmap = std::make_shared<QPixmap>(":/assets/gnd.png");
+        auto tempPixmap = std::make_shared<QPixmap>(":/assets/icons/gnd.png");
         child.setPixmap((*tempPixmap));
         rotateToAngle(child);
         break;
@@ -834,7 +831,7 @@ void DrawZone::drawCircuit()
     auto switches = calculator->getSwitches();
 
 
-    auto pixmap = std::make_shared<QPixmap>(":/assets/wire_small.png");
+    auto pixmap = std::make_shared<QPixmap>(":/assets/icons/wire_small.png");
     for(auto w:wires){
         int XCoord =  w->getXCoord()*gridSize;
         int YCoord =  w->getYCoord()*gridSize;
@@ -903,7 +900,7 @@ void DrawZone::drawCircuit()
             if (w->getValue()==COMPONENT_IS_GROUND){
 
                 Component_lb *gnd = new Component_lb(this,0,0,0,0,0,1,4);
-                QPixmap grnd=QPixmap(":/assets/gnd.png");
+                QPixmap grnd=QPixmap(":/assets/icons/gnd.png");
                 gnd->setPixmap(grnd);
                 gnd->setFixedSize(gridSize,gridSize);
                 gnd->setScaledContents(true);
@@ -930,17 +927,27 @@ void DrawZone::drawCircuit()
         }
     }
 
-    pixmap = std::make_shared<QPixmap>(":/assets/source_small.png");
+    pixmap = std::make_shared<QPixmap>(":/assets/icons/source_small.png");
     for(auto s:sources){
         int XCoord =  s->getXCoord()*gridSize;
         int YCoord =  s->getYCoord()*gridSize;
         int XCoord2;
         int YCoord2;
         int angle = s->getAngle();
+//        if(angle==4)
+//            angle=2;
+//        else if (angle==2)
+//            angle=4;
 
         QList<Component_lb*> list = this->findChildren<Component_lb *>();
         for(Component_lb *w: list) {
-            if(w->getNode1x()==XCoord && w->getNode1y()==YCoord && w->getAngle() == angle){
+            int ang;
+            ang=w->getAngle();
+            if(ang==4)
+                ang=2;
+            else if (ang==2)
+                ang=4;
+            if(w->getNode1x()==XCoord && w->getNode1y()==YCoord && ang==angle){
                 delete w;
             }
 
@@ -1001,7 +1008,7 @@ void DrawZone::drawCircuit()
         addValueToComponent(newIcon);
 
     }
-    pixmap = std::make_shared<QPixmap>(":/assets/res_small.png");
+    pixmap = std::make_shared<QPixmap>(":/assets/icons/res_small.png");
     for(auto r:resistors){
 
         int XCoord =  r->getXCoord()*gridSize;
@@ -1067,7 +1074,7 @@ void DrawZone::drawCircuit()
 
     }
 
-    pixmap = std::make_shared<QPixmap>(":/assets/sw_open.png");
+    pixmap = std::make_shared<QPixmap>(":/assets/icons/sw_open.png");
     for(auto s:switches){
 
         int XCoord =  s->getXCoord()*gridSize;

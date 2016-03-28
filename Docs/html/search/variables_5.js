@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['node1',['node1',['../class_resistor.html#aabadf8c45f0bf0ae5c155aa265fa9eda',1,'Resistor']]],
-  ['node2',['node2',['../class_resistor.html#ac2c6112e569fc68e5f8804fef5fcd9d3',1,'Resistor']]]
+  ['goal',['goal',['../class_component__lb.html#af693a3ab65c3fbaebd74ef4527b9c85d',1,'Component_lb']]],
+  ['gridsize',['gridSize',['../class_main_window.html#a3088dbc014cb5e95ccc157115f630472',1,'MainWindow']]],
+  ['groundpresent',['groundpresent',['../class_draw_zone.html#a59f43237ff4e404b4a2bba006d3ae8a3',1,'DrawZone']]]
 ];

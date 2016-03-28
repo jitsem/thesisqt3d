@@ -1,9 +1,11 @@
 var class_calc =
 [
+    [ "Calc", "class_calc.html#aab8419a8e94b9d61dee93d0813a9b83e", null ],
     [ "addResistor", "class_calc.html#a8e47eefdb08b4866347b35704cf33fff", null ],
     [ "addSource", "class_calc.html#aa56042b17287af21c096253cf4685784", null ],
     [ "addSwitch", "class_calc.html#ab6035df1b5d23ff219af684ada4dfa3c", null ],
     [ "addWire", "class_calc.html#ad6856e4add82708718def6fc85ad8b9a", null ],
+    [ "computeNetwork", "class_calc.html#ab2e4467f57e33271d6eed2d81b4e96e2", null ],
     [ "correctAngles", "class_calc.html#a043e0bab78ea9a08a33e9cb7a083c221", null ],
     [ "decreaseResistanceAtResistor", "class_calc.html#a160a508b353caa172c602b1e798e8b4a", null ],
     [ "decreaseVoltageAtSource", "class_calc.html#a8c5dec7192e6868d16105cea78917bac", null ],
@@ -39,6 +41,7 @@ var class_calc =
     [ "getYCoordOfWire", "class_calc.html#ad7cf0d0636911c62fb398591fc54a163", null ],
     [ "increaseResistanceAtResistor", "class_calc.html#afff70d9d640603ad3b3133604bfb624c", null ],
     [ "increaseVoltageAtSource", "class_calc.html#a5e8e0722bb52472601d67bc9739ab279", null ],
+    [ "Instance", "class_calc.html#a99cc42c95779048997d52f75a2586bb4", null ],
     [ "isSwitchUp", "class_calc.html#ab00d0a168ed3abf58dab30f84a30e2fa", null ],
     [ "node1AtResistor", "class_calc.html#a8adcd4bda69231b4b108152d566ed0ee", null ],
     [ "node1AtSwitch", "class_calc.html#a8aef093d27dc5c4fcd901cc741fc25f5", null ],
@@ -56,7 +59,6 @@ var class_calc =
     [ "resistanceAtResistor", "class_calc.html#ae1cd7b3a4337677fbccf8453aa412092", null ],
     [ "setCurrentsOfResistorsAndSwitches", "class_calc.html#a9f2e6e9439d0ce003116b336bb9f8e9d", null ],
     [ "setCurrentsOfStrayWires", "class_calc.html#adf8accc1a2efbbc3b6e60cc9d7b11ba0", null ],
-    [ "setCurrentsOfSwitchedWires", "class_calc.html#a21e038679660baa047852e166868514b", null ],
     [ "setCurrentsOfWires", "class_calc.html#a5a35b91a9e31a52dee36119ed8edcc6e", null ],
     [ "setFileName", "class_calc.html#a815e01af104b3c5d85401654cd5c1a37", null ],
     [ "setThreeStar", "class_calc.html#aa2b2bd73e482c6b10e9bd6fae0ff54b1", null ],
@@ -64,5 +66,14 @@ var class_calc =
     [ "solveLevel", "class_calc.html#a521c91d3ec11c68c23b00cc7aac2cd65", null ],
     [ "toggleSwitch", "class_calc.html#abecdea72a11ef21350cce7267b3216ea", null ],
     [ "voltageAtNode", "class_calc.html#a0f6e9d1a487a0e025e166011ad81cdef", null ],
-    [ "writeBackToFile", "class_calc.html#afd054946890c68ca93223d12ef0d7603", null ]
+    [ "writeBackToFile", "class_calc.html#afd054946890c68ca93223d12ef0d7603", null ],
+    [ "fileName", "class_calc.html#a5129f5a912a0883d6c15a7ba3a9482e9", null ],
+    [ "instance", "class_calc.html#a0597e77c9e5a7af36a41de9d540b8606", null ],
+    [ "resistors", "class_calc.html#ae12e85bff703dc2499726f50b91bda4f", null ],
+    [ "sol", "class_calc.html#a7751ac835e23f02eea70bceeb8fa36ef", null ],
+    [ "sources", "class_calc.html#ab450003541f56cdbfadf04ddcf6d0300", null ],
+    [ "switches", "class_calc.html#a3e2bb666752bb983cfdd59aa3c87e14b", null ],
+    [ "threeStar", "class_calc.html#a9635a1e9cacbfe6d5896e67307e2d8ba", null ],
+    [ "twoStar", "class_calc.html#a4b41e34e7601a69b1c43edcdb67d94fc", null ],
+    [ "wires", "class_calc.html#a3616cca55d2575b05e02cfad2ce77121", null ]
 ];

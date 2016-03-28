@@ -111,6 +111,9 @@ $(document).ready(function(){initNavTree('class_calc.html','');});
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="class_calc-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">Calc Class Reference</div>  </div>
@@ -122,16 +125,12 @@ $(document).ready(function(){initNavTree('class_calc.html','');});
 Inheritance diagram for Calc:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_calc__inherit__graph.png" border="0" usemap="#_calc_inherit__map" alt="Inheritance graph"/></div>
-<map name="_calc_inherit__map" id="_calc_inherit__map">
-</map>
-</div>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
 Collaboration diagram for Calc:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_calc__coll__graph.png" border="0" usemap="#_calc_coll__map" alt="Collaboration graph"/></div>
-<map name="_calc_coll__map" id="_calc_coll__map">
-</map>
-</div>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -225,13 +224,11 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a9f2e6e9439d0ce003116b336bb9f8e9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5a35b91a9e31a52dee36119ed8edcc6e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calc.html#a5a35b91a9e31a52dee36119ed8edcc6e">setCurrentsOfWires</a> ()</td></tr>
 <tr class="separator:a5a35b91a9e31a52dee36119ed8edcc6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a21e038679660baa047852e166868514b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calc.html#a21e038679660baa047852e166868514b">setCurrentsOfSwitchedWires</a> ()</td></tr>
-<tr class="separator:a21e038679660baa047852e166868514b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf8accc1a2efbbc3b6e60cc9d7b11ba0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calc.html#adf8accc1a2efbbc3b6e60cc9d7b11ba0">setCurrentsOfStrayWires</a> ()</td></tr>
 <tr class="separator:adf8accc1a2efbbc3b6e60cc9d7b11ba0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a099af31fec4ac4b1afe8b6fe475d24c7"><td class="memItemLeft" align="right" valign="top">Q_INVOKABLE bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calc.html#a099af31fec4ac4b1afe8b6fe475d24c7">readFile</a> ()</td></tr>
+<tr class="memitem:a099af31fec4ac4b1afe8b6fe475d24c7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calc.html#a099af31fec4ac4b1afe8b6fe475d24c7">readFile</a> ()</td></tr>
 <tr class="separator:a099af31fec4ac4b1afe8b6fe475d24c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afd054946890c68ca93223d12ef0d7603"><td class="memItemLeft" align="right" valign="top">Q_INVOKABLE void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calc.html#afd054946890c68ca93223d12ef0d7603">writeBackToFile</a> ()</td></tr>
+<tr class="memitem:afd054946890c68ca93223d12ef0d7603"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calc.html#afd054946890c68ca93223d12ef0d7603">writeBackToFile</a> ()</td></tr>
 <tr class="separator:afd054946890c68ca93223d12ef0d7603"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e094cad6bec9569054c1d760c9cf764"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calc.html#a1e094cad6bec9569054c1d760c9cf764">process_wire_line</a> (QString &amp;lijn)</td></tr>
 <tr class="separator:a1e094cad6bec9569054c1d760c9cf764"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -270,7 +267,65 @@ Public Member Functions</h2></td></tr>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a99cc42c95779048997d52f75a2586bb4"><td class="memItemLeft" align="right" valign="top">static std::shared_ptr&lt; <a class="el" href="class_calc.html">Calc</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calc.html#a99cc42c95779048997d52f75a2586bb4">Instance</a> ()</td></tr>
 <tr class="separator:a99cc42c95779048997d52f75a2586bb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:aab8419a8e94b9d61dee93d0813a9b83e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calc.html#aab8419a8e94b9d61dee93d0813a9b83e">Calc</a> ()</td></tr>
+<tr class="separator:aab8419a8e94b9d61dee93d0813a9b83e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2e4467f57e33271d6eed2d81b4e96e2"><td class="memItemLeft" align="right" valign="top">std::vector&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calc.html#ab2e4467f57e33271d6eed2d81b4e96e2">computeNetwork</a> (int nrOfNodes)</td></tr>
+<tr class="separator:ab2e4467f57e33271d6eed2d81b4e96e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a7751ac835e23f02eea70bceeb8fa36ef"><td class="memItemLeft" align="right" valign="top">std::vector&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calc.html#a7751ac835e23f02eea70bceeb8fa36ef">sol</a></td></tr>
+<tr class="separator:a7751ac835e23f02eea70bceeb8fa36ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab450003541f56cdbfadf04ddcf6d0300"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::shared_ptr&lt; <a class="el" href="class_source.html">Source</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calc.html#ab450003541f56cdbfadf04ddcf6d0300">sources</a></td></tr>
+<tr class="separator:ab450003541f56cdbfadf04ddcf6d0300"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae12e85bff703dc2499726f50b91bda4f"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::shared_ptr&lt; <a class="el" href="class_resistor.html">Resistor</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calc.html#ae12e85bff703dc2499726f50b91bda4f">resistors</a></td></tr>
+<tr class="separator:ae12e85bff703dc2499726f50b91bda4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3616cca55d2575b05e02cfad2ce77121"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::shared_ptr&lt; <a class="el" href="class_wire.html">Wire</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calc.html#a3616cca55d2575b05e02cfad2ce77121">wires</a></td></tr>
+<tr class="separator:a3616cca55d2575b05e02cfad2ce77121"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e2bb666752bb983cfdd59aa3c87e14b"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::shared_ptr&lt; <a class="el" href="class_switch.html">Switch</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calc.html#a3e2bb666752bb983cfdd59aa3c87e14b">switches</a></td></tr>
+<tr class="separator:a3e2bb666752bb983cfdd59aa3c87e14b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5129f5a912a0883d6c15a7ba3a9482e9"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calc.html#a5129f5a912a0883d6c15a7ba3a9482e9">fileName</a></td></tr>
+<tr class="separator:a5129f5a912a0883d6c15a7ba3a9482e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b41e34e7601a69b1c43edcdb67d94fc"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calc.html#a4b41e34e7601a69b1c43edcdb67d94fc">twoStar</a></td></tr>
+<tr class="separator:a4b41e34e7601a69b1c43edcdb67d94fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9635a1e9cacbfe6d5896e67307e2d8ba"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calc.html#a9635a1e9cacbfe6d5896e67307e2d8ba">threeStar</a></td></tr>
+<tr class="separator:a9635a1e9cacbfe6d5896e67307e2d8ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:a0597e77c9e5a7af36a41de9d540b8606"><td class="memItemLeft" align="right" valign="top">static std::shared_ptr&lt; <a class="el" href="class_calc.html">Calc</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_calc.html#a0597e77c9e5a7af36a41de9d540b8606">instance</a> =nullptr</td></tr>
+<tr class="separator:a0597e77c9e5a7af36a41de9d540b8606"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Class where all major calculations and I/O happen </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="aab8419a8e94b9d61dee93d0813a9b83e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Calc::Calc </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Constructor for <a class="el" href="class_calc.html">Calc</a> </p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="a8e47eefdb08b4866347b35704cf33fff"></a>
 <div class="memitem">
@@ -319,6 +374,7 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Add <a class="el" href="class_switch.html">Switch</a> to switches </p>
 
 </div>
 </div>
@@ -335,6 +391,32 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Add <a class="el" href="class_wire.html">Wire</a> to wires </p>
+
+</div>
+</div>
+<a class="anchor" id="ab2e4467f57e33271d6eed2d81b4e96e2"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; float &gt; Calc::computeNetwork </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nrOfNodes</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Calculates voltage of each nodes, based on components in circuit </p>
 
 </div>
 </div>
@@ -350,6 +432,7 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Standardize the angles of resistors and switches, makes current-calculations much easier </p>
 
 </div>
 </div>
@@ -415,6 +498,7 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Empty all vectors </p>
 
 </div>
 </div>
@@ -489,6 +573,7 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Get angle of <a class="el" href="class_switch.html">Switch</a> at swNr, invokable from QML </p>
 
 </div>
 </div>
@@ -513,6 +598,7 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Get angle of <a class="el" href="class_wire.html">Wire</a> at wiNr, invokable from QML </p>
 
 </div>
 </div>
@@ -587,6 +673,7 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Get current trough <a class="el" href="class_wire.html">Wire</a> at wiNr, invokable from QML </p>
 
 </div>
 </div>
@@ -602,6 +689,7 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Getter for file path </p>
 
 </div>
 </div>
@@ -626,6 +714,7 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Get length of <a class="el" href="class_wire.html">Wire</a> at wiNr, invokable from QML </p>
 
 </div>
 </div>
@@ -650,6 +739,7 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Get Node of <a class="el" href="class_wire.html">Wire</a> at wiNr, invokable from QML </p>
 
 </div>
 </div>
@@ -673,7 +763,7 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Get number of Resistors, invokable from QML </p>
+<p>Get number of resistors, invokable from QML </p>
 
 </div>
 </div>
@@ -697,7 +787,7 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Get number of Sources, invokable from QML </p>
+<p>Get number of sources, invokable from QML </p>
 
 </div>
 </div>
@@ -721,6 +811,7 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Get number of wires, invokable from QML </p>
 
 </div>
 </div>
@@ -744,6 +835,7 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Get number of wires, invokable from QML </p>
 
 </div>
 </div>
@@ -759,6 +851,7 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Get resistors </p>
 
 </div>
 </div>
@@ -774,6 +867,7 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Get sources </p>
 
 </div>
 </div>
@@ -789,6 +883,7 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Get switches </p>
 
 </div>
 </div>
@@ -804,6 +899,7 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Getter for threeStarGoal </p>
 
 </div>
 </div>
@@ -819,6 +915,7 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Getter for twoStarGoal </p>
 
 </div>
 </div>
@@ -859,6 +956,7 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Get wires </p>
 
 </div>
 </div>
@@ -933,6 +1031,7 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Get XCoord of <a class="el" href="class_switch.html">Switch</a> at swNr, invokable from QML </p>
 
 </div>
 </div>
@@ -957,6 +1056,7 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Get XCoord of <a class="el" href="class_wire.html">Wire</a> at wiNr, invokable from QML </p>
 
 </div>
 </div>
@@ -1031,6 +1131,7 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Get YCoord of <a class="el" href="class_switch.html">Switch</a> at swNr, invokable from QML </p>
 
 </div>
 </div>
@@ -1055,6 +1156,7 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Get YCoord of <a class="el" href="class_wire.html">Wire</a> at wiNr, invokable from QML </p>
 
 </div>
 </div>
@@ -1153,6 +1255,7 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Get state of <a class="el" href="class_switch.html">Switch</a> at swNr, invokable from QML </p>
 
 </div>
 </div>
@@ -1202,6 +1305,7 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Get Node 1 of <a class="el" href="class_switch.html">Switch</a> at swNr, invokable from QML </p>
 
 </div>
 </div>
@@ -1251,6 +1355,7 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Get Node 2 of <a class="el" href="class_switch.html">Switch</a> at swNr, invokable from QML </p>
 
 </div>
 </div>
@@ -1341,6 +1446,7 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Read line of levelfile for the click Goal </p>
 
 </div>
 </div>
@@ -1357,6 +1463,7 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Read line of levelfile for a <a class="el" href="class_resistor.html">Resistor</a> component </p>
 
 </div>
 </div>
@@ -1373,6 +1480,7 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Read line of levelfile for a <a class="el" href="class_source.html">Source</a> component </p>
 
 </div>
 </div>
@@ -1389,6 +1497,7 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Read line of levelfile for a <a class="el" href="class_switch.html">Switch</a> component </p>
 
 </div>
 </div>
@@ -1405,6 +1514,7 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Read line of levelfile for a <a class="el" href="class_wire.html">Wire</a> component </p>
 
 </div>
 </div>
@@ -1420,6 +1530,7 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Read in file </p>
 
 </div>
 </div>
@@ -1460,6 +1571,7 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Set currents trough resistors, switches and wires </p>
 
 </div>
 </div>
@@ -1475,21 +1587,7 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a21e038679660baa047852e166868514b"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Calc::setCurrentsOfSwitchedWires </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
+<p>Set currents of wires, which are not directly connected to other components </p>
 
 </div>
 </div>
@@ -1505,6 +1603,7 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Set currents trough wires, based on other components </p>
 
 </div>
 </div>
@@ -1521,6 +1620,7 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Setter for file path </p>
 
 </div>
 </div>
@@ -1537,6 +1637,7 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Getter for threeStarGoal </p>
 
 </div>
 </div>
@@ -1553,6 +1654,7 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Getter for twoStarGoal </p>
 
 </div>
 </div>
@@ -1593,6 +1695,7 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Toggle <a class="el" href="class_switch.html">Switch</a> at swNr, invokable from QML </p>
 
 </div>
 </div>
@@ -1633,6 +1736,197 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Write changes to file </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a5129f5a912a0883d6c15a7ba3a9482e9"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString Calc::fileName</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>File path </p>
+
+</div>
+</div>
+<a class="anchor" id="a0597e77c9e5a7af36a41de9d540b8606"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt; <a class="el" href="class_calc.html">Calc</a> &gt; Calc::instance =nullptr</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Instance pointer for <a class="el" href="class_calc.html">Calc</a>, makes sure there is only one instance of this class </p>
+
+</div>
+</div>
+<a class="anchor" id="ae12e85bff703dc2499726f50b91bda4f"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::shared_ptr&lt;<a class="el" href="class_resistor.html">Resistor</a>&gt; &gt; Calc::resistors</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Vector with all objects of type Resistors </p>
+
+</div>
+</div>
+<a class="anchor" id="a7751ac835e23f02eea70bceeb8fa36ef"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;float&gt; Calc::sol</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Vector with nodeVoltage </p>
+
+</div>
+</div>
+<a class="anchor" id="ab450003541f56cdbfadf04ddcf6d0300"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::shared_ptr&lt;<a class="el" href="class_source.html">Source</a>&gt; &gt; Calc::sources</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Vector with all objects of type <a class="el" href="class_source.html">Source</a> </p>
+
+</div>
+</div>
+<a class="anchor" id="a3e2bb666752bb983cfdd59aa3c87e14b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::shared_ptr&lt;<a class="el" href="class_switch.html">Switch</a>&gt; &gt; Calc::switches</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Vector with all objects of type <a class="el" href="class_switch.html">Switch</a> </p>
+
+</div>
+</div>
+<a class="anchor" id="a9635a1e9cacbfe6d5896e67307e2d8ba"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Calc::threeStar</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Three star goal </p>
+
+</div>
+</div>
+<a class="anchor" id="a4b41e34e7601a69b1c43edcdb67d94fc"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Calc::twoStar</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Two star goal </p>
+
+</div>
+</div>
+<a class="anchor" id="a3616cca55d2575b05e02cfad2ce77121"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::shared_ptr&lt;<a class="el" href="class_wire.html">Wire</a>&gt; &gt; Calc::wires</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Vector with all objects of type <a class="el" href="class_wire.html">Wire</a> </p>
 
 </div>
 </div>

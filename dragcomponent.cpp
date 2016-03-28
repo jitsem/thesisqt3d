@@ -30,7 +30,7 @@ DragComponent::DragComponent(QWidget *parent)
     QWidgetList components;
 
     Component_lb *sourceIcon = new Component_lb(this,15,0,0,0,0,1,0);
-    QPixmap source=QPixmap(":/assets/source_small.png");
+    QPixmap source=QPixmap(":/assets/icons/source_small.png");
     sourceIcon->setPixmap(source);
     sourceIcon->setFixedSize(MainWindow::Instance()->getGridSize(),MainWindow::Instance()->getGridSize());
     sourceIcon->setScaledContents(true);
@@ -39,7 +39,7 @@ DragComponent::DragComponent(QWidget *parent)
 
 
     Component_lb *res1 = new Component_lb(this,100,3,4,20,4,1,1);
-    QPixmap res2=QPixmap(":/assets/res_small.png");
+    QPixmap res2=QPixmap(":/assets/icons/res_small.png");
     res1->setPixmap(res2);
     res1->move(0,10);
     res1->setFixedSize(MainWindow::Instance()->getGridSize(),MainWindow::Instance()->getGridSize());
@@ -48,7 +48,7 @@ DragComponent::DragComponent(QWidget *parent)
     res1->show();
 
     Component_lb *wire1 = new Component_lb(this,0,3,4,20,4,1,2);
-    QPixmap wir=QPixmap(":/assets/wire_small.png");
+    QPixmap wir=QPixmap(":/assets/icons/wire_small.png");
     wire1->setPixmap(wir);
     wire1->setFixedSize(MainWindow::Instance()->getGridSize(),MainWindow::Instance()->getGridSize());
     wire1->setScaledContents(true);
@@ -57,7 +57,7 @@ DragComponent::DragComponent(QWidget *parent)
 
 
     Component_lb *sw_op = new Component_lb(this,0,0,0,0,0,1,3);
-    QPixmap switch_open=QPixmap(":/assets/sw_open.png");
+    QPixmap switch_open=QPixmap(":/assets/icons/sw_open.png");
     sw_op->setPixmap(switch_open);
     sw_op->setFixedSize(MainWindow::Instance()->getGridSize(),MainWindow::Instance()->getGridSize());
     sw_op->setScaledContents(true);

@@ -24,5 +24,8 @@ var class_draw_zone =
     [ "slotTriggeredSave", "class_draw_zone.html#a60a5850c643a8ff1b2572e55b84a854a", null ],
     [ "solveNode", "class_draw_zone.html#a611009f9d33c89aaf1f4ed4bb42077a0", null ],
     [ "updateNodePositions", "class_draw_zone.html#a26748ecad7d163922cecdc7feea11a5b", null ],
-    [ "writeToVectors", "class_draw_zone.html#ac9845e11aad5696a50a9fea15f0856c9", null ]
+    [ "writeToVectors", "class_draw_zone.html#ac9845e11aad5696a50a9fea15f0856c9", null ],
+    [ "dragStartPosition", "class_draw_zone.html#ae454e5de9b62ddf6e563db54d61bdafd", null ],
+    [ "groundpresent", "class_draw_zone.html#a59f43237ff4e404b4a2bba006d3ae8a3", null ],
+    [ "polypoints", "class_draw_zone.html#a800565b1b25c282160b5d38e693853f0", null ]
 ];

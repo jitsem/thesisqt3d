@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['value',['value',['../class_component.html#aa2111d9574c3ffdac8290cb1e0c346eb',1,'Component']]]
+  ['length',['length',['../class_wire.html#a33c31b655760a7ee301f1a7b0d7b4237',1,'Wire']]]
 ];
