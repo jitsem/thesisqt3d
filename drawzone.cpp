@@ -1,16 +1,15 @@
 #include "drawzone.h"
+
+#include <memory>
+#include <vector>
 #include <QLabel>
 #include <QMouseEvent>
 #include <QMimeData>
 #include <QDrag>
 #include <QPainter>
-#include <memory>
 #include <QPixmap>
 #include <QDebug>
 #include <QLayout>
-#include <QGraphicsScene>
-#include <QGraphicsView>
-#include <QApplication>
 #include <QObject>
 #include <QPushButton>
 #include <QLineEdit>
@@ -21,12 +20,11 @@
 #include <QDialogButtonBox>
 #include <QDoubleSpinBox>
 #include <QDialog>
-#include <vector>
-
+#include <QMainWindow>
+#include <QWidget>
 #include <QQuickView>
 #include <QQmlEngine>
 #include <QQmlContext>
-#include <QMessageBox>
 
 #include "calc.h"
 #include "source.h"
@@ -35,14 +33,14 @@
 #include "switch.h"
 #include "ui_mainwindow.h"
 #include "component_lb.h"
+#include "component_lb.h"
+#include "component.h"
+#include "mainwindow.h"
 
 
 
 //TODO dynamically connect 2 components with drag select
 //TODO make function showBox(QString) instead of repeating the messagebox code all the time
-
-//Needed to determine move or click
-QPoint  dragStartPosition;
 
 
 DrawZone::DrawZone(QWidget *parent)
@@ -101,6 +99,7 @@ void DrawZone::slotTriggeredSave()
 //Add ground symbol to wire that is selected
 void DrawZone::slotTriggeredGround()
 {
+    int gridSize = MainWindow::Instance()->getGridSize();
     //DONE make sure the input is tested!
     if(groundpresent)
     {
@@ -112,10 +111,10 @@ void DrawZone::slotTriggeredGround()
         msgBox.exec();
         return;
     }
-    QList<component_lb*> list = this->findChildren<component_lb *>();
+    QList<Component_lb*> list = this->findChildren<Component_lb *>();
     int i=0;
-    component_lb* gndwire;
-    for(component_lb *w: list) {
+    Component_lb* gndwire;
+    for(Component_lb *w: list) {
         if(w->getSelected()){
             i++;
             if(w->getType()==2){
@@ -137,24 +136,24 @@ void DrawZone::slotTriggeredGround()
     if(i==1){
 
         updateNodePositions();
-        component_lb *gnd = new component_lb(this,0,0,0,0,0,1,4);
-        gnd->setFixedSize(MainWindow::Instance()->getGridSize(),MainWindow::Instance()->getGridSize());
+        Component_lb *gnd = new Component_lb(this,0,0,0,0,0,1,4);
+        gnd->setFixedSize(gridSize,gridSize);
 
         QPixmap grnd=QPixmap(":/assets/gnd.png");
         gnd->setPixmap(grnd);
         //TODO check if ground is put on top of other component
 
         if(gndwire->getAngle()==2 || gndwire->getAngle()==4){
-            gnd->move(gndwire->x()-gndwire->width()/2+2*MainWindow::Instance()->getGridSize(),gndwire->y()+MainWindow::Instance()->getGridSize());
+            gnd->move(gndwire->x()-gndwire->width()/2+2*gridSize,gndwire->y()+gridSize);
             polypoints[0]=QPoint(gndwire->x()+gndwire->width()/2,gndwire->y()+gndwire->height()/2);
-            polypoints[1]=QPoint(gndwire->x()+2*MainWindow::Instance()->getGridSize(),gndwire->y()+gndwire->height()/2);
-            polypoints[2]=QPoint(gndwire->x()+2*MainWindow::Instance()->getGridSize(),gndwire->y()+MainWindow::Instance()->getGridSize());
+            polypoints[1]=QPoint(gndwire->x()+2*gridSize,gndwire->y()+gndwire->height()/2);
+            polypoints[2]=QPoint(gndwire->x()+2*gridSize,gndwire->y()+gridSize);
         }
         else{
-            gnd->move(gndwire->x(),gndwire->y()+gndwire->height()+MainWindow::Instance()->getGridSize());
+            gnd->move(gndwire->x(),gndwire->y()+gndwire->height()+gridSize);
             polypoints[0]=QPoint(gndwire->x()+gndwire->width()/2,gndwire->y()+gndwire->height()/2);
-            polypoints[1]=QPoint(gndwire->x()+gndwire->width()/2,gndwire->y()+gndwire->height()+MainWindow::Instance()->getGridSize());
-            polypoints[2]=QPoint(gndwire->x()+gndwire->width()/2,gndwire->y()+gndwire->height()+MainWindow::Instance()->getGridSize());
+            polypoints[1]=QPoint(gndwire->x()+gndwire->width()/2,gndwire->y()+gndwire->height()+gridSize);
+            polypoints[2]=QPoint(gndwire->x()+gndwire->width()/2,gndwire->y()+gndwire->height()+gridSize);
         }
         gnd->setScaledContents(true);
         gnd->setAttribute(Qt::WA_DeleteOnClose);
@@ -193,7 +192,7 @@ void DrawZone::dragEnterEvent(QDragEnterEvent *event)
 //Will be updated for more components
 void DrawZone::dragMoveEvent(QDragMoveEvent *event)
 {
-    component_lb *child = dynamic_cast<component_lb*>(childAt(dragStartPosition));
+    Component_lb *child = dynamic_cast<Component_lb*>(childAt(dragStartPosition));
     if(child){
         if(event->source()==this){
             if (child->getType()==4){
@@ -225,7 +224,7 @@ void DrawZone::mouseMoveEvent(QMouseEvent *event)
             < QApplication::startDragDistance())
         return;
 
-    component_lb *child = dynamic_cast<component_lb*>(childAt(event->pos()));
+    Component_lb *child = dynamic_cast<Component_lb*>(childAt(event->pos()));
     if (!child)
         return;
     QWidget *b =child->buddy();
@@ -274,8 +273,9 @@ void DrawZone::mouseMoveEvent(QMouseEvent *event)
 //Taking into account every sort of angle/grid size component_type,..
 void DrawZone::dropEvent(QDropEvent *event)
 {
+    int gridSize = MainWindow::Instance()->getGridSize();
     setCursor(Qt::OpenHandCursor);
-    component_lb* gndWire;
+    Component_lb* gndWire;
     if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
         QByteArray itemData = event->mimeData()->data("application/x-dnditemdata");
         QDataStream dataStream(&itemData, QIODevice::ReadOnly);
@@ -283,8 +283,8 @@ void DrawZone::dropEvent(QDropEvent *event)
         //Do this only if the ground is present
         //For ground wire connection
         if(groundpresent){
-            QList<component_lb*> list = this->findChildren<component_lb *>();
-            for (component_lb * & w :list){
+            QList<Component_lb*> list = this->findChildren<Component_lb *>();
+            for (Component_lb * & w :list){
                 if (w->getValue()==COMPONENT_IS_GROUND){
                     gndWire=w;
                     break;
@@ -300,20 +300,20 @@ void DrawZone::dropEvent(QDropEvent *event)
         int selected;
         dataStream >> pixmap >> offset >> value >> angle >> type >> selected;
 
-        component_lb *newIcon = new component_lb(this,value,0,0,0,0,angle,type,selected);
+        Component_lb *newIcon = new Component_lb(this,value,0,0,0,0,angle,type,selected);
         newIcon->setScaledContents(true);
-        newIcon->setFixedSize(MainWindow::Instance()->getGridSize(),MainWindow::Instance()->getGridSize());
+        newIcon->setFixedSize(gridSize,gridSize);
         newIcon->setPixmap(pixmap);
 
         //Check if there is no component already there
-        component_lb *child = nullptr;
+        Component_lb *child = nullptr;
         if (event->source()==this)
-            child = dynamic_cast<component_lb*>(childAt(event->pos()));
+            child = dynamic_cast<Component_lb*>(childAt(event->pos()));
         //TODO als het ding van de lijst komt de juiste positie voor child vinden
         //TODO IMPROVE!
 
         newIcon->move(event->pos() - offset);
-        newIcon->setFixedSize(MainWindow::Instance()->getGridSize(),MainWindow::Instance()->getGridSize());
+        newIcon->setFixedSize(gridSize,gridSize);
         newIcon->setScaledContents(true);
         newIcon->show();
         newIcon->setAttribute(Qt::WA_DeleteOnClose);
@@ -323,26 +323,26 @@ void DrawZone::dropEvent(QDropEvent *event)
         updateNodePositions();
 
         //TODO add snaptogrid function
-        //Move new component to nearest multiple of MainWindow::Instance()->getGridSize() pixels. (for every angle!!)
+        //Move new component to nearest multiple of gridSize pixels. (for every angle!!)
         if (newIcon->getType()==0 || newIcon->getType()==1){
             QLabel    *valueLabel = new QLabel(QString::number(newIcon->getValue()), this);
             valueLabel->setAttribute(Qt::WA_DeleteOnClose);
             QFont font;
             font=valueLabel->font();
-            font.setPixelSize(MainWindow::Instance()->getGridSize()/4);
+            font.setPixelSize(gridSize/4);
             valueLabel->setFont(font);
             switch (newIcon->getAngle()){
             case 1 :
-                valueLabel->move(roundUp(newIcon->getNode1x(),MainWindow::Instance()->getGridSize()),roundUp(newIcon->getNode1y(),MainWindow::Instance()->getGridSize())-newIcon->height()/2);
+                valueLabel->move(roundUp(newIcon->getNode1x(),gridSize),roundUp(newIcon->getNode1y(),gridSize)-newIcon->height()/2);
                 break;
             case 2:
-                valueLabel->move(roundUp(newIcon->getNode1x(),MainWindow::Instance()->getGridSize())-(newIcon->width()/2),roundUp(newIcon->getNode2y(),MainWindow::Instance()->getGridSize()));
+                valueLabel->move(roundUp(newIcon->getNode1x(),gridSize)-(newIcon->width()/2),roundUp(newIcon->getNode2y(),gridSize));
                 break;
             case 3:(
-                valueLabel->move(roundUp(newIcon->getNode2x(),MainWindow::Instance()->getGridSize()),roundUp(newIcon->getNode1y(),MainWindow::Instance()->getGridSize())-newIcon->height()/2));
+                valueLabel->move(roundUp(newIcon->getNode2x(),gridSize),roundUp(newIcon->getNode1y(),gridSize)-newIcon->height()/2));
                 break;
             case 4:
-                valueLabel->move(roundUp(newIcon->getNode1x(),MainWindow::Instance()->getGridSize())-(newIcon->width()/2),roundUp(newIcon->getNode1y(),MainWindow::Instance()->getGridSize()));
+                valueLabel->move(roundUp(newIcon->getNode1x(),gridSize)-(newIcon->width()/2),roundUp(newIcon->getNode1y(),gridSize));
                 break;
             }
             newIcon->setBuddy(valueLabel);
@@ -350,27 +350,27 @@ void DrawZone::dropEvent(QDropEvent *event)
         }
         switch (newIcon->getAngle()){
         case 1 :
-            newIcon->move(roundUp(newIcon->getNode1x(),MainWindow::Instance()->getGridSize()),roundUp(newIcon->getNode1y(),MainWindow::Instance()->getGridSize())-newIcon->height()/2);
+            newIcon->move(roundUp(newIcon->getNode1x(),gridSize),roundUp(newIcon->getNode1y(),gridSize)-newIcon->height()/2);
             break;
         case 2:
-            newIcon->move(roundUp(newIcon->getNode1x(),MainWindow::Instance()->getGridSize())-(newIcon->width()/2),roundUp(newIcon->getNode2y(),MainWindow::Instance()->getGridSize()));
+            newIcon->move(roundUp(newIcon->getNode1x(),gridSize)-(newIcon->width()/2),roundUp(newIcon->getNode2y(),gridSize));
             break;
         case 3:(
-            newIcon->move(roundUp(newIcon->getNode2x(),MainWindow::Instance()->getGridSize()),roundUp(newIcon->getNode1y(),MainWindow::Instance()->getGridSize())-newIcon->height()/2));
+            newIcon->move(roundUp(newIcon->getNode2x(),gridSize),roundUp(newIcon->getNode1y(),gridSize)-newIcon->height()/2));
             break;
         case 4:
-            newIcon->move(roundUp(newIcon->getNode1x(),MainWindow::Instance()->getGridSize())-(newIcon->width()/2),roundUp(newIcon->getNode1y(),MainWindow::Instance()->getGridSize()));
+            newIcon->move(roundUp(newIcon->getNode1x(),gridSize)-(newIcon->width()/2),roundUp(newIcon->getNode1y(),gridSize));
             break;
         }
         updateNodePositions();
 
         //TODO the drawing of these connections points will be gone if you can connect two components!
         if (newIcon->getType()==4){
-            gndWire->setFixedSize(MainWindow::Instance()->getGridSize(),MainWindow::Instance()->getGridSize());
+            gndWire->setFixedSize(gridSize,gridSize);
             gndWire->setScaledContents(true);
             if(gndWire->getAngle()==2 || gndWire->getAngle()==4){
                 polypoints[0]=QPoint(gndWire->x()+gndWire->width()/2,gndWire->y()+gndWire->height()/2);
-                polypoints[1]=QPoint(newIcon->x()+newIcon->width()/2,newIcon->y()-MainWindow::Instance()->getGridSize());
+                polypoints[1]=QPoint(newIcon->x()+newIcon->width()/2,newIcon->y()-gridSize);
                 polypoints[2]=QPoint(newIcon->x()+newIcon->width()/2,newIcon->y());
             }
             else{
@@ -417,10 +417,10 @@ void DrawZone::dropEvent(QDropEvent *event)
 void DrawZone::mousePressEvent(QMouseEvent *event)
 {
     setCursor(Qt::ClosedHandCursor);
-    component_lb *child = dynamic_cast<component_lb*>(childAt(event->pos()));
+    Component_lb *child = dynamic_cast<Component_lb*>(childAt(event->pos()));
     if (!child){
-        QList<component_lb*> list = this->findChildren<component_lb *>();
-        for(component_lb *w : list) {
+        QList<Component_lb*> list = this->findChildren<Component_lb *>();
+        for(Component_lb *w : list) {
             w->setSelected(0);
             MainWindow::Instance()->getUi()->actionRotate->setEnabled(false);
             MainWindow::Instance()->getUi()->actionDelete->setEnabled(false);
@@ -438,7 +438,7 @@ void DrawZone::mousePressEvent(QMouseEvent *event)
 void DrawZone::mouseReleaseEvent(QMouseEvent *event)
 {
     setCursor(Qt::OpenHandCursor);
-    component_lb *child = dynamic_cast<component_lb*>(childAt(event->pos()));
+    Component_lb *child = dynamic_cast<Component_lb*>(childAt(event->pos()));
     if (!child)
         return;
     if ((event->pos() - dragStartPosition).manhattanLength()
@@ -456,41 +456,41 @@ void DrawZone::mouseReleaseEvent(QMouseEvent *event)
 
 }
 
-component_lb *DrawZone::removeGray(component_lb &child){
+Component_lb *DrawZone::removeGray(Component_lb &child){
 
     switch (child.getType()){
 
     case 0:
     {
-        auto tempPixmap = std::make_shared<QPixmap>(":/assets/source_small.png");
+        auto tempPixmap = std::make_shared<QPixmap>(":/assets/icons/source_small.png");
         child.setPixmap((*tempPixmap));
         rotateToAngle(child);
     }
         break;
     case 1:
     {
-        auto tempPixmap = std::make_shared<QPixmap>(":/assets/res_small.png");
+        auto tempPixmap = std::make_shared<QPixmap>(":/assets/icons/res_small.png");
         child.setPixmap((*tempPixmap));
         rotateToAngle(child);
     }
         break;
     case 2:
     {
-        auto tempPixmap = std::make_shared<QPixmap>(":/assets/wire_small.png");
+        auto tempPixmap = std::make_shared<QPixmap>(":/assets/icons/wire_small.png");
         child.setPixmap((*tempPixmap));
         rotateToAngle(child);
         break;
     }
     case 3:
     {
-        auto tempPixmap = std::make_shared<QPixmap>(":/assets/sw_open.png");
+        auto tempPixmap = std::make_shared<QPixmap>(":/assets/icons/sw_open.png");
         child.setPixmap((*tempPixmap));
         rotateToAngle(child);
         break;
     }
     case 4:
     {
-        auto tempPixmap = std::make_shared<QPixmap>(":/assets/gnd.png");
+        auto tempPixmap = std::make_shared<QPixmap>(":/assets/icons/gnd.png");
         child.setPixmap((*tempPixmap));
         rotateToAngle(child);
         break;
@@ -505,7 +505,7 @@ component_lb *DrawZone::removeGray(component_lb &child){
     return &child;
 }
 
-component_lb *DrawZone::setGray(component_lb &child)
+Component_lb *DrawZone::setGray(Component_lb &child)
 {
     QPixmap tempPixmap = *(child.pixmap());
     QPainter painter;
@@ -525,6 +525,7 @@ component_lb *DrawZone::setGray(component_lb &child)
 //Also needs to draw connections between components if
 void DrawZone::paintEvent(QPaintEvent *event)
 {
+    int gridSize = MainWindow::Instance()->getGridSize();
     QPainter painter(this);
     painter.setBrush(Qt::black);
     int i=0;
@@ -533,9 +534,9 @@ void DrawZone::paintEvent(QPaintEvent *event)
         j=0;
         while(j<frameRect().height()){
             painter.drawRect(i,j,2,2);
-            j+=MainWindow::Instance()->getGridSize();
+            j+=gridSize;
         }
-        i+=MainWindow::Instance()->getGridSize();
+        i+=gridSize;
     }
     if(groundpresent){
         painter.drawPolyline(polypoints,3);
@@ -559,10 +560,10 @@ void DrawZone::setGroundpresent(int value)
 bool DrawZone::checkClosedCircuit(){
 
     updateNodePositions();
-    QList<component_lb*> list = this->findChildren<component_lb *>();
+    QList<Component_lb*> list = this->findChildren<Component_lb *>();
     QList<QPoint> points;
 
-    for(component_lb *w: list) {
+    for(Component_lb *w: list) {
         if(!(w->getType()==4)){
             points.push_back(QPoint(w->getNode1x(),w->getNode1y()));
             points.push_back(QPoint(w->getNode2x(),w->getNode2y()));
@@ -599,9 +600,9 @@ bool DrawZone::checkClosedCircuit(){
 void DrawZone::calc_nodes(){
 
 
-    QList<component_lb*> list = this->findChildren<component_lb *>();
-    component_lb *current;
-    for(component_lb *w: list){
+    QList<Component_lb*> list = this->findChildren<Component_lb *>();
+    Component_lb *current;
+    for(Component_lb *w: list){
         w->setN1(-1);
         w->setN2(-1);
         if (w->getType()==2 && w->getValue()==COMPONENT_IS_GROUND){
@@ -615,9 +616,9 @@ void DrawZone::calc_nodes(){
         }
     }
     int curnode=0;
-    QList<component_lb*> stack;
+    QList<Component_lb*> stack;
     stack.push_back(current);
-    QList<component_lb*> overschot=solveNode(list,current,curnode,stack);
+    QList<Component_lb*> overschot=solveNode(list,current,curnode,stack);
     while (!overschot.isEmpty()){
         curnode++;
         current=overschot.takeFirst();
@@ -633,7 +634,7 @@ void DrawZone::calc_nodes(){
         }
 
         stack.push_back(current);
-        for (component_lb* w : overschot) {
+        for (Component_lb* w : overschot) {
             if (!list.contains(w))
                 list.append(w);
         }
@@ -642,11 +643,11 @@ void DrawZone::calc_nodes(){
 }
 
 //Method for solving (filling out) one node
-QList<component_lb *> DrawZone::solveNode(QList<component_lb *> &l,
-                                          component_lb *current, int & curnode, QList<component_lb *> & stack){
+QList<Component_lb *> DrawZone::solveNode(QList<Component_lb *> &l,
+                                          Component_lb *current, int & curnode, QList<Component_lb *> & stack){
 
-    QList<component_lb*> halfaf;
-    QList<component_lb*> neighbours;
+    QList<Component_lb*> halfaf;
+    QList<Component_lb*> neighbours;
 
     while(!l.isEmpty()){
 
@@ -662,7 +663,7 @@ QList<component_lb *> DrawZone::solveNode(QList<component_lb *> &l,
                 }
                 else{
                     int done =0;
-                    for (component_lb* w: l) {
+                    for (Component_lb* w: l) {
                         if ((w->getN1()!=-1) && (w->getN2()!=-1))
                             done++;
                     }
@@ -677,7 +678,7 @@ QList<component_lb *> DrawZone::solveNode(QList<component_lb *> &l,
 
         }
         else if (!neighbours.isEmpty()){
-            component_lb * b=neighbours.takeFirst();
+            Component_lb * b=neighbours.takeFirst();
             if(b->getType()==2){
                 b->setN1(curnode);
                 b->setN2(curnode);
@@ -727,10 +728,10 @@ QList<component_lb *> DrawZone::solveNode(QList<component_lb *> &l,
 }
 
 //Get neighbouring components based on their nodes positions
-QList<component_lb *> DrawZone::getNeighbours(QList<component_lb *> &l, component_lb & current){
+QList<Component_lb *> DrawZone::getNeighbours(QList<Component_lb *> &l, Component_lb & current){
 
-    QList<component_lb *> neighbours;
-    for(component_lb *w:l){
+    QList<Component_lb *> neighbours;
+    for(Component_lb *w:l){
         if(!(w==&current)){
             if((current.getNode2x()==w->getNode1x())&&(current.getNode2y()==w->getNode1y())){
                 neighbours.append(w);
@@ -752,12 +753,13 @@ QList<component_lb *> DrawZone::getNeighbours(QList<component_lb *> &l, componen
 //Converts from component_lb objects to vectorlists in 3d model
 void DrawZone::writeToVectors()
 {
+    int gridSize = MainWindow::Instance()->getGridSize();
     calc_nodes();
-    QList<component_lb*> list = this->findChildren<component_lb *>();
+    QList<Component_lb*> list = this->findChildren<Component_lb *>();
     //fill out all drawn components in singleton calc object vectors
     std::shared_ptr<Calc> c = Calc::Instance();
     c->emptyVectors();
-    for(component_lb *w : list){
+    for(Component_lb *w : list){
         //TODO oplossen angles verkeerd
         int angle = w->getAngle();
         if(angle == 4){
@@ -772,23 +774,23 @@ void DrawZone::writeToVectors()
         case 0:
         {
             auto s = std::make_shared<Source>(w->getValue(),w->getN1(),w->getN2(),
-                                              w->getNode1x()/MainWindow::Instance()->getGridSize(),w->getNode1y()/MainWindow::Instance()->getGridSize(),angle,w->getAdjust(),w->getBegin(),
+                                              w->getNode1x()/gridSize,w->getNode1y()/gridSize,angle,w->getAdjust(),w->getBegin(),
                                               w->getStepSize());
-            auto wir = std::make_shared<Wire>(0.0,w->getNode1x()/MainWindow::Instance()->getGridSize(),w->getNode1y()/MainWindow::Instance()->getGridSize(),angle,1,w->getN2());
+            auto wir = std::make_shared<Wire>(0.0,w->getNode1x()/gridSize,w->getNode1y()/gridSize,angle,1,w->getN2());
             c->addSource(s);
             c->addWire(wir);
             break;
         }
         case 1:
         {
-            auto r = std::make_shared<Resistor>(w->getValue(),w->getN1(),w->getN2(),w->getNode1x()/MainWindow::Instance()->getGridSize(),w->getNode1y()/MainWindow::Instance()->getGridSize(),
+            auto r = std::make_shared<Resistor>(w->getValue(),w->getN1(),w->getN2(),w->getNode1x()/gridSize,w->getNode1y()/gridSize,
                                                 angle,w->getAdjust(),w->getBegin(),w->getStepSize());
             c->addResistor(r);
             break;
         }
         case 2:
         {
-            auto wir = std::make_shared<Wire>(w->getValue(),w->getNode1x()/MainWindow::Instance()->getGridSize(),w->getNode1y()/MainWindow::Instance()->getGridSize(),angle,1,
+            auto wir = std::make_shared<Wire>(w->getValue(),w->getNode1x()/gridSize,w->getNode1y()/gridSize,angle,1,
                                               w->getN2(),0,w->getGoal());
             wir->setValue(w->getValue());
             c->addWire(wir);
@@ -796,7 +798,7 @@ void DrawZone::writeToVectors()
         }
         case 3:
         {
-            auto sw = std::make_shared<Switch>(w->getN1(),w->getN2(),w->getNode1x()/MainWindow::Instance()->getGridSize(),w->getNode1y()/MainWindow::Instance()->getGridSize(),angle);
+            auto sw = std::make_shared<Switch>(w->getN1(),w->getN2(),w->getNode1x()/gridSize,w->getNode1y()/gridSize,angle);
             c->addSwitch(sw);
             break;
         }
@@ -814,6 +816,7 @@ void DrawZone::drawCircuit()
     //TODO code ietwat verkleinen
     //DONE draad aan bron
 
+    int gridSize = MainWindow::Instance()->getGridSize();
     //Clear drawingfield
     QList<QWidget*> list = this->findChildren<QWidget *>();
     for(QWidget *w : list) {
@@ -828,10 +831,10 @@ void DrawZone::drawCircuit()
     auto switches = calculator->getSwitches();
 
 
-    auto pixmap = std::make_shared<QPixmap>(":/assets/wire_small.png");
+    auto pixmap = std::make_shared<QPixmap>(":/assets/icons/wire_small.png");
     for(auto w:wires){
-        int XCoord =  w->getXCoord()*MainWindow::Instance()->getGridSize();
-        int YCoord =  w->getYCoord()*MainWindow::Instance()->getGridSize();
+        int XCoord =  w->getXCoord()*gridSize;
+        int YCoord =  w->getYCoord()*gridSize;
         int XCoord2;
         int YCoord2;
         int angle = w->getAngle();
@@ -845,44 +848,44 @@ void DrawZone::drawCircuit()
             switch(angle){
             case 1:
                 if(i==0)
-                    YCoord -=MainWindow::Instance()->getGridSize()/2;
+                    YCoord -=gridSize/2;
                 else
-                    XCoord +=MainWindow::Instance()->getGridSize();
-                XCoord2 = XCoord +MainWindow::Instance()->getGridSize();
+                    XCoord +=gridSize;
+                XCoord2 = XCoord +gridSize;
                 YCoord2 = YCoord;
 
                 break;
             case 2:
                 if(i==0)
-                    XCoord -=MainWindow::Instance()->getGridSize()/2;
+                    XCoord -=gridSize/2;
                 else
-                    YCoord -= MainWindow::Instance()->getGridSize();
-                YCoord2 = YCoord - MainWindow::Instance()->getGridSize();
+                    YCoord -= gridSize;
+                YCoord2 = YCoord - gridSize;
                 XCoord2 = XCoord;
                 break;
             case 3:
                 if(i==0)
-                    YCoord -=MainWindow::Instance()->getGridSize()/2;
+                    YCoord -=gridSize/2;
                 else
-                    XCoord -=MainWindow::Instance()->getGridSize();
-                XCoord2 = XCoord -MainWindow::Instance()->getGridSize();
+                    XCoord -=gridSize;
+                XCoord2 = XCoord -gridSize;
                 YCoord2 = YCoord;
                 break;
             case 4:
                 if(i==0)
-                    XCoord -=MainWindow::Instance()->getGridSize()/2;
+                    XCoord -=gridSize/2;
                 else
-                    YCoord +=MainWindow::Instance()->getGridSize();
-                YCoord2 = YCoord + MainWindow::Instance()->getGridSize();
+                    YCoord +=gridSize;
+                YCoord2 = YCoord + gridSize;
                 XCoord2 = XCoord;
                 break;
             default:
                 break;
             }
 
-            component_lb *newIcon = new component_lb(this, w->getValue(), XCoord, YCoord, XCoord2,YCoord2,
+            Component_lb *newIcon = new Component_lb(this, w->getValue(), XCoord, YCoord, XCoord2,YCoord2,
                                                      angle, 2,0, w->getNode(),w->getNode(),0,0,0,w->getIsGoal());
-            newIcon->setFixedSize(MainWindow::Instance()->getGridSize(),MainWindow::Instance()->getGridSize());
+            newIcon->setFixedSize(gridSize,gridSize);
             newIcon->setScaledContents(true);
             newIcon->setPixmap(*pixmap);
             if(angle == 1 || angle == 4)
@@ -896,23 +899,23 @@ void DrawZone::drawCircuit()
             updateNodePositions();
             if (w->getValue()==COMPONENT_IS_GROUND){
 
-                component_lb *gnd = new component_lb(this,0,0,0,0,0,1,4);
-                QPixmap grnd=QPixmap(":/assets/gnd.png");
+                Component_lb *gnd = new Component_lb(this,0,0,0,0,0,1,4);
+                QPixmap grnd=QPixmap(":/assets/icons/gnd.png");
                 gnd->setPixmap(grnd);
-                gnd->setFixedSize(MainWindow::Instance()->getGridSize(),MainWindow::Instance()->getGridSize());
+                gnd->setFixedSize(gridSize,gridSize);
                 gnd->setScaledContents(true);
                 if(newIcon->getAngle()==2 || newIcon->getAngle()==4){
-                    gnd->move(newIcon->x()-newIcon->width()/2+MainWindow::Instance()->getGridSize()*2,newIcon->y()+MainWindow::Instance()->getGridSize());
+                    gnd->move(newIcon->x()-newIcon->width()/2+gridSize*2,newIcon->y()+gridSize);
                     polypoints[0]=QPoint(newIcon->x()+newIcon->width()/2,newIcon->y()+newIcon->height()/2);
-                    polypoints[1]=QPoint(newIcon->x()+MainWindow::Instance()->getGridSize()*2,newIcon->y()+newIcon->height()/2);
-                    polypoints[2]=QPoint(newIcon->x()+MainWindow::Instance()->getGridSize()*2,newIcon->y()+MainWindow::Instance()->getGridSize());
+                    polypoints[1]=QPoint(newIcon->x()+gridSize*2,newIcon->y()+newIcon->height()/2);
+                    polypoints[2]=QPoint(newIcon->x()+gridSize*2,newIcon->y()+gridSize);
                 }
                 else{
-                    gnd->move(newIcon->x(),newIcon->y()+newIcon->height()+MainWindow::Instance()->getGridSize()*2);
+                    gnd->move(newIcon->x(),newIcon->y()+newIcon->height()+gridSize*2);
 
                     polypoints[0]=QPoint(newIcon->x()+newIcon->width()/2,newIcon->y()+newIcon->height()/2);
-                    polypoints[1]=QPoint(newIcon->x()+newIcon->width()/2,newIcon->y()+newIcon->height()+MainWindow::Instance()->getGridSize()*2);
-                    polypoints[2]=QPoint(newIcon->x()+newIcon->width()/2,newIcon->y()+newIcon->height()+MainWindow::Instance()->getGridSize()*2);
+                    polypoints[1]=QPoint(newIcon->x()+newIcon->width()/2,newIcon->y()+newIcon->height()+gridSize*2);
+                    polypoints[2]=QPoint(newIcon->x()+newIcon->width()/2,newIcon->y()+newIcon->height()+gridSize*2);
                 }
                 gnd->setAttribute(Qt::WA_DeleteOnClose);
                 gnd->show();
@@ -924,17 +927,27 @@ void DrawZone::drawCircuit()
         }
     }
 
-    pixmap = std::make_shared<QPixmap>(":/assets/source_small.png");
+    pixmap = std::make_shared<QPixmap>(":/assets/icons/source_small.png");
     for(auto s:sources){
-        int XCoord =  s->getXCoord()*MainWindow::Instance()->getGridSize();
-        int YCoord =  s->getYCoord()*MainWindow::Instance()->getGridSize();
+        int XCoord =  s->getXCoord()*gridSize;
+        int YCoord =  s->getYCoord()*gridSize;
         int XCoord2;
         int YCoord2;
         int angle = s->getAngle();
+//        if(angle==4)
+//            angle=2;
+//        else if (angle==2)
+//            angle=4;
 
-        QList<component_lb*> list = this->findChildren<component_lb *>();
-        for(component_lb *w: list) {
-            if(w->getNode1x()==XCoord && w->getNode1y()==YCoord && w->getAngle() == angle){
+        QList<Component_lb*> list = this->findChildren<Component_lb *>();
+        for(Component_lb *w: list) {
+            int ang;
+            ang=w->getAngle();
+            if(ang==4)
+                ang=2;
+            else if (ang==2)
+                ang=4;
+            if(w->getNode1x()==XCoord && w->getNode1y()==YCoord && ang==angle){
                 delete w;
             }
 
@@ -943,29 +956,29 @@ void DrawZone::drawCircuit()
         switch(angle){
         case 1:
 
-            YCoord -=MainWindow::Instance()->getGridSize()/2;
-            XCoord2 = XCoord +MainWindow::Instance()->getGridSize();
+            YCoord -=gridSize/2;
+            XCoord2 = XCoord +gridSize;
             YCoord2 = YCoord;
 
             break;
         case 2:
 
-            XCoord -=MainWindow::Instance()->getGridSize()/2;
-            YCoord2 = YCoord + MainWindow::Instance()->getGridSize();
+            XCoord -=gridSize/2;
+            YCoord2 = YCoord + gridSize;
             XCoord2 = XCoord;
 
             break;
         case 3:
 
-            YCoord -=MainWindow::Instance()->getGridSize()/2;
-            XCoord2 = XCoord -MainWindow::Instance()->getGridSize();
+            YCoord -=gridSize/2;
+            XCoord2 = XCoord -gridSize;
             YCoord2 = YCoord;
 
             break;
         case 4:
 
-            XCoord -=MainWindow::Instance()->getGridSize()/2;
-            YCoord2 = YCoord - MainWindow::Instance()->getGridSize();
+            XCoord -=gridSize/2;
+            YCoord2 = YCoord - gridSize;
             XCoord2 = XCoord;
 
             break;
@@ -973,10 +986,10 @@ void DrawZone::drawCircuit()
             break;
         }
         //TODO check if nodem en p are correct with node1 en node2
-        component_lb *newIcon = new component_lb(this, s->getValue(), XCoord, YCoord, XCoord2,
+        Component_lb *newIcon = new Component_lb(this, s->getValue(), XCoord, YCoord, XCoord2,
                                                  YCoord2, angle,0,0, s->getNodep(),s->getNodem(),s->getIsAdjustable(),
                                                  s->getBeginValue(),s->getStepSize());
-        newIcon->setFixedSize(MainWindow::Instance()->getGridSize(),MainWindow::Instance()->getGridSize());
+        newIcon->setFixedSize(gridSize,gridSize);
         newIcon->setScaledContents(true);
         newIcon->setPixmap(*pixmap);
         if(angle == 1 || angle == 2)
@@ -995,11 +1008,11 @@ void DrawZone::drawCircuit()
         addValueToComponent(newIcon);
 
     }
-    pixmap = std::make_shared<QPixmap>(":/assets/res_small.png");
+    pixmap = std::make_shared<QPixmap>(":/assets/icons/res_small.png");
     for(auto r:resistors){
 
-        int XCoord =  r->getXCoord()*MainWindow::Instance()->getGridSize();
-        int YCoord =  r->getYCoord()*MainWindow::Instance()->getGridSize();
+        int XCoord =  r->getXCoord()*gridSize;
+        int YCoord =  r->getYCoord()*gridSize;
         int XCoord2;
         int YCoord2;
         int angle = r->getAngle();
@@ -1007,29 +1020,29 @@ void DrawZone::drawCircuit()
         switch(angle){
         case 1:
 
-            YCoord -=MainWindow::Instance()->getGridSize()/2;
-            XCoord2 = XCoord +MainWindow::Instance()->getGridSize();
+            YCoord -=gridSize/2;
+            XCoord2 = XCoord +gridSize;
             YCoord2 = YCoord;
 
             break;
         case 2:
 
-            XCoord -=MainWindow::Instance()->getGridSize()/2;
-            YCoord2 = YCoord + MainWindow::Instance()->getGridSize();
+            XCoord -=gridSize/2;
+            YCoord2 = YCoord + gridSize;
             XCoord2 = XCoord;
 
             break;
         case 3:
 
-            YCoord -=MainWindow::Instance()->getGridSize()/2;
-            XCoord2 = XCoord -MainWindow::Instance()->getGridSize();
+            YCoord -=gridSize/2;
+            XCoord2 = XCoord -gridSize;
             YCoord2 = YCoord;
 
             break;
         case 4:
 
-            XCoord -=MainWindow::Instance()->getGridSize()/2;
-            YCoord2 = YCoord - MainWindow::Instance()->getGridSize();
+            XCoord -=gridSize/2;
+            YCoord2 = YCoord - gridSize;
             XCoord2 = XCoord;
 
             break;
@@ -1037,9 +1050,9 @@ void DrawZone::drawCircuit()
             break;
         }
 
-        component_lb *newIcon = new component_lb(this, r->getValue(), XCoord, YCoord, XCoord2,YCoord2, angle, 1, 0, r->getNode1(),
+        Component_lb *newIcon = new Component_lb(this, r->getValue(), XCoord, YCoord, XCoord2,YCoord2, angle, 1, 0, r->getNode1(),
                                                  r->getNode2(),r->getIsAdjustable(),r->getBeginValue(),r->getStepSize());
-        newIcon->setFixedSize(MainWindow::Instance()->getGridSize(),MainWindow::Instance()->getGridSize());
+        newIcon->setFixedSize(gridSize,gridSize);
         newIcon->setScaledContents(true);
         newIcon->setPixmap(*pixmap);
         if(angle == 1 || angle == 2)
@@ -1061,11 +1074,11 @@ void DrawZone::drawCircuit()
 
     }
 
-    pixmap = std::make_shared<QPixmap>(":/assets/sw_open.png");
+    pixmap = std::make_shared<QPixmap>(":/assets/icons/sw_open.png");
     for(auto s:switches){
 
-        int XCoord =  s->getXCoord()*MainWindow::Instance()->getGridSize();
-        int YCoord =  s->getYCoord()*MainWindow::Instance()->getGridSize();
+        int XCoord =  s->getXCoord()*gridSize;
+        int YCoord =  s->getYCoord()*gridSize;
         int XCoord2;
         int YCoord2;
         int angle = s->getAngle();
@@ -1073,29 +1086,29 @@ void DrawZone::drawCircuit()
         switch(angle){
         case 1:
 
-            YCoord -=MainWindow::Instance()->getGridSize()/2;
-            XCoord2 = XCoord +MainWindow::Instance()->getGridSize();
+            YCoord -=gridSize/2;
+            XCoord2 = XCoord +gridSize;
             YCoord2 = YCoord;
 
             break;
         case 2:
 
-            XCoord -=MainWindow::Instance()->getGridSize()/2;
-            YCoord2 = YCoord + MainWindow::Instance()->getGridSize();
+            XCoord -=gridSize/2;
+            YCoord2 = YCoord + gridSize;
             XCoord2 = XCoord;
 
             break;
         case 3:
 
-            YCoord -=MainWindow::Instance()->getGridSize()/2;
-            XCoord2 = XCoord -MainWindow::Instance()->getGridSize();
+            YCoord -=gridSize/2;
+            XCoord2 = XCoord -gridSize;
             YCoord2 = YCoord;
 
             break;
         case 4:
 
-            XCoord -=MainWindow::Instance()->getGridSize()/2;
-            YCoord2 = YCoord - MainWindow::Instance()->getGridSize();
+            XCoord -=gridSize/2;
+            YCoord2 = YCoord - gridSize;
             XCoord2 = XCoord;
 
             break;
@@ -1103,9 +1116,9 @@ void DrawZone::drawCircuit()
             break;
         }
 
-        component_lb *newIcon = new component_lb(this, s->getValue(), XCoord, YCoord, XCoord2,YCoord2, angle, 3, 0,
+        Component_lb *newIcon = new Component_lb(this, s->getValue(), XCoord, YCoord, XCoord2,YCoord2, angle, 3, 0,
                                                  s->getNode1(),s->getNode2());
-        newIcon->setFixedSize(MainWindow::Instance()->getGridSize(),MainWindow::Instance()->getGridSize());
+        newIcon->setFixedSize(gridSize,gridSize);
         newIcon->setScaledContents(true);
         newIcon->setPixmap(*pixmap);
         if(angle == 1 || angle == 2)
@@ -1130,33 +1143,36 @@ void DrawZone::drawCircuit()
 }
 
 //Create valuelabel that resizes to 1/4th of the gridsize
-void DrawZone::addValueToComponent(component_lb * &newIcon){
+void DrawZone::addValueToComponent(Component_lb * &newIcon){
+
+    int gridSize = MainWindow::Instance()->getGridSize();
+
     if(newIcon->getType()==0 || newIcon->getType()==1){
         QLabel    *valueLabel = new QLabel(QString::number(newIcon->getValue()), this);
         switch (newIcon->getAngle()){
         case 1 :
-            valueLabel->move(roundUp(newIcon->getNode1x(),MainWindow::Instance()->getGridSize()),roundUp(newIcon->getNode1y(),MainWindow::Instance()->getGridSize())-newIcon->height()/2);
+            valueLabel->move(roundUp(newIcon->getNode1x(),gridSize),roundUp(newIcon->getNode1y(),gridSize)-newIcon->height()/2);
             break;
         case 2:
-            valueLabel->move(roundUp(newIcon->getNode1x(),MainWindow::Instance()->getGridSize())-(newIcon->width()/2),roundUp(newIcon->getNode2y(),MainWindow::Instance()->getGridSize()));
+            valueLabel->move(roundUp(newIcon->getNode1x(),gridSize)-(newIcon->width()/2),roundUp(newIcon->getNode2y(),gridSize));
             break;
         case 3:(
-            valueLabel->move(roundUp(newIcon->getNode2x(),MainWindow::Instance()->getGridSize()),roundUp(newIcon->getNode1y(),MainWindow::Instance()->getGridSize())-newIcon->height()/2));
+            valueLabel->move(roundUp(newIcon->getNode2x(),gridSize),roundUp(newIcon->getNode1y(),gridSize)-newIcon->height()/2));
             break;
         case 4:
-            valueLabel->move(roundUp(newIcon->getNode1x(),MainWindow::Instance()->getGridSize())-(newIcon->width()/2),roundUp(newIcon->getNode1y(),MainWindow::Instance()->getGridSize()));
+            valueLabel->move(roundUp(newIcon->getNode1x(),gridSize)-(newIcon->width()/2),roundUp(newIcon->getNode1y(),gridSize));
             break;
         }
         newIcon->setBuddy(valueLabel);
         QFont font = valueLabel->font();
-        font.setPixelSize(MainWindow::Instance()->getGridSize()/4);
+        font.setPixelSize(gridSize/4);
         valueLabel->setFont(font);
         valueLabel->show();
     }
 }
 
 //See header
-void DrawZone::rotateToAngle(component_lb &child){
+void DrawZone::rotateToAngle(Component_lb &child){
 
     int curangle=child.getAngle();
     auto orig=std::make_shared<QPixmap>(*(child.pixmap()));
@@ -1168,32 +1184,34 @@ void DrawZone::rotateToAngle(component_lb &child){
 //Take into account the angle of the components and fill out there nodal positions correctly
 void DrawZone::updateNodePositions(){
 
-    QList<component_lb*> list = this->findChildren<component_lb *>();
-    for(component_lb *w: list) {
+    int gridSize = MainWindow::Instance()->getGridSize();
+
+    QList<Component_lb*> list = this->findChildren<Component_lb *>();
+    for(Component_lb *w: list) {
         switch (w->getAngle()){
         case 1:
             w->setNode1x(w->x());
-            w->setNode1y(w->y()+(MainWindow::Instance()->getGridSize()/2));
-            w->setNode2x(w->x()+MainWindow::Instance()->getGridSize());
-            w->setNode2y(w->y()+(MainWindow::Instance()->getGridSize()/2));
+            w->setNode1y(w->y()+(gridSize/2));
+            w->setNode2x(w->x()+gridSize);
+            w->setNode2y(w->y()+(gridSize/2));
             break;
         case 2:
-            w->setNode1x(w->x()+(MainWindow::Instance()->getGridSize()/2));
-            w->setNode1y(w->y()+(MainWindow::Instance()->getGridSize()));
-            w->setNode2x(w->x()+(MainWindow::Instance()->getGridSize()/2));
+            w->setNode1x(w->x()+(gridSize/2));
+            w->setNode1y(w->y()+(gridSize));
+            w->setNode2x(w->x()+(gridSize/2));
             w->setNode2y(w->y());
             break;
         case 3:
-            w->setNode1x(w->x()+MainWindow::Instance()->getGridSize());
-            w->setNode1y(w->y()+(MainWindow::Instance()->getGridSize()/2));
+            w->setNode1x(w->x()+gridSize);
+            w->setNode1y(w->y()+(gridSize/2));
             w->setNode2x(w->x());
-            w->setNode2y(w->y()+(MainWindow::Instance()->getGridSize()/2));
+            w->setNode2y(w->y()+(gridSize/2));
             break;
         case 4:
-            w->setNode1x(w->x()+(MainWindow::Instance()->getGridSize()/2));
+            w->setNode1x(w->x()+(gridSize/2));
             w->setNode1y(w->y());
-            w->setNode2x(w->x()+(MainWindow::Instance()->getGridSize()/2));
-            w->setNode2y(w->y()+MainWindow::Instance()->getGridSize());
+            w->setNode2x(w->x()+(gridSize/2));
+            w->setNode2y(w->y()+gridSize);
             break;
         }
     }
@@ -1217,7 +1235,7 @@ void DrawZone::mouseDoubleClickEvent( QMouseEvent * event )
 {
     if ( event->button() == Qt::LeftButton )
     {
-        component_lb *child = static_cast<component_lb*>(childAt(event->pos()));
+        Component_lb *child = static_cast<Component_lb*>(childAt(event->pos()));
         if (child!=nullptr){
             switch(child->getType()){
 

@@ -1,0 +1,4 @@
+<map id="Switch" name="Switch">
+<area shape="rect" id="node2" href="$class_resistor.html" title="Resistor" alt="" coords="15,80,90,107"/>
+<area shape="rect" id="node3" href="$class_component.html" title="Component" alt="" coords="5,5,100,32"/>
+</map>

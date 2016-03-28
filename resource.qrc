@@ -1,19 +1,24 @@
 <RCC>
     <qresource prefix="/">
-        <file>assets/Levels/inputfile_1.sj</file>
-        <file>assets/Levels/inputfile_2.sj</file>
-        <file>assets/Levels/inputfile_3.sj</file>
-        <file>assets/textures/ground.png</file>
-	<file>assets/textures/sky.png</file>
-        <file>assets/icons/svg/turn-left-circle.svg</file>
-        <file>assets/icons/svg/turn-right.svg</file>
-        <file>assets/icons/svg/triangle-pointing-up.svg</file>
-        <file>assets/icons/svg/turn-triangle.svg</file>
-	<file>assets/icons/svg/question-button.svg</file>
-	<file>assets/icons/svg/battery-power.svg</file>
-	<file>assets/icons/svg/inbox-symbol.svg</file>
-	<file>assets/icons/svg/mark-ribbon.svg</file>
-	
+  
+     
+        <file>assets/icons/rotate-right.png</file>
+        <file>assets/icons/rotate-left.png</file>
+        <file>assets/icons/zoom-out.png</file>
+        <file>assets/icons/zoom-in.png</file>
+	<file>assets/icons/info.png</file>
+	<file>assets/icons/res_small.png</file>
+        <file>assets/icons/source_small.png</file>
+        <file>assets/icons/wire_small.png</file>
+        <file>assets/icons/gnd.png</file>
+        <file>assets/icons/sw_open.png</file>
+  	<file>assets/icons/folder-open.png</file>
+  	<file>assets/icons/star.png</file>
+	<file>assets/icons/preview.png</file>
+        <file>assets/icons/exit.png</file>
+        <file>assets/icons/save.png</file>
+        <file>assets/icons/new-file.png</file>
+        <file>assets/icons/trash.png</file>
 
     </qresource>
 </RCC>

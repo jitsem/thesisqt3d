@@ -61,7 +61,7 @@ Item {
         anchors.top: rotateCameraLeft.bottom
         anchors.topMargin: 10
         anchors.left:parent.left
-        iconSource: "qrc:/assets/icons/svg/question-button.svg"
+        iconSource: "qrc:/assets/icons/info.png"
         onClicked: solRect.visible = !solRect.visible
         style: butStyle
     }
@@ -105,7 +105,7 @@ Item {
         width:  mainWindow.getGridSize(); height:  mainWindow.getGridSize()
         anchors.top:parent.top
         anchors.right:parent.right
-        iconSource: "qrc:/assets/icons/svg/turn-right.svg"
+        iconSource: "qrc:/assets/icons/rotate-right.png"
         style: butStyle
 
 
@@ -118,7 +118,7 @@ Item {
         width:  mainWindow.getGridSize(); height:  mainWindow.getGridSize()
         anchors.top:parent.top
         anchors.left:parent.left
-        iconSource: "qrc:/assets/icons/svg/turn-left-circle.svg"
+        iconSource: "qrc:/assets/icons/rotate-left.png"
         style: butStyle
 
 
@@ -130,7 +130,7 @@ Item {
         anchors.right: parent.right
         anchors.top: rotateCameraRight.bottom
         anchors.topMargin: 10
-        iconSource: "qrc:/assets/icons/svg/triangle-pointing-up.svg"
+        iconSource: "qrc:/assets/icons/zoom-in.png"
         style: butStyle
 
     }
@@ -141,8 +141,8 @@ Item {
         width:  mainWindow.getGridSize(); height:  mainWindow.getGridSize()
         anchors.right: parent.right
         anchors.top: zoomIn.bottom
-        anchors.topMargin: 5
-        iconSource: "qrc:/assets/icons/svg/turn-triangle.svg"
+        anchors.topMargin: 10
+        iconSource: "qrc:/assets/icons/zoom-out.png"
         style: butStyle
     }
 
@@ -191,7 +191,7 @@ Item {
         anchors.bottom: parent.bottom
         anchors.topMargin: 10
         anchors.right:parent.right
-        iconSource: "qrc:/assets/icons/png/direction.png"
+        iconSource: "qrc:/assets/icons/exit.png"
         onClicked: {
 
             mainWindow.delete3D();
@@ -212,7 +212,7 @@ Item {
         anchors.top: nodalInfo.bottom
         anchors.topMargin: 10
         anchors.left:parent.left
-        iconSource: "qrc:/assets/source_small.png"
+        iconSource: "qrc:/assets/icons/source_small.png"
         onClicked: sourceMenu.popup()
         style: butStyle
 
@@ -227,7 +227,7 @@ Item {
         anchors.top: sourceEdit.bottom
         anchors.topMargin: 10
         anchors.left:parent.left
-        iconSource: "qrc:/assets/res_small.png"
+        iconSource: "qrc:/assets/icons/res_small.png"
         onClicked:resistorMenu.popup()
         style: butStyle
 

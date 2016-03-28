@@ -1,16 +1,18 @@
 #include "calc.h"
 
-#include <iostream>
 #include <vector>
 #include <limits>
-
 #include <QTextStream>
 #include <QPoint>
 #include <QStandardPaths>
-#include <QDebug>
 #include <QFile>
+#include <QDebug>
 
 #include "Eigen/Dense"
+#include "resistor.h"
+#include "source.h"
+#include "wire.h"
+#include "switch.h"
 
 std::shared_ptr<Calc> Calc::instance=nullptr;
 
@@ -485,7 +487,6 @@ Correct:
 
     }
 }
-
 void Calc::setCurrentsOfResistorsAndSwitches()
 {
     for(auto& r : resistors){

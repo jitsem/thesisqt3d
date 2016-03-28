@@ -1,9 +1,7 @@
 TEMPLATE = app
 CONFIG += c++11
 
-QT+=qml quick widgets 3dcore 3dinput 3drender 3dquick xml svg quickwidgets
-
-QTPLUGIN += qsvg@
+QT+=qml quick widgets 3dcore 3dinput 3drender 3dquick xml quickwidgets
 
 SOURCES += main.cpp \
     resistor.cpp \
@@ -32,7 +30,6 @@ HEADERS += \
 
 
 DISTFILES += \
-    solution.png \
     Qml/InputController.qml \
     Qml/World3D.qml \
     Qml/Source.qml \
@@ -56,9 +53,8 @@ DISTFILES += \
 RESOURCES += \
     qml.qrc \
     resource.qrc \
-    levelbuilder.qrc \
 
-INCLUDEPATH += $$PWD/Eigen/
+INCLUDEPATH += $$PWD/Eigen/Dense
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
