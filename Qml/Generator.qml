@@ -145,7 +145,7 @@ Entity{
             var minVolt = Math.min(calculator.voltageAtNode(calculator.node1AtResistor(i)),calculator.voltageAtNode(calculator.node2AtResistor(i)));
             var maxVolt = Math.max(calculator.voltageAtNode(calculator.node1AtResistor(i)),calculator.voltageAtNode(calculator.node2AtResistor(i)));
             var angle = Math.atan2(root.sf,(minVolt-maxVolt));
-            var length = Math.abs(((maxVolt-minVolt))/Math.cos(angle));
+            var length = Math.max(1*root.sf,Math.abs(((maxVolt-minVolt))/Math.cos(angle)));
 
             resistors[i].changeAngle(angle*180/Math.PI);
             resistors[i].changeLength(length);

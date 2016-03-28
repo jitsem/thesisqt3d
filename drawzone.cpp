@@ -934,20 +934,26 @@ void DrawZone::drawCircuit()
         int XCoord2;
         int YCoord2;
         int angle = s->getAngle();
-//        if(angle==4)
-//            angle=2;
-//        else if (angle==2)
-//            angle=4;
-
+        if(angle==4){
+            angle=2;
+            YCoord -=gridSize;
+        }
+        else if (angle==2){
+            angle=4;
+            YCoord +=gridSize;
+        }
         QList<Component_lb*> list = this->findChildren<Component_lb *>();
         for(Component_lb *w: list) {
-            int ang;
-            ang=w->getAngle();
-            if(ang==4)
-                ang=2;
-            else if (ang==2)
-                ang=4;
-            if(w->getNode1x()==XCoord && w->getNode1y()==YCoord && ang==angle){
+            int ang=w->getAngle();
+            int x = w->getNode1x();
+            int y = w->getNode1y();
+            if(ang==4){
+                y +=gridSize;
+            }
+            else if (ang==2){
+                y -= gridSize;
+            }
+            if(x==XCoord && y==YCoord && ang==angle){
                 delete w;
             }
 
