@@ -1319,16 +1319,19 @@ void DrawZone::mouseDoubleClickEvent( QMouseEvent * event )
             }
             case 2:
                 QStringList sl;
-                if(child->getGoal()==1)
-                    sl << tr("yes") <<tr("no");
-                else
-                    sl << tr("no") <<tr("yes");
+                if(child->getGoal()==0)
+                    sl << tr("no") <<tr("yes(Front)")<<tr("yes(Back)");
+                else if (child->getGoal()==1)
+                    sl << tr("yes(Front)") <<tr("yes(Back)")<<tr("no");
+                else if (child->getGoal()==2)
+                    sl << tr("yes(Back)") <<tr("yes(Front)")<<tr("no");
                 QString item = QInputDialog::getItem(this,"tis voor aan te passen","Is this a goal",sl,0,false);
-                if((!item.isEmpty()) && item == "yes"){
-                    child->setGoal(1);
-                }
-                else
+                if((!item.isEmpty()) && item == "no")
                     child->setGoal(0);
+                else  if((!item.isEmpty()) && item == "yes(Front)")
+                    child->setGoal(1);
+                else  if((!item.isEmpty()) && item == "yes(Back)")
+                    child->setGoal(2);
                 break;
 
             }
