@@ -328,8 +328,11 @@ void MainWindow::on_action_Copy_triggered()
     copied.clear();
     QList<Component_lb*> list = drawzoneWidget->findChildren<Component_lb *>();
     for(auto w: list) {
-        if (w->getSelected())
-            copied.push_back(w);
+        if (w->getSelected()){
+            auto temp = new Component_lb(drawzoneWidget,w->getValue(),0,0,0,0,w->getAngle(),w->getType());
+            temp->setPixmap(*(w->pixmap()));
+            copied.push_back(temp);
+        }
     }
 
 }
@@ -339,7 +342,7 @@ void MainWindow::on_action_Paste_triggered()
     //Put components if the clipboard on the drawzone
     if (!copied.isEmpty()){
         int i=0;
-        for(auto w:copied){
+        for(auto& w:copied){
 
             Component_lb *newIcon = new Component_lb(drawzoneWidget,w->getValue(),0,0,0,0,w->getAngle(),w->getType());
             newIcon->setPixmap(*(w->pixmap()));
