@@ -274,20 +274,34 @@ void MainWindow::on_actionRotate_triggered()
     QList<Component_lb*> list = drawzoneWidget->findChildren<Component_lb *>();
     for(auto w: list) {
         if(w->getSelected()){
+
             auto orig=std::make_shared<QPixmap>(*(w->pixmap()));
             QTransform transform;
             transform.rotate(-90);
             w->setPixmap(orig->transformed(transform));
-            if (w->getAngle()==4){
+            if (w->getAngle()==4)
                 w->setAngle(1);
-            }
             else
                 w->setAngle((w->getAngle())+1);
+            switch(w->getAngle()){
+            case 1:
+                w->move(QPoint(w->getNode1x(),w->getNode1y()+gridSize/2));
+                break;
+            case 2:
+                w->move(QPoint(w->getNode1x()-gridSize/2,w->getNode1y()));
+                break;
+            case 3:
+                w->move(QPoint(w->getNode1x()-gridSize,w->getNode1y()-3*gridSize/2));
+                break;
+            case 4:
+                w->move(QPoint(w->getNode1x()-gridSize/2,w->getNode1y()-gridSize));
+                break;
+            }
 
         }
 
     }
-
+    drawzoneWidget->updateNodePositions();
 }
 
 Ui::MainWindow *MainWindow::getUi() const
