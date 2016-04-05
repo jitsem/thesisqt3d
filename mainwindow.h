@@ -28,8 +28,10 @@ public:
     ~MainWindow();
     /**Stop 3D simulation, invokable from Qml*/
     Q_INVOKABLE void delete3D();
-    /**Enable some icons for editing*/
-    void enableIcons();
+    /**Enable some icons and edit plane*/
+    void enableInterface();
+    /**Toggle some icons*/
+    void toggleIcons(bool b);
     /**Returns ui*/
     Ui::MainWindow *getUi() const;
     /**Getter for GridSize*/

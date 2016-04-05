@@ -17,7 +17,7 @@ public:
     /**Constructor van Drawzone*/
     DrawZone(QWidget *parent);
     /**Rotates the child widget's pixmap to the angle set in it's properties*/
-    void rotateToAngle(Component_lb &child);  
+    void rotateToAngle(Component_lb &child);
     /**Make sure node 1 and node 2 have correct x&y coordinates*/
     void updateNodePositions();
     /**Function to snap components to nearest multiple of the grid*/
@@ -29,31 +29,39 @@ public:
     /**Get neighbouring components of current component that are present in list l ->key function in solving the node numbers*/
     QList<Component_lb *> getNeighbours(QList<Component_lb *> &l, Component_lb &current);
     /**Solve 1 node and return components (!=wires) that are semi filled out (1 node number is correct)*/
-    QList<Component_lb *> solveNode(QList<Component_lb *> &l, Component_lb *current, int &curnode, QList<Component_lb *> &stack);    
+    QList<Component_lb *> solveNode(QList<Component_lb *> &l, Component_lb *current, int &curnode, QList<Component_lb *> &stack);
     /**Function that fills out node numbers in component_lb objects, uses getNeighbours() and solvenode() intensively*/
-    void calc_nodes();    
+    void calc_nodes();
     /**Write current circuit to vectorlists for model of 3d representation*/
     void writeToVectors();
     /**Add valuelabel to the component so that the user sees the value*/
-    void addValueToComponent(Component_lb *&newIcon);    
+    void addValueToComponent(Component_lb *&newIcon);
     /**Getter of global bool var groundpresent*/
     int getGroundpresent() const;
     /**Setter of global bool var groundpresent*/
-    void setGroundpresent(int value); 
+    void setGroundpresent(int value);
     /**Remove gray background to pixmap when deselecting component*/
     Component_lb * removeGray(Component_lb & child);
     /**Set gray background to pixmap when selecting component*/
     Component_lb * setGray(Component_lb & child);
 
+    void connectComponents();
+    void addWire(QPoint &p, int dir);
+    //put this in updatenodepositions!!!!!!!
+    void updateNodeList();
+
 public slots:
-    
+
     /**Slot for executing save to file method*/
     void slotTriggeredSave();
     /**Round selected wire with this slot*/
     void slotTriggeredGround();
-    
+    /**capture change of connect tool*/
+    void slotConnectChanged(bool b);
+
+
 protected:
-    
+
     /**Catches doubleClickEvent*/
     void mouseDoubleClickEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     /**Catches dragEnterEvent*/
@@ -78,6 +86,15 @@ private:
     QPoint polypoints[3];
     /**Needed to determine move or click*/
     QPoint  dragStartPosition;
+    /** tool nr 1 = connect two components */
+    int doubleClicked=0,selectedTool=0;
+    /**The points that make up the connection between components for drawing */
+    QVector<QPoint> connectPoints;
+    QVector<QPoint> nodes;
+    QPoint redDotPos;
+
+
 };
+
 
 #endif // DRAWZONE_H
