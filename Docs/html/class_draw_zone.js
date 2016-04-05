@@ -2,8 +2,10 @@ var class_draw_zone =
 [
     [ "DrawZone", "class_draw_zone.html#ab7d1a07beef503d64db8426ee6fc6ce2", null ],
     [ "addValueToComponent", "class_draw_zone.html#a86c1d05089c1ff7e0fcfe5c479d2011f", null ],
+    [ "addWire", "class_draw_zone.html#a6a2f7588b9184e7de62da020233e9d7b", null ],
     [ "calc_nodes", "class_draw_zone.html#a8d732d604c8e96ea5dcf53d1d0ab1e9a", null ],
     [ "checkClosedCircuit", "class_draw_zone.html#a59eeee637600fab29e0b4a5049eb6198", null ],
+    [ "connectComponents", "class_draw_zone.html#a14932b1b627f28d6ea5609a5dfd74655", null ],
     [ "dragEnterEvent", "class_draw_zone.html#aa42ed6cf7c4b1c99f408f8d66d08d77f", null ],
     [ "dragMoveEvent", "class_draw_zone.html#a2ec79cb3188bff2c2c7788454e355fb7", null ],
     [ "drawCircuit", "class_draw_zone.html#a108ff54201c895ca8ad99c91a4d7c2f4", null ],
@@ -20,12 +22,19 @@ var class_draw_zone =
     [ "roundUp", "class_draw_zone.html#a43617ed785fe45880427501ed2233990", null ],
     [ "setGray", "class_draw_zone.html#a3feb4f9dd5af6ae8b8f208e37f1fa9c5", null ],
     [ "setGroundpresent", "class_draw_zone.html#a2aadc3be9d6c3527b4f597427ece9e68", null ],
+    [ "slotConnectChanged", "class_draw_zone.html#a52bd7c74bc42e00639cd3f4f225ff42f", null ],
     [ "slotTriggeredGround", "class_draw_zone.html#a61e5cff8d55d1d346b89e5481be235b6", null ],
     [ "slotTriggeredSave", "class_draw_zone.html#a60a5850c643a8ff1b2572e55b84a854a", null ],
     [ "solveNode", "class_draw_zone.html#a611009f9d33c89aaf1f4ed4bb42077a0", null ],
+    [ "updateNodeList", "class_draw_zone.html#a9ba7d14a91017152e61a42705aa7e6be", null ],
     [ "updateNodePositions", "class_draw_zone.html#a26748ecad7d163922cecdc7feea11a5b", null ],
     [ "writeToVectors", "class_draw_zone.html#ac9845e11aad5696a50a9fea15f0856c9", null ],
+    [ "connectPoints", "class_draw_zone.html#a44f1630475b024302d0a6a1348561476", null ],
+    [ "doubleClicked", "class_draw_zone.html#a4ff6a3a8eef8450f0c716ae6959b208e", null ],
     [ "dragStartPosition", "class_draw_zone.html#ae454e5de9b62ddf6e563db54d61bdafd", null ],
     [ "groundpresent", "class_draw_zone.html#a59f43237ff4e404b4a2bba006d3ae8a3", null ],
-    [ "polypoints", "class_draw_zone.html#a800565b1b25c282160b5d38e693853f0", null ]
+    [ "nodes", "class_draw_zone.html#a5d6f42bbffd1a0e7cf41d356ccef1da4", null ],
+    [ "polypoints", "class_draw_zone.html#a800565b1b25c282160b5d38e693853f0", null ],
+    [ "redDotPos", "class_draw_zone.html#a8b1e6c3b5845402a510353a5cb39469e", null ],
+    [ "selectedTool", "class_draw_zone.html#a8bcc63786e53dfb7e6d1764e2aa74bbd", null ]
 ];

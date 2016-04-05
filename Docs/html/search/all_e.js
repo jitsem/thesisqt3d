@@ -1,6 +1,7 @@
 var searchData=
 [
   ['selected',['selected',['../class_component__lb.html#a659850b230896dd9c7869f5a1f65de5a',1,'Component_lb']]],
+  ['selectedtool',['selectedTool',['../class_draw_zone.html#a8bcc63786e53dfb7e6d1764e2aa74bbd',1,'DrawZone']]],
   ['setadjust',['setAdjust',['../class_component__lb.html#a6985416e2c7436d889bfce2a6ece74a6',1,'Component_lb']]],
   ['setangle',['setAngle',['../class_component.html#a92792c6d09bd36f0f9cb0e679d7e07a0',1,'Component::setAngle()'],['../class_component__lb.html#af4ceb44bf2303c9b1d11647dddb3fc02',1,'Component_lb::setAngle()']]],
   ['setbegin',['setBegin',['../class_component__lb.html#ad4ac38e7d599b863aaec666e054e96d3',1,'Component_lb']]],
@@ -37,6 +38,7 @@ var searchData=
   ['setvalue',['setValue',['../class_component.html#a5374861651cb5e4106e973a68aa5fee8',1,'Component::setValue()'],['../class_component__lb.html#a6cb12b60d6c55ebe3a20e8b840e9a3b0',1,'Component_lb::setValue()']]],
   ['setxcoord',['setXCoord',['../class_component.html#abba1f54c76814e939e79586a0de2280e',1,'Component']]],
   ['setycoord',['setYCoord',['../class_component.html#ab96b2c53629fa9330b9a74b7c06c0053',1,'Component']]],
+  ['slotconnectchanged',['slotConnectChanged',['../class_draw_zone.html#a52bd7c74bc42e00639cd3f4f225ff42f',1,'DrawZone']]],
   ['slottriggeredground',['slotTriggeredGround',['../class_draw_zone.html#a61e5cff8d55d1d346b89e5481be235b6',1,'DrawZone']]],
   ['slottriggeredsave',['slotTriggeredSave',['../class_draw_zone.html#a60a5850c643a8ff1b2572e55b84a854a',1,'DrawZone']]],
   ['sol',['sol',['../class_calc.html#a7751ac835e23f02eea70bceeb8fa36ef',1,'Calc']]],

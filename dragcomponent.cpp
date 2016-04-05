@@ -41,19 +41,10 @@ DragComponent::DragComponent(QWidget *parent)
     Component_lb *res1 = new Component_lb(this,100,3,4,20,4,1,1);
     QPixmap res2=QPixmap(":/assets/icons/res_small.png");
     res1->setPixmap(res2);
-    res1->move(0,10);
     res1->setFixedSize(MainWindow::Instance()->getGridSize(),MainWindow::Instance()->getGridSize());
     res1->setScaledContents(true);
     res1->setAttribute(Qt::WA_DeleteOnClose);
     res1->show();
-
-    Component_lb *wire1 = new Component_lb(this,0,3,4,20,4,1,2);
-    QPixmap wir=QPixmap(":/assets/icons/wire_small.png");
-    wire1->setPixmap(wir);
-    wire1->setFixedSize(MainWindow::Instance()->getGridSize(),MainWindow::Instance()->getGridSize());
-    wire1->setScaledContents(true);
-    wire1->setAttribute(Qt::WA_DeleteOnClose);
-    wire1->show();
 
 
     Component_lb *sw_op = new Component_lb(this,0,0,0,0,0,1,3);
@@ -68,12 +59,10 @@ DragComponent::DragComponent(QWidget *parent)
     //foreach component
     components.append(sourceIcon);
     components.append(res1);
-    components.append(wire1);
     components.append(sw_op);
     mainLayout->addWidget(components[0]);
     mainLayout->addWidget(components[1]);
     mainLayout->addWidget(components[2]);
-    mainLayout->addWidget(components[3]);
 
 }
 

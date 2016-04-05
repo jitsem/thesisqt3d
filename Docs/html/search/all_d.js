@@ -2,6 +2,7 @@ var searchData=
 [
   ['readfile',['readFile',['../class_calc.html#a099af31fec4ac4b1afe8b6fe475d24c7',1,'Calc']]],
   ['readme_2emd',['README.md',['../_r_e_a_d_m_e_8md.html',1,'']]],
+  ['reddotpos',['redDotPos',['../class_draw_zone.html#a8b1e6c3b5845402a510353a5cb39469e',1,'DrawZone']]],
   ['removegray',['removeGray',['../class_draw_zone.html#abf2f7456ba6f98cf3223126a95dbaaeb',1,'DrawZone']]],
   ['resistanceatresistor',['resistanceAtResistor',['../class_calc.html#ae1cd7b3a4337677fbccf8453aa412092',1,'Calc']]],
   ['resistor',['Resistor',['../class_resistor.html',1,'Resistor'],['../class_resistor.html#a99f34d4ef123544d7736fe20fcb9bbd1',1,'Resistor::Resistor()']]],

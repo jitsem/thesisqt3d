@@ -36,6 +36,7 @@ var searchData=
   ['setvalue',['setValue',['../class_component.html#a5374861651cb5e4106e973a68aa5fee8',1,'Component::setValue()'],['../class_component__lb.html#a6cb12b60d6c55ebe3a20e8b840e9a3b0',1,'Component_lb::setValue()']]],
   ['setxcoord',['setXCoord',['../class_component.html#abba1f54c76814e939e79586a0de2280e',1,'Component']]],
   ['setycoord',['setYCoord',['../class_component.html#ab96b2c53629fa9330b9a74b7c06c0053',1,'Component']]],
+  ['slotconnectchanged',['slotConnectChanged',['../class_draw_zone.html#a52bd7c74bc42e00639cd3f4f225ff42f',1,'DrawZone']]],
   ['slottriggeredground',['slotTriggeredGround',['../class_draw_zone.html#a61e5cff8d55d1d346b89e5481be235b6',1,'DrawZone']]],
   ['slottriggeredsave',['slotTriggeredSave',['../class_draw_zone.html#a60a5850c643a8ff1b2572e55b84a854a',1,'DrawZone']]],
   ['solvelevel',['solveLevel',['../class_calc.html#a521c91d3ec11c68c23b00cc7aac2cd65',1,'Calc']]],

@@ -137,6 +137,8 @@ Public Slots</h2></td></tr>
 <tr class="separator:a60a5850c643a8ff1b2572e55b84a854a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a61e5cff8d55d1d346b89e5481be235b6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_draw_zone.html#a61e5cff8d55d1d346b89e5481be235b6">slotTriggeredGround</a> ()</td></tr>
 <tr class="separator:a61e5cff8d55d1d346b89e5481be235b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52bd7c74bc42e00639cd3f4f225ff42f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_draw_zone.html#a52bd7c74bc42e00639cd3f4f225ff42f">slotConnectChanged</a> (bool b)</td></tr>
+<tr class="separator:a52bd7c74bc42e00639cd3f4f225ff42f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -170,6 +172,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:abf2f7456ba6f98cf3223126a95dbaaeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3feb4f9dd5af6ae8b8f208e37f1fa9c5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_component__lb.html">Component_lb</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_draw_zone.html#a3feb4f9dd5af6ae8b8f208e37f1fa9c5">setGray</a> (<a class="el" href="class_component__lb.html">Component_lb</a> &amp;child)</td></tr>
 <tr class="separator:a3feb4f9dd5af6ae8b8f208e37f1fa9c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14932b1b627f28d6ea5609a5dfd74655"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_draw_zone.html#a14932b1b627f28d6ea5609a5dfd74655">connectComponents</a> ()</td></tr>
+<tr class="separator:a14932b1b627f28d6ea5609a5dfd74655"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a2f7588b9184e7de62da020233e9d7b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_draw_zone.html#a6a2f7588b9184e7de62da020233e9d7b">addWire</a> (QPoint &amp;p, int dir)</td></tr>
+<tr class="separator:a6a2f7588b9184e7de62da020233e9d7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ba7d14a91017152e61a42705aa7e6be"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_draw_zone.html#a9ba7d14a91017152e61a42705aa7e6be">updateNodeList</a> ()</td></tr>
+<tr class="separator:a9ba7d14a91017152e61a42705aa7e6be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -198,6 +206,16 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a800565b1b25c282160b5d38e693853f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae454e5de9b62ddf6e563db54d61bdafd"><td class="memItemLeft" align="right" valign="top">QPoint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_draw_zone.html#ae454e5de9b62ddf6e563db54d61bdafd">dragStartPosition</a></td></tr>
 <tr class="separator:ae454e5de9b62ddf6e563db54d61bdafd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ff6a3a8eef8450f0c716ae6959b208e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_draw_zone.html#a4ff6a3a8eef8450f0c716ae6959b208e">doubleClicked</a> =0</td></tr>
+<tr class="separator:a4ff6a3a8eef8450f0c716ae6959b208e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8bcc63786e53dfb7e6d1764e2aa74bbd"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_draw_zone.html#a8bcc63786e53dfb7e6d1764e2aa74bbd">selectedTool</a> =0</td></tr>
+<tr class="separator:a8bcc63786e53dfb7e6d1764e2aa74bbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44f1630475b024302d0a6a1348561476"><td class="memItemLeft" align="right" valign="top">QVector&lt; QPoint &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_draw_zone.html#a44f1630475b024302d0a6a1348561476">connectPoints</a></td></tr>
+<tr class="separator:a44f1630475b024302d0a6a1348561476"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d6f42bbffd1a0e7cf41d356ccef1da4"><td class="memItemLeft" align="right" valign="top">QVector&lt; QPoint &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_draw_zone.html#a5d6f42bbffd1a0e7cf41d356ccef1da4">nodes</a></td></tr>
+<tr class="separator:a5d6f42bbffd1a0e7cf41d356ccef1da4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b1e6c3b5845402a510353a5cb39469e"><td class="memItemLeft" align="right" valign="top">QPoint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_draw_zone.html#a8b1e6c3b5845402a510353a5cb39469e">redDotPos</a></td></tr>
+<tr class="separator:a8b1e6c3b5845402a510353a5cb39469e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class for the right hand side of the application where the electric circuit is shown. inherits from QFrame </p>
@@ -237,6 +255,32 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a6a2f7588b9184e7de62da020233e9d7b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DrawZone::addWire </td>
+          <td>(</td>
+          <td class="paramtype">QPoint &amp;&#160;</td>
+          <td class="paramname"><em>p</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>dir</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a8d732d604c8e96ea5dcf53d1d0ab1e9a"></a>
 <div class="memitem">
 <div class="memproto">
@@ -266,6 +310,21 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Check if electric circuit is closed </p>
+
+</div>
+</div>
+<a class="anchor" id="a14932b1b627f28d6ea5609a5dfd74655"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DrawZone::connectComponents </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -623,6 +682,32 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a52bd7c74bc42e00639cd3f4f225ff42f"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DrawZone::slotConnectChanged </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>b</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">slot</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>capture change of connect tool </p>
+<p>Disable/Enable some functions </p>
+
+</div>
+</div>
 <a class="anchor" id="a61e5cff8d55d1d346b89e5481be235b6"></a>
 <div class="memitem">
 <div class="memproto">
@@ -710,6 +795,21 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a9ba7d14a91017152e61a42705aa7e6be"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DrawZone::updateNodeList </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a26748ecad7d163922cecdc7feea11a5b"></a>
 <div class="memitem">
 <div class="memproto">
@@ -743,6 +843,48 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a44f1630475b024302d0a6a1348561476"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QVector&lt;QPoint&gt; DrawZone::connectPoints</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The points that make up the connection between components for drawing </p>
+
+</div>
+</div>
+<a class="anchor" id="a4ff6a3a8eef8450f0c716ae6959b208e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int DrawZone::doubleClicked =0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>tool nr 1 = connect two components </p>
+
+</div>
+</div>
 <a class="anchor" id="ae454e5de9b62ddf6e563db54d61bdafd"></a>
 <div class="memitem">
 <div class="memproto">
@@ -785,6 +927,26 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a5d6f42bbffd1a0e7cf41d356ccef1da4"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QVector&lt;QPoint&gt; DrawZone::nodes</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a800565b1b25c282160b5d38e693853f0"></a>
 <div class="memitem">
 <div class="memproto">
@@ -803,6 +965,46 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>The points that make up the connection between ground and wire for drawing &ndash; TEMPORARY </p>
+
+</div>
+</div>
+<a class="anchor" id="a8b1e6c3b5845402a510353a5cb39469e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QPoint DrawZone::redDotPos</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a8bcc63786e53dfb7e6d1764e2aa74bbd"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int DrawZone::selectedTool =0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

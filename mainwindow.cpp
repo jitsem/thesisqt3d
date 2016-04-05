@@ -19,6 +19,7 @@
 #include <QScreen>
 #include <QWidget>
 #include <QQuickView>
+#include <QScrollBar>
 
 
 #include "dragcomponent.h"
@@ -50,12 +51,23 @@ void MainWindow::setUpUi()
 
     QHBoxLayout *horlayout = new QHBoxLayout();
     QWidget *componentsWidget=new DragComponent();
-    drawzoneWidget=new DrawZone(this);
+
 
     ui->widget_container->setLayout(horlayout);
     horlayout->addWidget(componentsWidget);
-    horlayout->addWidget(drawzoneWidget);
 
+    QScrollArea * sa = new QScrollArea();
+    drawzoneWidget=new DrawZone(sa);
+    sa->setWidget(drawzoneWidget);
+    sa->setWidgetResizable(true);
+    sa->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContentsOnFirstShow);
+    sa->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    sa->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+
+
+
+
+    horlayout->addWidget(sa);
 
     componentsWidget->setMaximumWidth(gridSize*1.5);
 
@@ -291,6 +303,7 @@ void MainWindow::on_actionRotate_triggered()
             QTransform transform;
             transform.rotate(-90);
             w->setPixmap(orig->transformed(transform));
+
             if (w->getAngle()==4)
                 w->setAngle(1);
             else
@@ -309,10 +322,13 @@ void MainWindow::on_actionRotate_triggered()
                 w->move(QPoint(w->getNode1x()-gridSize/2,w->getNode1y()));
                 break;
             }
+            delete w->buddy();
+            drawzoneWidget->addValueToComponent(w);
 
         }
 
     }
+
     drawzoneWidget->updateNodePositions();
 
 }
