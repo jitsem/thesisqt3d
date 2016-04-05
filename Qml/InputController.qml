@@ -35,6 +35,10 @@ Entity{
 
 
         world3D.zoomlevel += direction;
+        if(world3D.zoomlevel<5)
+            world3D.zoomlevel = 5;
+        else if(world3D.zoomlevel >105)
+            world3D.zoomlevel=105;
 
 
     }

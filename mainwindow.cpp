@@ -62,6 +62,8 @@ void MainWindow::setUpUi()
     //Connect signal to different classes
     QObject::connect (this,SIGNAL(on_actionSave_triggered()),drawzoneWidget,SLOT(slotTriggeredSave()));
     QObject::connect (this,SIGNAL(on_actionGround_triggered()),drawzoneWidget,SLOT(slotTriggeredGround()));
+    QObject::connect (ui->actionConnect,SIGNAL(toggled(bool)),drawzoneWidget,SLOT(slotConnectChanged(bool)));
+
 }
 
 int MainWindow::getGridSize() const
@@ -125,7 +127,7 @@ void MainWindow::on_actionOpen_File_triggered()
 
         bool succes = calculator->readFile();
         if(succes){
-            enableIcons();
+            enableInterface();
             drawzoneWidget->drawCircuit();
         }
         else{
@@ -200,7 +202,7 @@ void MainWindow::on_actionNew_triggered()
         calculator->writeBackToFile();
         drawzoneWidget->setGroundpresent(0);
         drawzoneWidget->drawCircuit();
-        enableIcons();
+        enableInterface();
 
     }
 }
@@ -252,7 +254,7 @@ void MainWindow::on_actionEdit_Goals_triggered()
     delete d;
 }
 
-void MainWindow::enableIcons(){
+void MainWindow::enableInterface(){
 
     //Enable some buttons
     ui->actionSave->setEnabled(true);
@@ -260,10 +262,20 @@ void MainWindow::enableIcons(){
     ui->action3D_Preview->setEnabled(true);
     ui->actionGround->setEnabled(true);
     ui->actionEdit_Goals->setEnabled(true);
+    ui->actionConnect->setEnabled(true);
 
     //Enable editor
     ui->widget_container->setEnabled(true);
 
+}
+
+void MainWindow::toggleIcons(bool b)
+{
+    ui->actionSave->setEnabled(b);
+    ui->actionSave_as->setEnabled(b);
+    ui->action3D_Preview->setEnabled(b);
+    ui->actionGround->setEnabled(b);
+    ui->actionEdit_Goals->setEnabled(b);
 }
 
 
@@ -274,19 +286,34 @@ void MainWindow::on_actionRotate_triggered()
     QList<Component_lb*> list = drawzoneWidget->findChildren<Component_lb *>();
     for(auto w: list) {
         if(w->getSelected()){
+
             auto orig=std::make_shared<QPixmap>(*(w->pixmap()));
             QTransform transform;
             transform.rotate(-90);
             w->setPixmap(orig->transformed(transform));
-            if (w->getAngle()==4){
+            if (w->getAngle()==4)
                 w->setAngle(1);
-            }
             else
                 w->setAngle((w->getAngle())+1);
+            switch(w->getAngle()){
+            case 1:
+                w->move(QPoint(w->getNode1x(),w->getNode1y()-gridSize/2));
+                break;
+            case 2:
+                w->move(QPoint(w->getNode2x()-3*gridSize/2,w->getNode2y()-gridSize));
+                break;
+            case 3:
+                w->move(QPoint(w->getNode2x()-gridSize,w->getNode2y()+gridSize/2));
+                break;
+            case 4:
+                w->move(QPoint(w->getNode1x()-gridSize/2,w->getNode1y()));
+                break;
+            }
 
         }
 
     }
+    drawzoneWidget->updateNodePositions();
 
 }
 
@@ -325,11 +352,17 @@ void MainWindow::on_actionDelete_triggered()
 void MainWindow::on_action_Copy_triggered()
 {
     //Clear the clipboard, and put the selected components in
+    for(auto c: copied){
+        delete c;
+    }
     copied.clear();
     QList<Component_lb*> list = drawzoneWidget->findChildren<Component_lb *>();
     for(auto w: list) {
-        if (w->getSelected())
-            copied.push_back(w);
+        if (w->getSelected()){
+            auto temp = new Component_lb(this,w->getValue(),0,0,0,0,w->getAngle(),w->getType());
+            temp->setPixmap(*(w->pixmap()));
+            copied.push_back(temp);
+        }
     }
 
 }
@@ -339,7 +372,7 @@ void MainWindow::on_action_Paste_triggered()
     //Put components if the clipboard on the drawzone
     if (!copied.isEmpty()){
         int i=0;
-        for(auto w:copied){
+        for(auto& w:copied){
 
             Component_lb *newIcon = new Component_lb(drawzoneWidget,w->getValue(),0,0,0,0,w->getAngle(),w->getType());
             newIcon->setPixmap(*(w->pixmap()));

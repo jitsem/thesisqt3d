@@ -36,6 +36,7 @@
 #include "component_lb.h"
 #include "component.h"
 #include "mainwindow.h"
+#include "dragcomponent.h"
 
 
 
@@ -139,7 +140,7 @@ void DrawZone::slotTriggeredGround()
         Component_lb *gnd = new Component_lb(this,0,0,0,0,0,1,4);
         gnd->setFixedSize(gridSize,gridSize);
 
-        QPixmap grnd=QPixmap(":/assets/gnd.png");
+        QPixmap grnd=QPixmap(":/assets/icons/gnd.png");
         gnd->setPixmap(grnd);
         //TODO check if ground is put on top of other component
 
@@ -218,8 +219,24 @@ void DrawZone::dragMoveEvent(QDragMoveEvent *event)
 //Execute dragging by creating QDrag obj
 void DrawZone::mouseMoveEvent(QMouseEvent *event)
 {
-    if (!(event->buttons() & Qt::LeftButton))
+    // setCursor(Qt::ArrowCursor);
+    if(selectedTool){
+        //make sure only points that make rectangular corners are possible
+        QPoint temp;
+        temp=QPoint(roundUp(event->pos().x(),MainWindow::Instance()->getGridSize()),roundUp(event->pos().y(),MainWindow::Instance()->getGridSize()));
+        if(!connectPoints.empty()){
+            if(connectPoints.last().rx()==temp.rx()||connectPoints.last().ry()==temp.ry()){
+                redDotPos=temp;
+                update();
+            }
+        } else {
+            redDotPos=(QPoint(roundUp(event->pos().x(),MainWindow::Instance()->getGridSize()),roundUp(event->pos().y(),MainWindow::Instance()->getGridSize())));
+            update();
+        }
+    }
+    if (!(event->buttons() & Qt::LeftButton)){
         return;
+    }
     if ((event->pos() - dragStartPosition).manhattanLength()
             < QApplication::startDragDistance())
         return;
@@ -274,7 +291,6 @@ void DrawZone::mouseMoveEvent(QMouseEvent *event)
 void DrawZone::dropEvent(QDropEvent *event)
 {
     int gridSize = MainWindow::Instance()->getGridSize();
-    setCursor(Qt::OpenHandCursor);
     Component_lb* gndWire;
     if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
         QByteArray itemData = event->mimeData()->data("application/x-dnditemdata");
@@ -416,44 +432,70 @@ void DrawZone::dropEvent(QDropEvent *event)
 //Make sure everything is deselected when user clicks on empty space
 void DrawZone::mousePressEvent(QMouseEvent *event)
 {
-    setCursor(Qt::ClosedHandCursor);
-    Component_lb *child = dynamic_cast<Component_lb*>(childAt(event->pos()));
-    if (!child){
-        QList<Component_lb*> list = this->findChildren<Component_lb *>();
-        for(Component_lb *w : list) {
-            w->setSelected(0);
-            MainWindow::Instance()->getUi()->actionRotate->setEnabled(false);
-            MainWindow::Instance()->getUi()->actionDelete->setEnabled(false);
-            removeGray(*w);
+    if(!selectedTool){
+        //setCursor(Qt::ClosedHandCursor);
+        Component_lb *child = dynamic_cast<Component_lb*>(childAt(event->pos()));
+        if (!child){
+            QList<Component_lb*> list = this->findChildren<Component_lb *>();
+            for(Component_lb *w : list) {
+                w->setSelected(0);
+                MainWindow::Instance()->getUi()->actionRotate->setEnabled(false);
+                MainWindow::Instance()->getUi()->actionDelete->setEnabled(false);
+                removeGray(*w);
+            }
+            return;
         }
-        return;
+
+        if (event->button() == Qt::LeftButton){
+            dragStartPosition = event->pos();
+        }
     }
 
-    if (event->button() == Qt::LeftButton){
-        dragStartPosition = event->pos();
-    }
 }
 
 //Select component if releaseevent is near pressevent
 void DrawZone::mouseReleaseEvent(QMouseEvent *event)
 {
-    setCursor(Qt::OpenHandCursor);
-    Component_lb *child = dynamic_cast<Component_lb*>(childAt(event->pos()));
-    if (!child)
-        return;
-    if ((event->pos() - dragStartPosition).manhattanLength()
-            > QApplication::startDragDistance()){
-        qDebug()<<"ignored move";
-        return;
+    //setCursor(Qt::OpenHandCursor);
+    if(selectedTool && (!doubleClicked)){
+        connectPoints.push_back(QPoint(roundUp(event->pos().x(),MainWindow::Instance()->getGridSize()),roundUp(event->pos().y(),MainWindow::Instance()->getGridSize())));
+        if(connectPoints.size()>1){
+            updateNodeList();
+            if(nodes.contains(connectPoints.last()))
+                connectComponents();
+        }
+        update();
     }
-    if(!(child->getSelected())){
-        setGray(*child);
+    if (doubleClicked){
+        doubleClicked=0;
     }
     else{
-        removeGray(*child);
+        Component_lb *child = dynamic_cast<Component_lb*>(childAt(event->pos()));
+        if (!child)
+            return;
+        if ((event->pos() - dragStartPosition).manhattanLength()
+                > QApplication::startDragDistance()){
+            qDebug()<<"ignored move";
+            return;
+        }
+        if(!(child->getSelected())){
+            setGray(*child);
+        }
+        else{
+            removeGray(*child);
+        }
     }
     return;
 
+}
+
+void DrawZone::updateNodeList(){
+    updateNodePositions();
+    QList<Component_lb*> list = this->findChildren<Component_lb *>();
+    for (Component_lb * & w :list){
+        nodes.push_back(QPoint(w->getNode1x(),w->getNode1y()));
+        nodes.push_back(QPoint(w->getNode2x(),w->getNode2y()));
+    }
 }
 
 Component_lb *DrawZone::removeGray(Component_lb &child){
@@ -541,10 +583,55 @@ void DrawZone::paintEvent(QPaintEvent *event)
     if(groundpresent){
         painter.drawPolyline(polypoints,3);
     }
+    if(selectedTool){
+        if(!nodes.isEmpty()){
+            painter.setBrush(Qt::green);
+            for(QPoint a: nodes){
+                painter.drawEllipse(a,2,2);
+            }
+        }
+        if(redDotPos!=QPoint(0,0)){
+            painter.setBrush(Qt::red);
+            painter.drawEllipse(redDotPos,3,3);
+        }
+        for(QPoint a: connectPoints){
+            painter.drawEllipse(a,3,3);
+        }
+        painter.setBrush(Qt::black);
+        if(!connectPoints.isEmpty()){
+            QPolygonF polyline;
+            for(QPoint a: connectPoints){
+                polyline.append(a);
+            }
+            polyline.append(redDotPos);
+            painter.drawPolyline(polyline);
+        }
+    }
     painter.end();
     return;
 }
 
+void DrawZone::slotConnectChanged(bool b)
+{
+    auto m = MainWindow::Instance();
+    selectedTool=b;
+
+    /**Disable/Enable some functions*/
+    setMouseTracking(b);
+    setAcceptDrops(!b);
+    m->getUi()->widget_container->findChild<DragComponent *>()->setEnabled(!b);
+    m->toggleIcons(!b);
+
+
+
+    if (!b){
+        connectComponents();
+    }
+    else {
+        updateNodeList();
+        update();
+    }
+}
 
 int DrawZone::getGroundpresent() const
 {
@@ -934,20 +1021,26 @@ void DrawZone::drawCircuit()
         int XCoord2;
         int YCoord2;
         int angle = s->getAngle();
-//        if(angle==4)
-//            angle=2;
-//        else if (angle==2)
-//            angle=4;
-
+        if(angle==4){
+            angle=2;
+            YCoord -=gridSize;
+        }
+        else if (angle==2){
+            angle=4;
+            YCoord +=gridSize;
+        }
         QList<Component_lb*> list = this->findChildren<Component_lb *>();
         for(Component_lb *w: list) {
-            int ang;
-            ang=w->getAngle();
-            if(ang==4)
-                ang=2;
-            else if (ang==2)
-                ang=4;
-            if(w->getNode1x()==XCoord && w->getNode1y()==YCoord && ang==angle){
+            int ang=w->getAngle();
+            int x = w->getNode1x();
+            int y = w->getNode1y();
+            if(ang==4){
+                y +=gridSize;
+            }
+            else if (ang==2){
+                y -= gridSize;
+            }
+            if(x==XCoord && y==YCoord && ang==angle){
                 delete w;
             }
 
@@ -1230,101 +1323,210 @@ int DrawZone::roundUp(int numToRound, int multiple)
     return result;
 
 }
+void DrawZone::addWire(QPoint &p,int dir){
+    int gridsize=MainWindow::Instance()->getGridSize();
+    auto pixmap = std::make_shared<QPixmap>(":/assets/icons/wire_small.png");
+    Component_lb *newIcon = new Component_lb(this,0,p.x(),p.y(),0,0,dir,2);
+    newIcon->setFixedSize(gridsize,gridsize);
+    newIcon->setScaledContents(true);
+    newIcon->setPixmap(*pixmap);
+    rotateToAngle(*newIcon);
+    switch (dir){
+    case 1:
+    {
+        newIcon->move(QPoint(p.x(),p.y()-gridsize/2));
+        break;
+    }
+    case 2:
+    {
+        newIcon->move(QPoint(p.x()-gridsize/2,p.y()-gridsize));
+        break;
+    }
+    case 3:
+    {
+        newIcon->move(QPoint(p.x()-gridsize,p.y()-gridsize/2));
+        break;
+    }
+    case 4:
+    {
+        newIcon->move(QPoint(p.x()-gridsize/2,p.y()));
+        break;
+    }
+
+    }
+
+    newIcon->show();
+    newIcon->setAttribute(Qt::WA_DeleteOnClose);
+    newIcon->setFocusPolicy(Qt::StrongFocus);
+    updateNodePositions();
+    update();
+}
+
+void DrawZone::connectComponents(){
+
+    int gridsize=MainWindow::Instance()->getGridSize();
+    QPoint p,pEnd;
+    if (!connectPoints.isEmpty())
+        pEnd=connectPoints.last();
+    while(!connectPoints.isEmpty()){
+        p=connectPoints.first();
+        connectPoints.removeOne(p);
+        if (p==pEnd)
+            break;
+        if(p.y()==connectPoints.first().y()) //horizontal
+        {
+            if (p.x()<connectPoints.first().x())//to the right
+            {
+                addWire(p,1);
+                if (((connectPoints.first().x()-p.x())/gridsize ) > 1){
+                    connectPoints.push_front(QPoint(p.x()+gridsize,p.y()));
+                    continue;
+                }
+            }
+            else //to the left
+            {
+                addWire(p,3);
+                if (((p.x()-connectPoints.first().x())/gridsize ) > 1){
+                    connectPoints.push_front(QPoint(p.x()-gridsize,p.y()));
+                    continue;
+                }
+            }
+        }
+        else if(p.x()==connectPoints.first().x())//vertical
+        {
+            if (p.y()<connectPoints.first().y())//down
+            {
+                addWire(p,4);
+                if (((connectPoints.first().y()-p.y())/gridsize ) > 1){
+                    connectPoints.push_front(QPoint(p.x(),p.y()+gridsize));
+                    continue;
+                }
+            }
+            else //up
+            {
+                addWire(p,2);
+                if (((p.y()-connectPoints.first().y())/gridsize ) > 1){
+                    connectPoints.push_front(QPoint(p.x(),p.y()-gridsize));
+                    continue;
+                }
+            }
+
+        }
+    }
+    connectPoints.clear();
+    //nodes.clear();
+    redDotPos=QPoint(0,0);
+    update();
+}
+
 //Create interaction widgets/dialogs to edit components
 void DrawZone::mouseDoubleClickEvent( QMouseEvent * event )
 {
     if ( event->button() == Qt::LeftButton )
     {
-        Component_lb *child = static_cast<Component_lb*>(childAt(event->pos()));
-        if (child!=nullptr){
-            switch(child->getType()){
+        if(selectedTool){
+            QPoint p2=event->pos();
+            p2.setX(roundUp(p2.x(),MainWindow::Instance()->getGridSize()));
+            p2.setY(roundUp(p2.y(),MainWindow::Instance()->getGridSize()));
+            connectPoints.push_back(p2);
+            connectComponents();
+            doubleClicked=1;
+        }
+        else{
+            Component_lb *child = static_cast<Component_lb*>(childAt(event->pos()));
+            if (child!=nullptr){
+                switch(child->getType()){
 
-            case 0:
-            case 1:{
-                //Make dialog for setting variables
-                QDialog * d = new QDialog();
-                QVBoxLayout * vbox = new QVBoxLayout();
+                case 0:
+                case 1:{
+                    //Make dialog for setting variables
+                    QDialog * d = new QDialog();
+                    QVBoxLayout * vbox = new QVBoxLayout();
 
-                //Box for value
-                QLabel * labelValue = new QLabel("Value of component?");
-                QDoubleSpinBox * value = new QDoubleSpinBox();
-                value->setRange(0,std::numeric_limits<float>::max());
-                value->setValue(child->getValue());
+                    //Box for value
+                    QLabel * labelValue = new QLabel("Value of component?");
+                    QDoubleSpinBox * value = new QDoubleSpinBox();
+                    value->setRange(0,std::numeric_limits<float>::max());
+                    value->setValue(child->getValue());
 
-                //Box for Adjustable
-                QLabel * labelAdjust = new QLabel("Is component adjustable?");
-                QCheckBox * adjust = new QCheckBox();
+                    //Box for Adjustable
+                    QLabel * labelAdjust = new QLabel("Is component adjustable?");
+                    QCheckBox * adjust = new QCheckBox();
 
-                //Box for BeginValue
-                QLabel * labelBValue = new QLabel("Beginvalue of component?");
-                QDoubleSpinBox * bValue = new QDoubleSpinBox();
-                value->setRange(0,std::numeric_limits<float>::max());
-                bValue->setValue(child->getBegin());
-                bValue->setDisabled(true);
+                    //Box for BeginValue
+                    QLabel * labelBValue = new QLabel("Beginvalue of component?");
+                    QDoubleSpinBox * bValue = new QDoubleSpinBox();
+                    value->setRange(0,std::numeric_limits<float>::max());
+                    bValue->setValue(child->getBegin());
+                    bValue->setDisabled(true);
 
-                //Box for stepSize
-                QLabel * labelStep = new QLabel("StepSize of component?");
-                QDoubleSpinBox * step = new QDoubleSpinBox();
-                value->setRange(0,std::numeric_limits<float>::max());
-                step->setValue(child->getStepSize());
-                step->setDisabled(true);
+                    //Box for stepSize
+                    QLabel * labelStep = new QLabel("StepSize of component?");
+                    QDoubleSpinBox * step = new QDoubleSpinBox();
+                    value->setRange(0,std::numeric_limits<float>::max());
+                    step->setValue(child->getStepSize());
+                    step->setDisabled(true);
 
-                QDialogButtonBox * buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+                    QDialogButtonBox * buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
-                QObject::connect(buttonBox, SIGNAL(accepted()), d, SLOT(accept()));
-                QObject::connect(buttonBox, SIGNAL(rejected()), d, SLOT(reject()));
-                QObject::connect(adjust, SIGNAL(toggled(bool)), bValue, SLOT(setEnabled(bool)));
-                QObject::connect(adjust, SIGNAL(toggled(bool)), step, SLOT(setEnabled(bool)));
+                    QObject::connect(buttonBox, SIGNAL(accepted()), d, SLOT(accept()));
+                    QObject::connect(buttonBox, SIGNAL(rejected()), d, SLOT(reject()));
+                    QObject::connect(adjust, SIGNAL(toggled(bool)), bValue, SLOT(setEnabled(bool)));
+                    QObject::connect(adjust, SIGNAL(toggled(bool)), step, SLOT(setEnabled(bool)));
 
-                if(child->getAdjust()==1){
-                    adjust->setChecked(true);
-                }else{
-                    adjust->setChecked(false);
+                    if(child->getAdjust()==1){
+                        adjust->setChecked(true);
+                    }else{
+                        adjust->setChecked(false);
+                    }
+
+                    vbox->addWidget(labelValue);
+                    vbox->addWidget(value);
+                    vbox->addWidget(labelAdjust);
+                    vbox->addWidget(adjust);
+                    vbox->addWidget(labelBValue);
+                    vbox->addWidget(bValue);
+                    vbox->addWidget(labelStep);
+                    vbox->addWidget(step);
+                    vbox->addWidget(buttonBox);
+
+                    d->setLayout(vbox);
+                    d->setWindowTitle("Set Component Values");
+
+                    int result = d->exec();
+                    if(result == QDialog::Accepted)
+                    {
+                        child->setValue(value->value());
+                        child->setAdjust(adjust->isChecked());
+                        child->setBegin(bValue->value());
+                        child->setStepSize(step->value());
+                        dynamic_cast<QLabel*>(child->buddy())->setText(QString::number(value->value()));
+
+                    }
+
+                    //TODO check delete Clean up
+                    delete d;
+
+                    break;
                 }
-
-                vbox->addWidget(labelValue);
-                vbox->addWidget(value);
-                vbox->addWidget(labelAdjust);
-                vbox->addWidget(adjust);
-                vbox->addWidget(labelBValue);
-                vbox->addWidget(bValue);
-                vbox->addWidget(labelStep);
-                vbox->addWidget(step);
-                vbox->addWidget(buttonBox);
-
-                d->setLayout(vbox);
-                d->setWindowTitle("Set Component Values");
-
-                int result = d->exec();
-                if(result == QDialog::Accepted)
-                {
-                    child->setValue(value->value());
-                    child->setAdjust(adjust->isChecked());
-                    child->setBegin(bValue->value());
-                    child->setStepSize(step->value());
-                    dynamic_cast<QLabel*>(child->buddy())->setText(QString::number(value->value()));
+                case 2:
+                    QStringList sl;
+                    if(child->getGoal()==0)
+                        sl << tr("no") <<tr("yes(Front)")<<tr("yes(Back)");
+                    else if (child->getGoal()==1)
+                        sl << tr("yes(Front)") <<tr("yes(Back)")<<tr("no");
+                    else if (child->getGoal()==2)
+                        sl << tr("yes(Back)") <<tr("yes(Front)")<<tr("no");
+                    QString item = QInputDialog::getItem(this,"tis voor aan te passen","Is this a goal",sl,0,false);
+                    if((!item.isEmpty()) && item == "no")
+                        child->setGoal(0);
+                    else  if((!item.isEmpty()) && item == "yes(Front)")
+                        child->setGoal(1);
+                    else  if((!item.isEmpty()) && item == "yes(Back)")
+                        child->setGoal(2);
+                    break;
 
                 }
-
-                //TODO check delete Clean up
-                delete d;
-
-                break;
-            }
-            case 2:
-                QStringList sl;
-                if(child->getGoal()==1)
-                    sl << tr("yes") <<tr("no");
-                else
-                    sl << tr("no") <<tr("yes");
-                QString item = QInputDialog::getItem(this,"tis voor aan te passen","Is this a goal",sl,0,false);
-                if((!item.isEmpty()) && item == "yes"){
-                    child->setGoal(1);
-                }
-                else
-                    child->setGoal(0);
-                break;
-
             }
         }
     }
