@@ -14,6 +14,8 @@ var searchData=
   ['component_5flb_2ecpp',['component_lb.cpp',['../component__lb_8cpp.html',1,'']]],
   ['component_5flb_2eh',['component_lb.h',['../component__lb_8h.html',1,'']]],
   ['computenetwork',['computeNetwork',['../class_calc.html#ab2e4467f57e33271d6eed2d81b4e96e2',1,'Calc']]],
+  ['connectcomponents',['connectComponents',['../class_draw_zone.html#a14932b1b627f28d6ea5609a5dfd74655',1,'DrawZone']]],
+  ['connectpoints',['connectPoints',['../class_draw_zone.html#a44f1630475b024302d0a6a1348561476',1,'DrawZone']]],
   ['copied',['copied',['../class_main_window.html#af1cc8231a3d9def139817aa379e41fef',1,'MainWindow']]],
   ['correctangles',['correctAngles',['../class_calc.html#a043e0bab78ea9a08a33e9cb7a083c221',1,'Calc']]],
   ['current',['current',['../class_component.html#a5313b0a04f29b03efce01a56b7d320b0',1,'Component']]]

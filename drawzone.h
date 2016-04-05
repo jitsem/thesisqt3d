@@ -48,7 +48,7 @@ public:
     void connectComponents();
     void addWire(QPoint &p, int dir);
     //put this in updatenodepositions!!!!!!!
-    void updateNodeList();
+//    void updateNodeList();
 
 public slots:
 

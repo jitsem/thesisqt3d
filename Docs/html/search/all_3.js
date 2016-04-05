@@ -3,6 +3,7 @@ var searchData=
   ['decreaseresistanceatresistor',['decreaseResistanceAtResistor',['../class_calc.html#a160a508b353caa172c602b1e798e8b4a',1,'Calc']]],
   ['decreasevoltageatsource',['decreaseVoltageAtSource',['../class_calc.html#a8c5dec7192e6868d16105cea78917bac',1,'Calc']]],
   ['delete3d',['delete3D',['../class_main_window.html#a924d23b58e8ad4e97b70423bd1c1b0ba',1,'MainWindow']]],
+  ['doubleclicked',['doubleClicked',['../class_draw_zone.html#a4ff6a3a8eef8450f0c716ae6959b208e',1,'DrawZone']]],
   ['dragcomponent',['DragComponent',['../class_drag_component.html',1,'DragComponent'],['../class_drag_component.html#a612c7e40456e664b77d0cb7a5ccfd1ea',1,'DragComponent::DragComponent()']]],
   ['dragcomponent_2ecpp',['dragcomponent.cpp',['../dragcomponent_8cpp.html',1,'']]],
   ['dragcomponent_2eh',['dragcomponent.h',['../dragcomponent_8h.html',1,'']]],

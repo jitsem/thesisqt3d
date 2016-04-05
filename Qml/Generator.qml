@@ -73,7 +73,7 @@ Entity{
             var angle = Math.atan2(root.sf,(minVolt-maxVolt));
 
             //Length depending on above angle
-            var length = Math.abs(((maxVolt-minVolt))/Math.cos(angle));
+            var length = Math.max(1*root.sf,Math.abs(((maxVolt-minVolt))/Math.cos(angle)));
 
             //Assign correct params and make
             var resistor = o.resistorFactory.createObject(null,{"a":(angle*180/Math.PI),

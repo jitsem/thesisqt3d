@@ -25,6 +25,7 @@
 #include <QQuickView>
 #include <QQmlEngine>
 #include <QQmlContext>
+#include <QScrollArea>
 
 #include "calc.h"
 #include "source.h"
@@ -458,13 +459,23 @@ void DrawZone::mouseReleaseEvent(QMouseEvent *event)
 {
     //setCursor(Qt::OpenHandCursor);
     if(selectedTool && (!doubleClicked)){
-        connectPoints.push_back(QPoint(roundUp(event->pos().x(),MainWindow::Instance()->getGridSize()),roundUp(event->pos().y(),MainWindow::Instance()->getGridSize())));
-        if(connectPoints.size()>1){
-            updateNodeList();
-            if(nodes.contains(connectPoints.last()))
-                connectComponents();
+        if (!connectPoints.isEmpty()){
+            QPoint temp=QPoint(roundUp(event->pos().x(),MainWindow::Instance()->getGridSize()),roundUp(event->pos().y(),MainWindow::Instance()->getGridSize()));
+            if(connectPoints.last().rx()==temp.rx()||connectPoints.last().ry()==temp.ry()){
+                connectPoints.push_back(temp);
+                update();
+            }
+            if(connectPoints.size()>1){
+                updateNodePositions();
+                if(nodes.contains(connectPoints.last()))
+                    connectComponents();
+            }
+            update();
         }
-        update();
+        else {
+            connectPoints.push_back(QPoint(roundUp(event->pos().x(),MainWindow::Instance()->getGridSize()),roundUp(event->pos().y(),MainWindow::Instance()->getGridSize())));
+            update();
+        }
     }
     if (doubleClicked){
         doubleClicked=0;
@@ -489,14 +500,6 @@ void DrawZone::mouseReleaseEvent(QMouseEvent *event)
 
 }
 
-void DrawZone::updateNodeList(){
-    updateNodePositions();
-    QList<Component_lb*> list = this->findChildren<Component_lb *>();
-    for (Component_lb * & w :list){
-        nodes.push_back(QPoint(w->getNode1x(),w->getNode1y()));
-        nodes.push_back(QPoint(w->getNode2x(),w->getNode2y()));
-    }
-}
 
 Component_lb *DrawZone::removeGray(Component_lb &child){
 
@@ -575,7 +578,7 @@ void DrawZone::paintEvent(QPaintEvent *event)
     while(i<frameRect().width()){
         j=0;
         while(j<frameRect().height()){
-            painter.drawRect(i,j,2,2);
+            painter.drawEllipse(QPoint(i,j),gridSize/40,gridSize/40);
             j+=gridSize;
         }
         i+=gridSize;
@@ -587,15 +590,15 @@ void DrawZone::paintEvent(QPaintEvent *event)
         if(!nodes.isEmpty()){
             painter.setBrush(Qt::green);
             for(QPoint a: nodes){
-                painter.drawEllipse(a,2,2);
+                painter.drawEllipse(a,gridSize/20,gridSize/20);
             }
         }
         if(redDotPos!=QPoint(0,0)){
             painter.setBrush(Qt::red);
-            painter.drawEllipse(redDotPos,3,3);
+            painter.drawEllipse(redDotPos,gridSize/20,gridSize/20);
         }
         for(QPoint a: connectPoints){
-            painter.drawEllipse(a,3,3);
+            painter.drawEllipse(a,gridSize/15,gridSize/15);
         }
         painter.setBrush(Qt::black);
         if(!connectPoints.isEmpty()){
@@ -605,8 +608,25 @@ void DrawZone::paintEvent(QPaintEvent *event)
             }
             polyline.append(redDotPos);
             painter.drawPolyline(polyline);
+
+            painter.setBrush(Qt::blue);
+            int i=0;
+            while(i<frameRect().width()){
+                painter.drawEllipse(QPoint(i,connectPoints.last().y()),gridSize/20,gridSize/20);
+                i+=gridSize;
+            }
+            i=0;
+            while(i<frameRect().height()){
+                painter.drawEllipse(QPoint(connectPoints.last().x(),i),gridSize/20,gridSize/20);
+                i+=gridSize;
+            }
         }
     }
+    //TODO make it work
+    auto s = MainWindow::Instance()->getUi()->widget_container->findChild<QScrollArea *>();
+    s->viewport()->updateGeometry();
+    s->viewport()->update();
+    s->update();
     painter.end();
     return;
 }
@@ -626,9 +646,11 @@ void DrawZone::slotConnectChanged(bool b)
 
     if (!b){
         connectComponents();
+        nodes.clear();
     }
     else {
-        updateNodeList();
+        nodes.clear();
+        updateNodePositions();
         update();
     }
 }
@@ -1307,6 +1329,8 @@ void DrawZone::updateNodePositions(){
             w->setNode2y(w->y()+gridSize);
             break;
         }
+        nodes.push_back(QPoint(w->getNode1x(),w->getNode1y()));
+        nodes.push_back(QPoint(w->getNode2x(),w->getNode2y()));
     }
 }
 
