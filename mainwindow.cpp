@@ -20,6 +20,8 @@
 #include <QWidget>
 #include <QQuickView>
 #include <QScrollBar>
+#include <QScroller>
+#include <QEasingCurve>
 
 
 #include "dragcomponent.h"
@@ -55,21 +57,28 @@ void MainWindow::setUpUi()
 
     ui->widget_container->setLayout(horlayout);
     horlayout->addWidget(componentsWidget);
+    componentsWidget->setMaximumWidth(gridSize*1.5);
 
+    //Set the drawzone in a scrollable widget
     QScrollArea * sa = new QScrollArea();
     drawzoneWidget=new DrawZone(sa);
     sa->setWidget(drawzoneWidget);
     sa->setWidgetResizable(true);
-    sa->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContentsOnFirstShow);
-    sa->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    sa->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-
-
-
-
+    sa->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
+    sa->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    sa->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     horlayout->addWidget(sa);
 
-    componentsWidget->setMaximumWidth(gridSize*1.5);
+
+    //Enable scrolling
+    QScroller::grabGesture(sa,QScroller::LeftMouseButtonGesture);
+    QScrollerProperties sp;
+    sp.setScrollMetric(QScrollerProperties::OvershootDragDistanceFactor,0);
+    sp.setScrollMetric(QScrollerProperties::MousePressEventDelay,0.2);
+    sp.setScrollMetric(QScrollerProperties::DragStartDistance, 0.005);
+    sp.setScrollMetric(QScrollerProperties::ScrollingCurve, QEasingCurve(QEasingCurve::OutExpo));
+    QScroller* qs   = QScroller::scroller( sa );
+    qs->setScrollerProperties(sp);
 
     //Connect signal to different classes
     QObject::connect (this,SIGNAL(on_actionSave_triggered()),drawzoneWidget,SLOT(slotTriggeredSave()));
@@ -188,7 +197,7 @@ void MainWindow::on_action3D_Preview_triggered()
         else{
             QMessageBox msgBox;
             msgBox.setText("<b>Sorry, Your application is a bit to complex for our engine</b>");
-            msgBox.setInformativeText("Please refrain from shorting out components");
+            msgBox.setInformativeText("Please try to add more wires between componenents and refrain from shorting out sources");
             msgBox.setStandardButtons(QMessageBox::Ok);
             msgBox.setDefaultButton(QMessageBox::Ok);
             msgBox.exec();
@@ -361,6 +370,8 @@ void MainWindow::on_actionDelete_triggered()
         }
 
     }
+    //Re-adjust screen size
+    drawzoneWidget->adjustScreenSize();
 
 }
 

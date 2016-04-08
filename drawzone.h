@@ -49,6 +49,8 @@ public:
     void addWire(QPoint &p, int dir);
     //put this in updatenodepositions!!!!!!!
 //    void updateNodeList();
+    /**Adjust ScreenSize to Components*/
+    void adjustScreenSize();
 
 public slots:
 
