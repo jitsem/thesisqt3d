@@ -26,6 +26,7 @@
 #include <QQmlEngine>
 #include <QQmlContext>
 #include <QScrollArea>
+#include <QScroller>
 
 #include "calc.h"
 #include "source.h"
@@ -178,6 +179,7 @@ void DrawZone::slotTriggeredGround()
 //Nothing really happens, but needed to accept drops from our program
 void DrawZone::dragEnterEvent(QDragEnterEvent *event)
 {
+
     if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
         if (event->source() == this) {
             event->setDropAction(Qt::MoveAction);
@@ -220,6 +222,7 @@ void DrawZone::dragMoveEvent(QDragMoveEvent *event)
 //Execute dragging by creating QDrag obj
 void DrawZone::mouseMoveEvent(QMouseEvent *event)
 {
+
     // setCursor(Qt::ArrowCursor);
     if(selectedTool){
         //make sure only points that make rectangular corners are possible
@@ -245,6 +248,7 @@ void DrawZone::mouseMoveEvent(QMouseEvent *event)
     Component_lb *child = dynamic_cast<Component_lb*>(childAt(event->pos()));
     if (!child)
         return;
+
     QWidget *b =child->buddy();
     if (b){
         b->close();
@@ -281,9 +285,9 @@ void DrawZone::mouseMoveEvent(QMouseEvent *event)
 
         child->close();
         delete child;
-
     } else {
         child->setPixmap(pixmap);
+
     }
 }
 
@@ -423,16 +427,22 @@ void DrawZone::dropEvent(QDropEvent *event)
         } else {
             event->acceptProposedAction();
         }
+
+
+        //Re-adjust screen size
+        adjustScreenSize();
+
     } else {
         event->ignore();
     }
-
 }
 
 //Keep dragstartposition
 //Make sure everything is deselected when user clicks on empty space
 void DrawZone::mousePressEvent(QMouseEvent *event)
 {
+
+
     if(!selectedTool){
         //setCursor(Qt::ClosedHandCursor);
         Component_lb *child = dynamic_cast<Component_lb*>(childAt(event->pos()));
@@ -444,11 +454,13 @@ void DrawZone::mousePressEvent(QMouseEvent *event)
                 MainWindow::Instance()->getUi()->actionDelete->setEnabled(false);
                 removeGray(*w);
             }
+
             return;
         }
 
         if (event->button() == Qt::LeftButton){
             dragStartPosition = event->pos();
+
         }
     }
 
@@ -457,7 +469,8 @@ void DrawZone::mousePressEvent(QMouseEvent *event)
 //Select component if releaseevent is near pressevent
 void DrawZone::mouseReleaseEvent(QMouseEvent *event)
 {
-    //setCursor(Qt::OpenHandCursor);
+
+
     if(selectedTool && (!doubleClicked)){
         if (!connectPoints.isEmpty()){
             QPoint temp=QPoint(roundUp(event->pos().x(),MainWindow::Instance()->getGridSize()),roundUp(event->pos().y(),MainWindow::Instance()->getGridSize()));
@@ -481,6 +494,7 @@ void DrawZone::mouseReleaseEvent(QMouseEvent *event)
         doubleClicked=0;
     }
     else{
+
         Component_lb *child = dynamic_cast<Component_lb*>(childAt(event->pos()));
         if (!child)
             return;
@@ -622,11 +636,7 @@ void DrawZone::paintEvent(QPaintEvent *event)
             }
         }
     }
-    //TODO make it work
-    auto s = MainWindow::Instance()->getUi()->widget_container->findChild<QScrollArea *>();
-    s->viewport()->updateGeometry();
-    s->viewport()->update();
-    s->update();
+
     painter.end();
     return;
 }
@@ -730,7 +740,15 @@ void DrawZone::calc_nodes(){
     QList<Component_lb*> overschot=solveNode(list,current,curnode,stack);
     while (!overschot.isEmpty()){
         curnode++;
-        current=overschot.takeFirst();
+        for (Component_lb* o :overschot){
+            if(o->getN1()!=-1 && o->getN2()!=-1){
+                overschot.removeOne(o);
+                list.removeOne(o);
+            }
+        }
+        current=overschot.at(qrand() % overschot.size());
+        overschot.removeOne(current);
+        //current=overschot.takeFirst();
         if (current->getN1()==-1){
             current->setN1(curnode);
             if (current->getType()==2)
@@ -854,6 +872,12 @@ QList<Component_lb *> DrawZone::getNeighbours(QList<Component_lb *> &l, Componen
             if((current.getNode2x()==w->getNode2x())&&(current.getNode2y()==w->getNode2y())){
                 neighbours.append(w);
             }
+        }
+    }
+    int i=0;
+    for (Component_lb *n:neighbours){
+        if(n->getType()==2){
+            neighbours.prepend(neighbours.takeAt(i));
         }
     }
     return neighbours;
@@ -1034,6 +1058,7 @@ void DrawZone::drawCircuit()
             //TODO if already component on the same spot, ignore or smth
             //DONE display values next to components
         }
+
     }
 
     pixmap = std::make_shared<QPixmap>(":/assets/icons/source_small.png");
@@ -1247,14 +1272,12 @@ void DrawZone::drawCircuit()
 
 
         updateNodePositions();
-
+        adjustScreenSize();
 
         //TODO if already component on the same spot, ignore or smth
         //DONE display values next to components
 
     }
-
-
 }
 
 //Create valuelabel that resizes to 1/4th of the gridsize
@@ -1384,6 +1407,22 @@ void DrawZone::addWire(QPoint &p,int dir){
     newIcon->setFocusPolicy(Qt::StrongFocus);
     updateNodePositions();
     update();
+}
+
+void DrawZone::adjustScreenSize()
+{
+    int gridsize=MainWindow::Instance()->getGridSize();
+    QList<Component_lb*> list = this->findChildren<Component_lb *>();
+    int tempx = 0;
+    int tempy = 0;
+    for(auto w : list){
+        tempx = std::max(tempx,w->getNode1x());
+        tempy = std::max(tempy,w->getNode1y());
+
+    }
+    //Adjust screen size
+    this->setMinimumSize(tempx+gridsize,tempy+gridsize);
+    this->parentWidget()->update();
 }
 
 void DrawZone::connectComponents(){

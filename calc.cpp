@@ -418,44 +418,46 @@ void Calc::correctAngles()
 
 
         for(auto& w: toCheck){
-            int xp = w->getXCoord();
-            int yp = w->getYCoord();
-            int l = w->getLength();
-            switch (w->getAngle()) {
-            case 1:
-                if(p==QPoint(xp,yp) || p == QPoint(xp+l,yp)){
-                    checkNode1 = w->getNode1();
-                    checkNode2 = w->getNode2();
-                    goto Correct;
-                }
+            if(w!=r){
+                int xp = w->getXCoord();
+                int yp = w->getYCoord();
+                int l = w->getLength();
+                switch (w->getAngle()) {
+                case 1:
+                    if(p==QPoint(xp,yp) || p == QPoint(xp+l,yp)){
+                        checkNode1 = w->getNode1();
+                        checkNode2 = w->getNode2();
+                        goto Correct;
+                    }
 
-                break;
-            case 2:
-                if(p==QPoint(xp,yp) || p == QPoint(xp,yp+l)){
-                    checkNode1 = w->getNode1();
-                    checkNode2 = w->getNode2();
-                    goto Correct;
-                }
+                    break;
+                case 2:
+                    if(p==QPoint(xp,yp) || p == QPoint(xp,yp+l)){
+                        checkNode1 = w->getNode1();
+                        checkNode2 = w->getNode2();
+                        goto Correct;
+                    }
 
-                break;
-            case 3:
-                if(p==QPoint(xp,yp) || p == QPoint(xp-l,yp)){
-                    checkNode1 = w->getNode1();
-                    checkNode2 = w->getNode2();
-                    goto Correct;
-                }
+                    break;
+                case 3:
+                    if(p==QPoint(xp,yp) || p == QPoint(xp-l,yp)){
+                        checkNode1 = w->getNode1();
+                        checkNode2 = w->getNode2();
+                        goto Correct;
+                    }
 
-                break;
-            case 4:
-                if(p==QPoint(xp,yp) || p == QPoint(xp,yp-l)){
-                    checkNode1 = w->getNode1();
-                    checkNode2 = w->getNode2();
-                    goto Correct;
-                }
+                    break;
+                case 4:
+                    if(p==QPoint(xp,yp) || p == QPoint(xp,yp-l)){
+                        checkNode1 = w->getNode1();
+                        checkNode2 = w->getNode2();
+                        goto Correct;
+                    }
 
-                break;
-            default:
-                break;
+                    break;
+                default:
+                    break;
+                }
             }
         }
 Correct:
