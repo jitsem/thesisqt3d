@@ -752,82 +752,116 @@ bool Calc::setCurrentsOfStrayWires(){
         }
     }
 
+    std::vector<std::shared_ptr<Component>> toCheck;
+    toCheck.insert(toCheck.end(), wires.begin(),wires.end());
+    toCheck.insert(toCheck.end(), resistors.begin(), resistors.end());
+    toCheck.insert(toCheck.end(), switches.begin(), switches.end());
+
+
+
 
     //As long as there are stray wires, stay in loop
     while(!(strayWires.empty())){
         timeout++;
 
         for(auto& w:strayWires){
-            if(std::isinf(w->getCurrent())){
-                QPoint pos(w->getXCoord(),w->getYCoord());
 
 
+            QPoint pos(w->getXCoord(),w->getYCoord());
+            int corr = -1;
+            if(timeout%2 ==0){
+                corr = 1;
+                switch(w->getAngle()){
+                case 1:
+                    pos.setX(pos.x()+1);
+                    break;
+                case 2:
+                    pos.setY(pos.y()+1);
+                    break;
+                case 3:
+                    pos.setX(pos.x()+1);
 
-                float curr = 0;
+                    break;
+                case 4:
+                    pos.setY(pos.y()-1);
+                    break;
+                default:
+                    break;
 
-                //Sum up the currents of al neighbouring wires
-                for (auto wire:wires){
-                    if(wire!=w){
-                        int xp = wire->getXCoord();
-                        int yp = wire->getYCoord();
-                        int l = wire->getLength();
-                        switch (wire->getAngle()) {
-
-                        case 1:
-                            if(pos==QPoint(xp,yp) ){
-                                curr += wire->getCurrent();
-                            }
-                            else if(pos == QPoint(xp+l,yp)){
-                                curr -= wire->getCurrent();
-                            }
-
-                            break;
-                        case 2:
-                            if(pos==QPoint(xp,yp)){
-                                curr += wire->getCurrent();
-                            }
-                            else if (pos== QPoint(xp,yp+l)){
-                                curr -= wire->getCurrent();
-                            }
-
-                            break;
-                        case 3:
-                            if(pos==QPoint(xp,yp)){
-                                curr += wire->getCurrent();
-                            }
-                            else if ( pos== QPoint(xp-l,yp)){
-                                curr -= wire->getCurrent();
-                            }
+                }
+            }
 
 
-                            break;
-                        case 4:
-                            if(pos==QPoint(xp,yp)){
-                                curr += wire->getCurrent();
-                            }
-                            else if ( pos== QPoint(xp,yp-l)){
-                                curr -= wire->getCurrent();
-                            }
+            float curr = 0;
 
-                            break;
-                        default:
-                            break;
+            //Sum up the currents of al neighbouring wires
+            for (auto wire:toCheck){
+                if(wire!=w){
+                    int xp = wire->getXCoord();
+                    int yp = wire->getYCoord();
+                    int l = wire->getLength();
+
+                    float current = wire->getCurrent();
+                    if(std::dynamic_pointer_cast<Resistor>(wire)){
+                        current=current*-1;
+                    }
+                    switch (wire->getAngle()) {
+
+                    case 1:
+                        if(pos==QPoint(xp,yp) ){
+                            curr += current;
+                        }
+                        else if(pos == QPoint(xp+l,yp)){
+                            curr -= current;
+                        }
+
+                        break;
+                    case 2:
+                        if(pos==QPoint(xp,yp)){
+                            curr += current;
+                        }
+                        else if (pos== QPoint(xp,yp+l)){
+                            curr -= current;
+                        }
+
+                        break;
+                    case 3:
+                        if(pos==QPoint(xp,yp)){
+                            curr += current;
+                        }
+                        else if ( pos== QPoint(xp-l,yp)){
+                            curr -= current;
                         }
 
 
+                        break;
+                    case 4:
+                        if(pos==QPoint(xp,yp)){
+                            curr += current;
+                        }
+                        else if ( pos== QPoint(xp,yp-l)){
+                            curr -= current;
+                        }
+
+                        break;
+                    default:
+                        break;
                     }
+
 
                 }
 
-                w->setCurrent(-curr);
-
-                //If current is real, push to toRemove
-                if(!(std::isinf(w->getCurrent())))
-                    toRemove.push_back(w);
-
             }
 
+            w->setCurrent(corr*curr);
+
+            //If current is real, push to toRemove
+            if(!(std::isinf(w->getCurrent())))
+                toRemove.push_back(w);
+
         }
+
+
         //Remove toRemove from staywires
         for(auto& r:toRemove){
             strayWires.erase( std::remove( strayWires.begin(), strayWires.end(), r), strayWires.end() );
