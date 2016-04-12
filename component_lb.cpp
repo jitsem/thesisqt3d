@@ -5,9 +5,9 @@
 #include <QMouseEvent>
 #include <QWidget>
 
-Component_lb::Component_lb(QWidget *parent, float val, int n1x, int n1y, int n2x, int n2y, int ang, int type, int selected, int n1, int n2, int adj, float beg, float ss, int go)
+Component_lb::Component_lb(QWidget *parent, float val, int n1x, int n1y, int n2x, int n2y, int ang, int type, int selected, int n1, int n2, int adj, float beg, float ss, int gov, int goc)
     :QLabel(parent),value(val), node1x(n1x),node1y(n1y),node2x(n2x),node2y(n2y),angle(ang),
-      type(type),selected(selected),n1(n1),n2(n2),adjust(adj),begin(beg),stepSize(ss),goal(go)
+      type(type),selected(selected),n1(n1),n2(n2),adjust(adj),begin(beg),stepSize(ss),voltageGoal(gov),currentGoal(goc)
 {
     this->setAttribute(Qt::WA_TranslucentBackground, true);
 }
@@ -143,14 +143,24 @@ void Component_lb::setStepSize(float value)
     stepSize = value;
 }
 
-int Component_lb::getGoal() const
+int Component_lb::getVoltageGoal() const
 {
-    return goal;
+    return voltageGoal;
 }
 
-void Component_lb::setGoal(int value)
+void Component_lb::setVoltageGoal(int value)
 {
-    goal = value;
+    voltageGoal = value;
+}
+
+int Component_lb::getCurrentGoal() const
+{
+    return currentGoal;
+}
+
+void Component_lb::setCurrentGoal(int value)
+{
+    currentGoal = value;
 }
 
 

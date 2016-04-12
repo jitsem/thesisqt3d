@@ -20,6 +20,7 @@
 #include <QDialogButtonBox>
 #include <QDoubleSpinBox>
 #include <QDialog>
+#include <QComboBox>
 #include <QMainWindow>
 #include <QWidget>
 #include <QQuickView>
@@ -924,7 +925,7 @@ void DrawZone::writeToVectors()
         case 2:
         {
             auto wir = std::make_shared<Wire>(w->getValue(),w->getNode1x()/gridSize,w->getNode1y()/gridSize,angle,1,
-                                              w->getN2(),0,w->getGoal());
+                                              w->getN2(),0,w->getVoltageGoal(),w->getCurrentGoal());
             wir->setValue(w->getValue());
             c->addWire(wir);
             break;
@@ -948,6 +949,11 @@ void DrawZone::drawCircuit()
     //DONE vorige tekening clearen
     //TODO code ietwat verkleinen
     //DONE draad aan bron
+
+    polypoints[0]=QPoint(0,0);
+    polypoints[1]=QPoint(0,0);
+    polypoints[2]=QPoint(0,0);
+    update();
 
     int gridSize = MainWindow::Instance()->getGridSize();
     //Clear drawingfield
@@ -1017,7 +1023,7 @@ void DrawZone::drawCircuit()
             }
 
             Component_lb *newIcon = new Component_lb(this, w->getValue(), XCoord, YCoord, XCoord2,YCoord2,
-                                                     angle, 2,0, w->getNode(),w->getNode(),0,0,0,w->getIsGoal());
+                                                     angle, 2,0, w->getNode(),w->getNode(),0,0,0,w->getIsVoltageGoal(),w->getIsCurrentGoal());
             newIcon->setFixedSize(gridSize,gridSize);
             newIcon->setScaledContents(true);
             newIcon->setPixmap(*pixmap);
@@ -1573,20 +1579,47 @@ void DrawZone::mouseDoubleClickEvent( QMouseEvent * event )
                     break;
                 }
                 case 2:
+                    //Make dialog for setting variables
+                    QDialog * d = new QDialog();
+                    QVBoxLayout * vbox = new QVBoxLayout();
+
+                    //Objects for voltage Goal
+                    QLabel * labelVolt = new QLabel("Is there a VoltageGoal on this wire?");
+                    QComboBox * cb = new QComboBox();
                     QStringList sl;
-                    if(child->getGoal()==0)
-                        sl << tr("no") <<tr("yes(Front)")<<tr("yes(Back)");
-                    else if (child->getGoal()==1)
-                        sl << tr("yes(Front)") <<tr("yes(Back)")<<tr("no");
-                    else if (child->getGoal()==2)
-                        sl << tr("yes(Back)") <<tr("yes(Front)")<<tr("no");
-                    QString item = QInputDialog::getItem(this,"tis voor aan te passen","Is this a goal",sl,0,false);
-                    if((!item.isEmpty()) && item == "no")
-                        child->setGoal(0);
-                    else  if((!item.isEmpty()) && item == "yes(Front)")
-                        child->setGoal(1);
-                    else  if((!item.isEmpty()) && item == "yes(Back)")
-                        child->setGoal(2);
+                    sl << tr("No") <<tr("Yes (Front of Wire)")<<tr("Yes (Back of Wire)");
+                    cb->insertItems(0,sl);
+                    cb->setCurrentIndex(child->getVoltageGoal());
+
+                    //Objects for currentGoal
+                    QLabel * labelCurr= new QLabel("Is there a CurrentGoal on this wire?");
+                    QComboBox * cbc = new QComboBox();
+                    QStringList slc;
+                    slc << tr("No") <<tr("Yes");
+                    cbc->insertItems(0,slc);
+                    cbc->setCurrentIndex(child->getCurrentGoal());
+
+
+
+                    QDialogButtonBox * buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+                    QObject::connect(buttonBox, SIGNAL(accepted()), d, SLOT(accept()));
+                    QObject::connect(buttonBox, SIGNAL(rejected()), d, SLOT(reject()));
+
+                    vbox->addWidget(labelVolt);
+                    vbox->addWidget(cb);
+                    vbox->addWidget(labelCurr);
+                    vbox->addWidget(cbc);
+                    vbox->addWidget(buttonBox);
+                    d->setLayout(vbox);
+
+                    int result = d->exec();
+                    if(result == QDialog::Accepted)
+                    {
+                        child->setVoltageGoal(cb->currentIndex());
+                        child->setCurrentGoal(cbc->currentIndex());
+
+                    }
+                    delete d;
                     break;
 
                 }

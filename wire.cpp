@@ -1,7 +1,7 @@
 #include "wire.h"
 
-Wire::Wire(float v, int x, int y, int ang, int length, int node, float current, int isG)
-    :Component(v,x,y,ang,0,0,0,current),length(length),node(node),isGoal(isG)
+Wire::Wire(float v, int x, int y, int ang, int length, int node, float current, int isVG, int isCG)
+    :Component(v,x,y,ang,0,0,0,current),length(length),node(node),isVoltageGoal(isVG),isCurrentGoal(isCG)
 {
 
 
@@ -39,12 +39,22 @@ int Wire::getNode2() const
     return getNode();
 }
 
-int Wire::getIsGoal() const
+int Wire::getIsVoltageGoal() const
 {
-    return isGoal;
+    return isVoltageGoal;
 }
 
-void Wire::setIsGoal(int value)
+void Wire::setIsVoltageGoal(int value)
 {
-    isGoal = value;
+    isVoltageGoal = value;
+}
+
+int Wire::getIsCurrentGoal() const
+{
+    return isCurrentGoal;
+}
+
+void Wire::setIsCurrentGoal(int value)
+{
+    isCurrentGoal = value;
 }
