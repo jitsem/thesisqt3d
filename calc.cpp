@@ -227,7 +227,7 @@ bool Calc::process_wire_line(QString &lijn)
     for (auto& current: list) {
 
         QStringList wireParams=current.split(" ",QString::SkipEmptyParts);
-        if(wireParams.size() == 7){   //Check for right amount of parameters
+        if(wireParams.size() == 8){   //Check for right amount of parameters
 
             int angle=wireParams.at(0).toInt();
             int x=wireParams.at(1).toInt();
@@ -235,9 +235,10 @@ bool Calc::process_wire_line(QString &lijn)
             int node=wireParams.at(3).toInt();
             int length=wireParams.at(4).toInt();
             float val= wireParams.at(5).toFloat();
-            int isGoal =wireParams.at(6).toInt();
+            int isVoltageGoal =wireParams.at(6).toInt();
+            int isCurrentGoal = wireParams.at(7).toInt();
 
-            auto w =std::make_shared<Wire>(val,x,y,angle,length,node,0.0,isGoal);
+            auto w =std::make_shared<Wire>(val,x,y,angle,length,node,0.0,isVoltageGoal,isCurrentGoal);
             wires.push_back(w);
 
         }
@@ -362,7 +363,7 @@ void Calc::writeBackToFile()
     out <<"*w\n";
     for (auto& wire:wires){
         out<<"*"<<"w"<< wire->getAngle() <<" "<< wire->getXCoord() << " "<< wire->getYCoord()
-          <<" "<< wire->getNode() << " " << wire->getLength() << " " << wire->getValue()<<" "<<wire->getIsGoal()<< "\n";
+          <<" "<< wire->getNode() << " " << wire->getLength() << " " << wire->getValue()<<" "<<wire->getIsVoltageGoal()<< " "<<wire->getIsCurrentGoal() <<"\n";
     }
     out <<"*/w\n";
 

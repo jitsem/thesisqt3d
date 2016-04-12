@@ -13,7 +13,7 @@ class Component_lb : public QLabel
 public:
     /**Constructor for Component_lb class*/
     Component_lb(QWidget * parent, float val, int n1x, int n1y, int n2x, int n2y, int ang, int type, int selected=0,
-                 int n1=-1, int n2=-1,int adj=0,float beg=50.0,float ss=5.0,int go = 0);
+                 int n1=-1, int n2=-1,int adj=0,float beg=50.0,float ss=5.0,int gov = 0,int goc=0);
     /**Getter for value*/
     float getValue() const;
     /**Setter for value*/
@@ -66,10 +66,14 @@ public:
     float getStepSize() const;
     /**Setter for stepSize of component */
     void setStepSize(float value);
-    /**Getter for goal boolean var */
-    int getGoal() const;
-    /**Setter for goal boolean var */
-    void setGoal(int value);
+    /**Getter for voltage goal boolean var */
+    int getVoltageGoal() const;
+    /**Setter for voltage goal boolean var */
+    void setVoltageGoal(int value);
+    /**Getter for current goal boolean var */
+    int getCurrentGoal() const;
+    /**Setter for current goal boolean var */
+    void setCurrentGoal(int value);
 
 private:
     /**Value of Component*/
@@ -106,8 +110,10 @@ private:
 
     /**Flag to show if component is adjustable, game element of other teams' app*/
     int adjust;
-    /**Flag to show if component is a goal (Wire only), game element of other teams' app*/
-    int goal;
+    /**Flag to show if component is a voltage goal (Wire only), game element of other teams' app*/
+    int voltageGoal;
+     /**Flag to show if component is a current goal (Wire only), game element of other teams' app*/
+    int currentGoal;
     /**BeginValue of component, game element of other teams' app*/
     float begin;
     /**StepSize of component, game element of other teams' app*/
