@@ -7,10 +7,10 @@ import QtQuick 2.3 as QQ2
 Entity{
     id:root
 
-    //size of each coordinate step
+    //Size of each coordinate step
     property real sf:5
 
-    //arrays for components
+    //Arrays for components
     property var sources:[]
     property var resistors :[]
     property var wires: []

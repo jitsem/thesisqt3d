@@ -21,7 +21,6 @@ DragComponent::DragComponent(QWidget *parent)
     :QFrame(parent)
 {
 
-    //TODO clean up pointers in destructor
     setFrameStyle(QFrame::Sunken | QFrame::StyledPanel);
     setAcceptDrops(true);
     QVBoxLayout *mainLayout = new QVBoxLayout;
@@ -68,14 +67,13 @@ DragComponent::DragComponent(QWidget *parent)
 
 void DragComponent::dragEnterEvent(QDragEnterEvent *event)
 {
-        //qDebug()<<"dragenterEvent from the list";
         event->ignore();
 
 }
 
 void DragComponent::dragMoveEvent(QDragMoveEvent *event)
 {
-    //this event never occurs because it is not called by the program, is kept for now for info
+        //this event never occurs because it is not called by the program, is kept for now for info
         event->ignore();
 }
 

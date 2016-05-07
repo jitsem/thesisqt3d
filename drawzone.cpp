@@ -43,10 +43,6 @@
 
 
 
-//TODO dynamically connect 2 components with drag select
-//TODO make function showBox(QString) instead of repeating the messagebox code all the time
-
-
 DrawZone::DrawZone(QWidget *parent)
     :QFrame(parent)
 {
@@ -66,11 +62,7 @@ DrawZone::DrawZone(QWidget *parent)
 //Write to file
 void DrawZone::slotTriggeredSave()
 {
-    //DONE implement save from Calc class
-    //DONE check if circuit that is drawn is correct
-    //DONE change positions to positions in grid of 50 px
-    //DONE fill out vectors of components
-    //DONE execute filewriting method
+
     if (!checkClosedCircuit()||!groundpresent){
         QMessageBox msgBox;
         if(!checkClosedCircuit())
@@ -83,7 +75,6 @@ void DrawZone::slotTriggeredSave()
         msgBox.exec();
     }
     else {
-        //TODO check if saving worked?
 
         writeToVectors();
         std::shared_ptr<Calc> c = Calc::Instance();
@@ -104,7 +95,7 @@ void DrawZone::slotTriggeredSave()
 void DrawZone::slotTriggeredGround()
 {
     int gridSize = MainWindow::Instance()->getGridSize();
-    //DONE make sure the input is tested!
+
     if(groundpresent)
     {
         QMessageBox msgBox;
@@ -126,7 +117,7 @@ void DrawZone::slotTriggeredGround()
                 gndwire->setValue(COMPONENT_IS_GROUND);
             }
             else{
-                //DONE make a messagebox
+
                 QMessageBox msgBox;
                 msgBox.setModal(true);
                 msgBox.setText("You can only ground a wire.");
@@ -145,7 +136,6 @@ void DrawZone::slotTriggeredGround()
 
         QPixmap grnd=QPixmap(":/assets/icons/gnd.png");
         gnd->setPixmap(grnd);
-        //TODO check if ground is put on top of other component
 
         if(gndwire->getAngle()==2 || gndwire->getAngle()==4){
             gnd->move(gndwire->x()-gndwire->width()/2+2*gridSize,gndwire->y()+gridSize);
@@ -166,7 +156,7 @@ void DrawZone::slotTriggeredGround()
         update();
     }
     else {
-        //DONE make a messagebox
+
         QMessageBox msgBox;
         msgBox.setModal(true);
         msgBox.setText("You have to select only one wire to ground");
@@ -224,7 +214,7 @@ void DrawZone::dragMoveEvent(QDragMoveEvent *event)
 void DrawZone::mouseMoveEvent(QMouseEvent *event)
 {
 
-    // setCursor(Qt::ArrowCursor);
+
     if(selectedTool){
         //make sure only points that make rectangular corners are possible
         QPoint temp;
@@ -331,8 +321,7 @@ void DrawZone::dropEvent(QDropEvent *event)
         Component_lb *child = nullptr;
         if (event->source()==this)
             child = dynamic_cast<Component_lb*>(childAt(event->pos()));
-        //TODO als het ding van de lijst komt de juiste positie voor child vinden
-        //TODO IMPROVE!
+
 
         newIcon->move(event->pos() - offset);
         newIcon->setFixedSize(gridSize,gridSize);
@@ -341,10 +330,9 @@ void DrawZone::dropEvent(QDropEvent *event)
         newIcon->setAttribute(Qt::WA_DeleteOnClose);
         newIcon->setFocusPolicy(Qt::StrongFocus);
 
-        //DONE display values next to components
+
         updateNodePositions();
 
-        //TODO add snaptogrid function
         //Move new component to nearest multiple of gridSize pixels. (for every angle!!)
         if (newIcon->getType()==0 || newIcon->getType()==1){
             QLabel    *valueLabel = new QLabel(QString::number(newIcon->getValue()), this);
@@ -386,7 +374,7 @@ void DrawZone::dropEvent(QDropEvent *event)
         }
         updateNodePositions();
 
-        //TODO the drawing of these connections points will be gone if you can connect two components!
+
         if (newIcon->getType()==4){
             gndWire->setFixedSize(gridSize,gridSize);
             gndWire->setScaledContents(true);
@@ -405,8 +393,7 @@ void DrawZone::dropEvent(QDropEvent *event)
 
         if(child!=nullptr){
 
-            //TODO check if direction is oposite!
-            //TODO make sure label is placed correctly if resistor/source is placed on top of another
+
             if((newIcon->getNode1x()==child->getNode1x())&&(newIcon->getNode1y()==child->getNode1y())
                     &&(newIcon->getNode2x()==child->getNode2x())&&(newIcon->getNode2y()==child->getNode2y())){
                 qDebug()<<"Placed component on top of other component";
@@ -445,7 +432,6 @@ void DrawZone::mousePressEvent(QMouseEvent *event)
 
 
     if(!selectedTool){
-        //setCursor(Qt::ClosedHandCursor);
         Component_lb *child = dynamic_cast<Component_lb*>(childAt(event->pos()));
         if (!child){
             QList<Component_lb*> list = this->findChildren<Component_lb *>();
@@ -557,7 +543,7 @@ Component_lb *DrawZone::removeGray(Component_lb &child){
     }
     default:
     {
-        //should never get here
+        //Should never get here
         break;
     }
     }
@@ -702,7 +688,6 @@ bool DrawZone::checkClosedCircuit(){
             }
         }
         else{
-            //TODO add alert to user
             qDebug()<<"Circuit not closed!";
             points.clear();
             return false;
@@ -890,11 +875,10 @@ void DrawZone::writeToVectors()
     int gridSize = MainWindow::Instance()->getGridSize();
     calc_nodes();
     QList<Component_lb*> list = this->findChildren<Component_lb *>();
-    //fill out all drawn components in singleton calc object vectors
+    //Fill out all drawn components in singleton calc object vectors
     std::shared_ptr<Calc> c = Calc::Instance();
     c->emptyVectors();
     for(Component_lb *w : list){
-        //TODO oplossen angles verkeerd
         int angle = w->getAngle();
         if(angle == 4){
             angle = 2;
@@ -937,7 +921,6 @@ void DrawZone::writeToVectors()
             break;
         }
         default :
-            //TODO ground not added
             break;
         }
     }
@@ -946,9 +929,6 @@ void DrawZone::writeToVectors()
 //Circuit is drawn directly from file, from 3d vectors.. so conversion to component_lb objects is done here
 void DrawZone::drawCircuit()
 {
-    //DONE vorige tekening clearen
-    //TODO code ietwat verkleinen
-    //DONE draad aan bron
 
     polypoints[0]=QPoint(0,0);
     polypoints[1]=QPoint(0,0);
@@ -1061,8 +1041,7 @@ void DrawZone::drawCircuit()
                 groundpresent=1;
                 update();
             }
-            //TODO if already component on the same spot, ignore or smth
-            //DONE display values next to components
+
         }
 
     }
@@ -1131,7 +1110,6 @@ void DrawZone::drawCircuit()
         default:
             break;
         }
-        //TODO check if nodem en p are correct with node1 en node2
         Component_lb *newIcon = new Component_lb(this, s->getValue(), XCoord, YCoord, XCoord2,
                                                  YCoord2, angle,0,0, s->getNodep(),s->getNodem(),s->getIsAdjustable(),
                                                  s->getBeginValue(),s->getStepSize());
@@ -1149,8 +1127,7 @@ void DrawZone::drawCircuit()
         newIcon->setFocusPolicy(Qt::StrongFocus);
 
         updateNodePositions();
-        //TODO if already component on the same spot, ignore or smth
-        //DONE display values next to components
+
         addValueToComponent(newIcon);
 
     }
@@ -1213,8 +1190,6 @@ void DrawZone::drawCircuit()
 
         updateNodePositions();
 
-        //DONE if already component on the same spot, ignore or smth
-        //TODO display values next to components
         addValueToComponent(newIcon);
 
 
@@ -1280,8 +1255,6 @@ void DrawZone::drawCircuit()
         updateNodePositions();
         adjustScreenSize();
 
-        //TODO if already component on the same spot, ignore or smth
-        //DONE display values next to components
 
     }
 }
@@ -1483,7 +1456,6 @@ void DrawZone::connectComponents(){
         }
     }
     connectPoints.clear();
-    //nodes.clear();
     redDotPos=QPoint(0,0);
     update();
 }
@@ -1573,7 +1545,7 @@ void DrawZone::mouseDoubleClickEvent( QMouseEvent * event )
 
                     }
 
-                    //TODO check delete Clean up
+                    //Clean up
                     delete d;
 
                     break;

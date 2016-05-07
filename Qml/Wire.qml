@@ -119,7 +119,6 @@ Entity{
 
 
     //Things for animating a change in value
-
     QQ2.NumberAnimation{
         id:animateHeight
         target:root

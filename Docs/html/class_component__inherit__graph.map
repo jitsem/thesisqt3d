@@ -1,6 +1,0 @@
-<map id="Component" name="Component">
-<area shape="rect" id="node2" href="$class_resistor.html" title="Resistor" alt="" coords="5,80,80,107"/>
-<area shape="rect" id="node4" href="$class_source.html" title="Source" alt="" coords="104,80,171,107"/>
-<area shape="rect" id="node5" href="$class_wire.html" title="Wire" alt="" coords="195,80,245,107"/>
-<area shape="rect" id="node3" href="$class_switch.html" title="Switch" alt="" coords="11,155,74,181"/>
-</map>

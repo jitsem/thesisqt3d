@@ -28,8 +28,8 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"_circuit_view_8qml.html",
-"class_resistor.html#ac2c6112e569fc68e5f8804fef5fcd9d3"
+"annotated.html",
+"d9/dc6/class_main_window.html#a5e806d75aef8e0e00e6ea431038955eb"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

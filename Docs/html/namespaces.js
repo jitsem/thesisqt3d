@@ -1,4 +1,4 @@
 var namespaces =
 [
-    [ "Ui", "namespace_ui.html", null ]
+    [ "Ui", "dc/df0/namespace_ui.html", null ]
 ];
