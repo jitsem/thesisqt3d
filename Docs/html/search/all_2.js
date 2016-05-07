@@ -6,11 +6,12 @@ var searchData=
   ['calc_5fnodes',['calc_nodes',['../class_draw_zone.html#a8d732d604c8e96ea5dcf53d1d0ab1e9a',1,'DrawZone']]],
   ['calculator',['calculator',['../class_main_window.html#ab16830884cde2ea96b381bc8388e8462',1,'MainWindow']]],
   ['checkclosedcircuit',['checkClosedCircuit',['../class_draw_zone.html#a59eeee637600fab29e0b4a5049eb6198',1,'DrawZone']]],
+  ['circuitview_2eqml',['CircuitView.qml',['../_circuit_view_8qml.html',1,'']]],
   ['component',['Component',['../class_component.html',1,'Component'],['../class_component.html#ac1317f67540bd8b7050c252d3add6970',1,'Component::Component()']]],
   ['component_2ecpp',['component.cpp',['../component_8cpp.html',1,'']]],
   ['component_2eh',['component.h',['../component_8h.html',1,'']]],
   ['component_5fis_5fground',['COMPONENT_IS_GROUND',['../component__lb_8h.html#a1b74a5585fe39f181017109f35dd8587',1,'component_lb.h']]],
-  ['component_5flb',['Component_lb',['../class_component__lb.html',1,'Component_lb'],['../class_component__lb.html#ac9b66b2f3e224dde0b4dfdeb4848507d',1,'Component_lb::Component_lb()']]],
+  ['component_5flb',['Component_lb',['../class_component__lb.html',1,'Component_lb'],['../class_component__lb.html#a1281160562fef904f360ca33bdc6e475',1,'Component_lb::Component_lb()']]],
   ['component_5flb_2ecpp',['component_lb.cpp',['../component__lb_8cpp.html',1,'']]],
   ['component_5flb_2eh',['component_lb.h',['../component__lb_8h.html',1,'']]],
   ['computenetwork',['computeNetwork',['../class_calc.html#ab2e4467f57e33271d6eed2d81b4e96e2',1,'Calc']]],
@@ -18,5 +19,6 @@ var searchData=
   ['connectpoints',['connectPoints',['../class_draw_zone.html#a44f1630475b024302d0a6a1348561476',1,'DrawZone']]],
   ['copied',['copied',['../class_main_window.html#af1cc8231a3d9def139817aa379e41fef',1,'MainWindow']]],
   ['correctangles',['correctAngles',['../class_calc.html#a043e0bab78ea9a08a33e9cb7a083c221',1,'Calc']]],
-  ['current',['current',['../class_component.html#a5313b0a04f29b03efce01a56b7d320b0',1,'Component']]]
+  ['current',['current',['../class_component.html#a5313b0a04f29b03efce01a56b7d320b0',1,'Component']]],
+  ['currentgoal',['currentGoal',['../class_component__lb.html#a78819cb4a6170ffafdab6f5778185429',1,'Component_lb']]]
 ];
