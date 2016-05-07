@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['generator_2eqml',['Generator.qml',['../_generator_8qml.html',1,'']]],
   ['getadjust',['getAdjust',['../class_component__lb.html#aa498e5994a1c16772c11b7a08cd68c41',1,'Component_lb']]],
   ['getangle',['getAngle',['../class_component.html#aa0ee9d10258acafec958acaf872c49ad',1,'Component::getAngle()'],['../class_component__lb.html#a43ca7653468f91f9b60fb817063e64aa',1,'Component_lb::getAngle()']]],
   ['getangleofresistor',['getAngleOfResistor',['../class_calc.html#ad875427f2cbee5546e24ade3cd3b09ce',1,'Calc']]],
@@ -9,15 +10,16 @@ var searchData=
   ['getbegin',['getBegin',['../class_component__lb.html#ac24a53a4300e496e1e0b12985f169198',1,'Component_lb']]],
   ['getbeginvalue',['getBeginValue',['../class_component.html#ad1bc85749a6c6708601ba8ff0cd79881',1,'Component']]],
   ['getcurrent',['getCurrent',['../class_component.html#acaaae7db60a3c4945277b888bc3f0423',1,'Component']]],
+  ['getcurrentgoal',['getCurrentGoal',['../class_component__lb.html#ab6850bab5f4a04eb5f45eb0e2e2398b3',1,'Component_lb']]],
   ['getcurrentofresistor',['getCurrentofResistor',['../class_calc.html#a891c10198d1eace175d4acd2d02ded5a',1,'Calc']]],
   ['getcurrentofsource',['getCurrentofSource',['../class_calc.html#ac9c61dc34d3feba2c6cc09b951e30b8f',1,'Calc']]],
   ['getcurrentofwire',['getCurrentofWire',['../class_calc.html#a29dc54c6c4301950700f4ae33e63af3e',1,'Calc']]],
   ['getfilename',['getFileName',['../class_calc.html#a01f577d96d4698c067443fa13bcb5513',1,'Calc']]],
-  ['getgoal',['getGoal',['../class_component__lb.html#aa0c3b0778c321e73fad2e1fc9062b042',1,'Component_lb']]],
   ['getgridsize',['getGridSize',['../class_main_window.html#ac30668a16107ef5d180fb3972960a8ea',1,'MainWindow']]],
   ['getgroundpresent',['getGroundpresent',['../class_draw_zone.html#ac9e1c2761b8beaff86f4910dd4d8b4c3',1,'DrawZone']]],
   ['getisadjustable',['getIsAdjustable',['../class_component.html#a604a02be15fb314053a5d76ffd18d1ff',1,'Component']]],
-  ['getisgoal',['getIsGoal',['../class_wire.html#aa954c8e0c636de245a5cc035178b168b',1,'Wire']]],
+  ['getiscurrentgoal',['getIsCurrentGoal',['../class_wire.html#a1b3febda8dc6e306b0878f9429d1d7db',1,'Wire']]],
+  ['getisvoltagegoal',['getIsVoltageGoal',['../class_wire.html#a121a99626e69564b0ed4fd4d03cb8fa3',1,'Wire']]],
   ['getlength',['getLength',['../class_component.html#ad8723fdcfe28152fe6885f239e93735d',1,'Component::getLength()'],['../class_wire.html#a42a8c72fc01ca4e16f52e7dfbe88d5c9',1,'Wire::getLength()']]],
   ['getlengthofwire',['getLengthOfWire',['../class_calc.html#ae36d0a3a35244825cd8d299f6f666cd8',1,'Calc']]],
   ['getn1',['getN1',['../class_component__lb.html#a29b09ed7df8bc38cf714c9f729c0da53',1,'Component_lb']]],
@@ -49,6 +51,7 @@ var searchData=
   ['getup',['getUp',['../class_switch.html#a0c3f0b9ea31f100e8646e56b24384733',1,'Switch']]],
   ['getvalue',['getValue',['../class_component.html#adcef7e516a9f2ae8970a0475465d840d',1,'Component::getValue()'],['../class_component__lb.html#a3bfa7fa5004945474b3e5a31d7a0a404',1,'Component_lb::getValue()']]],
   ['getvoltageatsource',['getVoltageAtSource',['../class_calc.html#a4bc35e1a558c42e22ac77c7b4115adeb',1,'Calc']]],
+  ['getvoltagegoal',['getVoltageGoal',['../class_component__lb.html#aa1c1639d85ad685fa4f29964ccc975b6',1,'Component_lb']]],
   ['getwires',['getWires',['../class_calc.html#a2cc91dd5c6ffe07b0c5cbf292a2062bf',1,'Calc']]],
   ['getxcoord',['getXCoord',['../class_component.html#a31499085f5fe3a3804f440b4520cd3b6',1,'Component']]],
   ['getxcoordofresistor',['getXCoordOfResistor',['../class_calc.html#a930d4ffb068cf4e771193fe174dc7163',1,'Calc']]],
@@ -60,7 +63,7 @@ var searchData=
   ['getycoordofsource',['getYCoordOfSource',['../class_calc.html#adb790cea06acc7001f4ee19e4a38f53f',1,'Calc']]],
   ['getycoordofswitch',['getYCoordOfSwitch',['../class_calc.html#a384c6ba935f43f989695d552b281af33',1,'Calc']]],
   ['getycoordofwire',['getYCoordOfWire',['../class_calc.html#ad7cf0d0636911c62fb398591fc54a163',1,'Calc']]],
-  ['goal',['goal',['../class_component__lb.html#af693a3ab65c3fbaebd74ef4527b9c85d',1,'Component_lb']]],
   ['gridsize',['gridSize',['../class_main_window.html#a3088dbc014cb5e95ccc157115f630472',1,'MainWindow']]],
+  ['groundplane_2eqml',['GroundPlane.qml',['../_ground_plane_8qml.html',1,'']]],
   ['groundpresent',['groundpresent',['../class_draw_zone.html#a59f43237ff4e404b4a2bba006d3ae8a3',1,'DrawZone']]]
 ];

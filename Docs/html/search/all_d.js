@@ -8,6 +8,7 @@ var searchData=
   ['resistor',['Resistor',['../class_resistor.html',1,'Resistor'],['../class_resistor.html#a99f34d4ef123544d7736fe20fcb9bbd1',1,'Resistor::Resistor()']]],
   ['resistor_2ecpp',['resistor.cpp',['../resistor_8cpp.html',1,'']]],
   ['resistor_2eh',['resistor.h',['../resistor_8h.html',1,'']]],
+  ['resistor_2eqml',['Resistor.qml',['../_resistor_8qml.html',1,'']]],
   ['resistors',['resistors',['../class_calc.html#ae12e85bff703dc2499726f50b91bda4f',1,'Calc']]],
   ['rotatetoangle',['rotateToAngle',['../class_draw_zone.html#a0340526db9a19d77fe175e514cfbd754',1,'DrawZone']]],
   ['roundup',['roundUp',['../class_draw_zone.html#a43617ed785fe45880427501ed2233990',1,'DrawZone']]]

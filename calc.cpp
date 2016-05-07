@@ -503,8 +503,6 @@ void Calc::setCurrentsOfResistorsAndSwitches()
     }
 
 }
-
-
 void Calc::setCurrentsOfWires()
 {
     //Joined vector with resistors,switches and sources
@@ -780,7 +778,7 @@ bool Calc::setCurrentsOfStrayWires(){
                     pos.setY(pos.y()+1);
                     break;
                 case 3:
-                    pos.setX(pos.x()+1);
+                    pos.setX(pos.x()-1);
 
                     break;
                 case 4:

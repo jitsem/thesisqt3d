@@ -43,43 +43,43 @@ Entity {
             clearColor: "darkslategrey"
 
 
-            ClearBuffer {
-                buffers : ClearBuffer.ColorDepthBuffer
 
-            }
+            ClearBuffer{
+                buffers: ClearBuffer.AllBuffers
 
-            CameraSelector {
-                camera: mainCamera
-
+                CameraSelector {
+                    id: cameraSelector
+                    camera: mainCamera
+                }
             }
         }
     }
 
 
-    //World generation
-    property Entity generator: Generator{
-        id:generator
+        //World generation
+        property Entity generator: Generator{
+            id:generator
+        }
+
+        //Groundplane for visisbility
+        GroundPlane{
+
+        }
+
+        //Controller for zoom, rotate and other input
+        property Entity inputController: InputController{
+            id:inputController
+        }
+
+
+        //Set middle of camera
+        function setCam(camx,camy){
+            x = camx/generator.sf;
+            z = camy/generator.sf;
+            mainCamera.viewCenter =  Qt.vector3d(camx, 0.0, -camy);
+
+        }
+
+
     }
-
-    //Groundplane for visisbility
-    GroundPlane{
-
-    }
-
-    //Controller for zoom, rotate and other input
-    property Entity inputController: InputController{
-        id:inputController
-    }
-
-
-    //Set middle of camera
-    function setCam(camx,camy){
-        x = camx/generator.sf;
-        z = camy/generator.sf;
-        mainCamera.viewCenter =  Qt.vector3d(camx, 0.0, -camy);
-
-    }
-
-
-}
 

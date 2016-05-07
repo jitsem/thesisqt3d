@@ -1,10 +1,10 @@
 var class_component__lb =
 [
-    [ "Component_lb", "class_component__lb.html#ac9b66b2f3e224dde0b4dfdeb4848507d", null ],
+    [ "Component_lb", "class_component__lb.html#a1281160562fef904f360ca33bdc6e475", null ],
     [ "getAdjust", "class_component__lb.html#aa498e5994a1c16772c11b7a08cd68c41", null ],
     [ "getAngle", "class_component__lb.html#a43ca7653468f91f9b60fb817063e64aa", null ],
     [ "getBegin", "class_component__lb.html#ac24a53a4300e496e1e0b12985f169198", null ],
-    [ "getGoal", "class_component__lb.html#aa0c3b0778c321e73fad2e1fc9062b042", null ],
+    [ "getCurrentGoal", "class_component__lb.html#ab6850bab5f4a04eb5f45eb0e2e2398b3", null ],
     [ "getN1", "class_component__lb.html#a29b09ed7df8bc38cf714c9f729c0da53", null ],
     [ "getN2", "class_component__lb.html#ab3bfe31834551ac57c6491b88d95a7f0", null ],
     [ "getNode1x", "class_component__lb.html#a2b15ea0ad0c73bd9a66779af9418891a", null ],
@@ -15,10 +15,11 @@ var class_component__lb =
     [ "getStepSize", "class_component__lb.html#afe6600c0222af4a6bbeb4568c20faa2b", null ],
     [ "getType", "class_component__lb.html#ac4afe0daeed8a6a47543b1f4f14a2386", null ],
     [ "getValue", "class_component__lb.html#a3bfa7fa5004945474b3e5a31d7a0a404", null ],
+    [ "getVoltageGoal", "class_component__lb.html#aa1c1639d85ad685fa4f29964ccc975b6", null ],
     [ "setAdjust", "class_component__lb.html#a6985416e2c7436d889bfce2a6ece74a6", null ],
     [ "setAngle", "class_component__lb.html#af4ceb44bf2303c9b1d11647dddb3fc02", null ],
     [ "setBegin", "class_component__lb.html#ad4ac38e7d599b863aaec666e054e96d3", null ],
-    [ "setGoal", "class_component__lb.html#ae7ff24d0230d61713190678550df6b5c", null ],
+    [ "setCurrentGoal", "class_component__lb.html#a11f41f9143a91f5d588b8a05589aad9c", null ],
     [ "setN1", "class_component__lb.html#a364e93e753fde9456824591ffc95aec2", null ],
     [ "setN2", "class_component__lb.html#ad7dd2470f2e15a5595403877c20e1c78", null ],
     [ "setNode1x", "class_component__lb.html#a8e6ff64872812b559400617c614148be", null ],
@@ -29,10 +30,11 @@ var class_component__lb =
     [ "setStepSize", "class_component__lb.html#ae9463aff7113d77e40651cbf98c00a74", null ],
     [ "setType", "class_component__lb.html#af602a70c132acdfe3210e10e9dcffc49", null ],
     [ "setValue", "class_component__lb.html#a6cb12b60d6c55ebe3a20e8b840e9a3b0", null ],
+    [ "setVoltageGoal", "class_component__lb.html#ab9c829e45bb90a314ae3ddf4382fe456", null ],
     [ "adjust", "class_component__lb.html#acd8ac6f5f383d44bff1a321070849410", null ],
     [ "angle", "class_component__lb.html#ae36b9282f254bbd4d7b885853547762d", null ],
     [ "begin", "class_component__lb.html#adf7c8998061de9073dc0e0803b0c7976", null ],
-    [ "goal", "class_component__lb.html#af693a3ab65c3fbaebd74ef4527b9c85d", null ],
+    [ "currentGoal", "class_component__lb.html#a78819cb4a6170ffafdab6f5778185429", null ],
     [ "n1", "class_component__lb.html#a3ee9a57f9b3e0d5e8ee75634ca61cc5c", null ],
     [ "n2", "class_component__lb.html#a5b0cd9404b83a3847714cc571879cf0c", null ],
     [ "node1x", "class_component__lb.html#a8d81b33a0888618a1ced0e6bb52d758e", null ],
@@ -42,5 +44,6 @@ var class_component__lb =
     [ "selected", "class_component__lb.html#a659850b230896dd9c7869f5a1f65de5a", null ],
     [ "stepSize", "class_component__lb.html#ae663ec30180ac794ae8256dc6c31297b", null ],
     [ "type", "class_component__lb.html#a224dcdcc38cabbc71b9ee5284405334c", null ],
-    [ "value", "class_component__lb.html#a9f61e770435d130c9112b8d5c551d37b", null ]
+    [ "value", "class_component__lb.html#a9f61e770435d130c9112b8d5c551d37b", null ],
+    [ "voltageGoal", "class_component__lb.html#a9e5cd8e68831a563861c2f66b7a6ce7c", null ]
 ];
