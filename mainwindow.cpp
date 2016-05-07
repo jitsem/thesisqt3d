@@ -131,7 +131,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionExit_triggered()
 {
-    //TODO CLEAN UP!
     exit(0);
 }
 

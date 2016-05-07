@@ -1,6 +1,6 @@
 #include "component.h"
 
-//TODO Overerving deftiger maken
+
 Component::Component(float val, int x, int y, int ang, int isAdj, float begValue, float sS, float cur):
    value(val),xCoord(x),yCoord(y),angle(ang),isAdjustable(isAdj),beginvalue(begValue), stepSize(sS), current(cur)
 {

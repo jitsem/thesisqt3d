@@ -113,9 +113,6 @@ bool Calc::readFile()
     resistors.clear();
     switches.clear();
 
-    //TODO Checken of een file volledig juist is
-    //DONE
-
     QFile * file = new QFile(fileName);
     if (file->open(QIODevice::ReadOnly| QIODevice::Text))
     {

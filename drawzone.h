@@ -44,11 +44,10 @@ public:
     Component_lb * removeGray(Component_lb & child);
     /**Set gray background to pixmap when selecting component*/
     Component_lb * setGray(Component_lb & child);
-
+    /**Connect components on the grid */
     void connectComponents();
+    /**Draws a wire element of size 1 at point p with direction dir*/
     void addWire(QPoint &p, int dir);
-    //put this in updatenodepositions!!!!!!!
-//    void updateNodeList();
     /**Adjust ScreenSize to Components*/
     void adjustScreenSize();
 
@@ -88,12 +87,14 @@ private:
     QPoint polypoints[3];
     /**Needed to determine move or click*/
     QPoint  dragStartPosition;
-    /** tool nr 1 = connect two components */
+    /**Tool nr 1 = connect two components */
     int doubleClicked=0,selectedTool=0;
     /**The points that make up the connection between components for drawing */
     QVector<QPoint> connectPoints;
-    QVector<QPoint> nodes;
-    QPoint redDotPos;
+    /**Vector containing the points that connect components */
+      QVector<QPoint> nodes;
+    /**Position of red dot that shows on hover while connecting components */
+      QPoint redDotPos;
 
 
 };
