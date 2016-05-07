@@ -8,7 +8,6 @@ Wire::Wire(float v, int x, int y, int ang, int length, int node, float current, 
 }
 
 
-
 int Wire::getLength() const
 {
     return length;
