@@ -31,7 +31,7 @@ public:
     void setIsCurrentGoal(int value);
 
 private:
-    /**Lenght of Wire*/
+    /**Length of Wire*/
     int length;
     /**Node of Wire*/
     int node;
